@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbd44bba901eafc08831291a0fd33849, type: 3}
   m_Name: Surface_Snow
   m_EditorClassIdentifier: 
-  speedMultiplier: 1
-  gripFactor: 1
-  priority: 1
+  speedMultiplier: 0.7
+  gripFactor: 0.9
+  priority: 2
   audioTag: default
   vfxTag: default
