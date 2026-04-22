@@ -71,4 +71,12 @@ public class GameManager : MonoBehaviour
 
         OnSectorPowerChanged?.Invoke(sector, isPowered);
     }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            SetSectorPower(SectorID.SectorA, true);
+        }
+    }
 }
