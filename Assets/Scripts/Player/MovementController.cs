@@ -43,6 +43,9 @@ public class MovementController : MonoBehaviour {
     [Tooltip("Слои, которые считаются землёй")]
     [SerializeField] private LayerMask groundLayers;
 
+    [Header("Slope Sliding")]
+    [Range(0f, 1f)][SerializeField] private float slideFriction = 0.3f;  // 0 = лёд, 1 = полное трение (нет скольжения)
+
     #endregion
 
     #region === Публичный интерфейс===
@@ -90,6 +93,10 @@ public class MovementController : MonoBehaviour {
     private const float InputThreshold = 0.01f;
     private const float GroundedVelocityReset = -2f;
 
+    private Vector3 _hitNormal = Vector3.up;
+    private bool _isTouchingSurface = false;
+
+
     #endregion
 
     #region === Unity Events ===
@@ -109,6 +116,7 @@ public class MovementController : MonoBehaviour {
         CheckGrounded();
         ApplyGravityAndJump();
         ApplyMovement();
+
     }
 
     #endregion
@@ -229,12 +237,42 @@ public class MovementController : MonoBehaviour {
             transform.rotation = Quaternion.Euler(0f, rotation, 0f);
         }
 
+        
+
         // 5. Финальный вектор движения
         Vector3 moveDirection = Quaternion.Euler(0f, targetRotation, 0f) * Vector3.forward;
         Vector3 finalVelocity = moveDirection.normalized * currentSpeed + Vector3.up * verticalVelocity;
-
-        // 6. Применение к контроллеру (ОДИН вызов за кадр!)
+        
+        CalculateSlopeSliding(ref finalVelocity);
+        
+        // 6. Применение к контроллеру
         controller.Move(finalVelocity * Time.deltaTime);
+
+        
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit) {
+        // Берем нормаль, только если ударился нижней частью капсулы
+        // (чтобы не скользить, задев стену головой)
+        if (hit.normal.y > 0f) {
+            _hitNormal = hit.normal;
+            _isTouchingSurface = true;
+        }
+    }
+
+    private void CalculateSlopeSliding(ref Vector3 moveVector) {
+        // Скользим, только если НЕ на земле (по нашей логике), но есть контакт
+
+        if (!grounded && _isTouchingSurface) {
+            // Формула: чем круче склон (меньше hitNormal.y), тем сильнее скольжение
+            float slideFactor = (1f - _hitNormal.y) * (1f - slideFriction);
+
+            // Добавляем боковую скорость вдоль склона
+            moveVector.x += slideFactor * _hitNormal.x;
+            moveVector.z += slideFactor * _hitNormal.z;
+
+            _isTouchingSurface = false;
+        }
     }
 
     #endregion
@@ -246,6 +284,9 @@ public class MovementController : MonoBehaviour {
         Color gizmoColor = grounded ? new Color(0f, 1f, 0f, 0.35f) : new Color(1f, 0f, 0f, 0.35f);
         Gizmos.color = gizmoColor;
         Gizmos.DrawSphere(transform.position + Vector3.up * groundedOffset, groundedRadius);
+
+
+        // Gizmos.DrawSphere(transform.position + Vector3.up * slopeOffset, slopeRadius);
     }
 
     #endregion
