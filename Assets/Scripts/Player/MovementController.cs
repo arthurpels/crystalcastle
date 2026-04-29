@@ -30,8 +30,6 @@ public class MovementController : MonoBehaviour {
     [SerializeField] private float jumpHeight = 1.2f;
     [Tooltip("Задержка между прыжками")]
     [SerializeField] private float jumpTimeout = 0.50f;
-    [Tooltip("Задержка перед переходом в состояние падения")]
-    [SerializeField] private float fallTimeout = 0.15f;
     [Tooltip("Максимальная скорость падения")]
     [SerializeField] private float terminalVelocity = 53.0f;
 
@@ -43,8 +41,6 @@ public class MovementController : MonoBehaviour {
     [Tooltip("Слои, которые считаются землёй")]
     [SerializeField] private LayerMask groundLayers;
 
-    [Header("Slope Sliding")]
-    [Range(0f, 1f)][SerializeField] private float slideFriction = 0.3f;  // 0 = лёд, 1 = полное трение (нет скольжения)
 
     #endregion
 
@@ -80,7 +76,6 @@ public class MovementController : MonoBehaviour {
 
     // Таймауты
     private float jumpTimeoutDelta;
-    private float fallTimeoutDelta;
 
     // Поворот
     private float targetRotation;
@@ -107,7 +102,6 @@ public class MovementController : MonoBehaviour {
 
         // Инициализация таймаутов
         jumpTimeoutDelta = jumpTimeout;
-        fallTimeoutDelta = fallTimeout;
     }
 
     private void Update() {
@@ -150,7 +144,6 @@ public class MovementController : MonoBehaviour {
     private void ApplyGravityAndJump() {
         if (grounded) {
             // Сброс таймаута падения
-            fallTimeoutDelta = fallTimeout;
 
             // Сброс вертикальной скорости при приземлении
             if (verticalVelocity < 0f)
@@ -169,9 +162,6 @@ public class MovementController : MonoBehaviour {
         } else {
             // В воздухе: сброс таймаута прыжка, отсчёт до "падения"
             jumpTimeoutDelta = jumpTimeout;
-
-            if (fallTimeoutDelta > 0f)
-                fallTimeoutDelta -= Time.deltaTime;
 
             // Блокировка прыжка в воздухе
             jumpInput = false;
@@ -237,18 +227,18 @@ public class MovementController : MonoBehaviour {
             transform.rotation = Quaternion.Euler(0f, rotation, 0f);
         }
 
-        
+
 
         // 5. Финальный вектор движения
         Vector3 moveDirection = Quaternion.Euler(0f, targetRotation, 0f) * Vector3.forward;
         Vector3 finalVelocity = moveDirection.normalized * currentSpeed + Vector3.up * verticalVelocity;
-        
+
         CalculateSlopeSliding(ref finalVelocity);
-        
+
         // 6. Применение к контроллеру
         controller.Move(finalVelocity * Time.deltaTime);
 
-        
+
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit) {
@@ -261,16 +251,17 @@ public class MovementController : MonoBehaviour {
     }
 
     private void CalculateSlopeSliding(ref Vector3 moveVector) {
-        // Скользим, только если НЕ на земле (по нашей логике), но есть контакт
-
-        if (!grounded && _isTouchingSurface) {
-            // Формула: чем круче склон (меньше hitNormal.y), тем сильнее скольжение
-            float slideFactor = (1f - _hitNormal.y) * (1f - slideFriction);
+        if (!grounded && _isTouchingSurface) {            
+            float slideFactor = 1f - _hitNormal.y;
 
             // Добавляем боковую скорость вдоль склона
             moveVector.x += slideFactor * _hitNormal.x;
             moveVector.z += slideFactor * _hitNormal.z;
 
+            if (verticalVelocity < 0) {
+                verticalVelocity = GroundedVelocityReset; //перс будет плавно соскадьзывать и не притянется к земле в конце скольжения а плавно начнет падать
+            }
+            
             _isTouchingSurface = false;
         }
     }
