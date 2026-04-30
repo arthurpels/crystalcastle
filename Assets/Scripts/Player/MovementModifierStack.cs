@@ -115,16 +115,6 @@ public class MovementModifierStack : MonoBehaviour
         _targetSpeedMult = Mathf.Clamp(speed, 0.001f, 3f);
         _targetGripMult = Mathf.Clamp(grip, 0f, 1f);
     }
-
-    /// <summary>Конвертирует gripFactor [0..1] в множитель [0.1..3.0] для контроллера</summary>
-    /// gripFactor: 1.0 = нормальное сцепление, 0.0 = лёд
-    /// Возвращает: 1.0 = норма, <1.0 = скользко (меньше ускорение)
-    // private float ConvertGripToMultiplier(float gripFactor)
-    // {
-    //     // Линейная конвертация: 1.0 → 1.0, 0.0 → 0 (минимальное сцепление)
-    //     return Mathf.Lerp(0.0f, 1.0f, gripFactor);
-    // }
-
     private void ApplyModifiers()
     {
         // Плавный переход
@@ -140,8 +130,8 @@ public class MovementModifierStack : MonoBehaviour
         }
 
         // Dead zone
-        if (Mathf.Abs(_currentSpeedMult - 1f) < deadZone) _currentSpeedMult = 1f;
-        if (Mathf.Abs(_currentGripMult - 1f) < deadZone) _currentGripMult = 1f;
+        // if (Mathf.Abs(_currentSpeedMult - 1f) < deadZone) _currentSpeedMult = 1f;
+        // if (Mathf.Abs(_currentGripMult - 1f) < deadZone) _currentGripMult = 1f;
 
         // Применяем в контроллер
         _controller.SpeedMultiplier = _currentSpeedMult;
