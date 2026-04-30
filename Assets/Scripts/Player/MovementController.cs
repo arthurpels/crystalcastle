@@ -58,7 +58,8 @@ public class MovementController : MonoBehaviour {
     public bool InputEnabled { get; set; } = true;
 
     /// <summary>Касается ли земли</summary>
-    public bool IsGrounded => grounded;
+    public bool IsGrounded => grounded;    public bool IsSprinting => currentSpeed > baseMoveSpeed;
+    public float VerticalVelocity => verticalVelocity;
 
     #endregion
 

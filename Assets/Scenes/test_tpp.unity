@@ -2205,7 +2205,7 @@ PrefabInstance:
     - target: {fileID: 7724869803818453764, guid: 99e784b579701bbebbc347f951663286,
         type: 3}
       propertyPath: jumpHeight
-      value: 2
+      value: 1.8
       objectReference: {fileID: 0}
     - target: {fileID: 7724869803818453764, guid: 99e784b579701bbebbc347f951663286,
         type: 3}
@@ -2230,7 +2230,7 @@ PrefabInstance:
     - target: {fileID: 7952755406387691533, guid: 99e784b579701bbebbc347f951663286,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
