@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cbd44bba901eafc08831291a0fd33849, type: 3}
-  m_Name: Surface_Ice
+  m_Name: Surface_SlipperyIce
   m_EditorClassIdentifier: 
   speedMultiplier: 1
-  gripFactor: 0.3
+  gripFactor: 0.1
   priority: 1
   audioTag: default
   vfxTag: default
