@@ -34,21 +34,21 @@ public class SurfaceColliderMapper : MonoBehaviour
             SurfaceDetector.UnregisterSurfaceCollider(this);
     }
 
-    private void OnTriggerEnter(Collider other) => TryApplySurface(other, true);
-    private void OnTriggerExit(Collider other) => TryApplySurface(other, false);
+    // private void OnTriggerEnter(Collider other) => TryApplySurface(other, true);
+    // private void OnTriggerExit(Collider other) => TryApplySurface(other, false);
 
-    private void TryApplySurface(Collider other, bool enter)
-    {
-        if (surfaceData == null || modifierStack == null) return;
+    // private void TryApplySurface(Collider other, bool enter)
+    // {
+    //     if (surfaceData == null || modifierStack == null) return;
         
 
-        if (!IsPlayer(other)) return;
+    //     if (!IsPlayer(other)) return;
 
-        if (enter)
-            modifierStack.AddSurface(surfaceData);
-        else
-            modifierStack.RemoveSurface(surfaceData);
-    }
+    //     if (enter)
+    //         modifierStack.AddSurface(surfaceData);
+    //     else
+    //         modifierStack.RemoveSurface(surfaceData);
+    // }
 
     private bool IsPlayer(Collider other) => 
         other.CompareTag("Player") || other.GetComponent<MovementController>() != null;

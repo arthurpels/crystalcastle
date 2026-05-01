@@ -9,6 +9,7 @@ using UnityEngine;
 [DefaultExecutionOrder(-10)] // Выполняется ДО других систем, чтобы они читали актуальное состояние
 public class MovementController : MonoBehaviour {
     #region === Настройки ===
+    [SerializeField] private PlayerAttributes playerAttributes;
 
     [Header("Speed")]
     [Tooltip("Базовая скорость ходьбы")]
@@ -31,6 +32,7 @@ public class MovementController : MonoBehaviour {
     [SerializeField] private float jumpHeight = 1.2f;
     [Tooltip("Задержка между прыжками")]
     [SerializeField] private float jumpTimeout = 0.50f;
+    [SerializeField] private float fallTimeout = 0.15f;
     [Tooltip("Максимальная скорость падения")]
     [SerializeField] private float terminalVelocity = 53.0f;
 
@@ -59,7 +61,11 @@ public class MovementController : MonoBehaviour {
     public bool InputEnabled { get; set; } = true;
 
     /// <summary>Касается ли земли</summary>
-    public bool IsGrounded => grounded; public bool IsSprinting => currentSpeed > baseMoveSpeed;
+    public bool IsGrounded => grounded;
+    public bool IsSprinting => currentSpeed > baseMoveSpeed;
+    public bool IsFalling => fallTimeoutDelta < 0;
+    public bool Jumped => jumpInput && jumpTimeoutDelta <= 0f;
+
     public float VerticalVelocity => verticalVelocity;
 
     #endregion
@@ -80,6 +86,7 @@ public class MovementController : MonoBehaviour {
 
     // Таймауты
     private float jumpTimeoutDelta;
+    private float fallTimeoutDelta;
 
     // Поворот
     private float targetRotation;
@@ -106,6 +113,7 @@ public class MovementController : MonoBehaviour {
 
         // Инициализация таймаутов
         jumpTimeoutDelta = jumpTimeout;
+        fallTimeoutDelta = fallTimeout;
     }
 
     private void Update() {
@@ -148,7 +156,7 @@ public class MovementController : MonoBehaviour {
 
     private void ApplyGravityAndJump() {
         if (grounded) {
-            // Сброс таймаута падения
+            fallTimeoutDelta = fallTimeout;
 
             // Сброс вертикальной скорости при приземлении
             if (verticalVelocity < 0f)
@@ -165,10 +173,12 @@ public class MovementController : MonoBehaviour {
             if (jumpTimeoutDelta > 0f)
                 jumpTimeoutDelta -= Time.deltaTime;
         } else {
-            // В воздухе: сброс таймаута прыжка, отсчёт до "падения"
             jumpTimeoutDelta = jumpTimeout;
 
-            // Блокировка прыжка в воздухе
+            if (fallTimeoutDelta >= 0.0f) {
+                fallTimeoutDelta -= Time.deltaTime;
+            }
+
             jumpInput = false;
         }
 
@@ -180,6 +190,10 @@ public class MovementController : MonoBehaviour {
     }
 
     private void ApplyMovement() {
+        if (sprintInput && !playerAttributes.CanSprint) {
+            sprintInput = false;
+        }
+
         float targetSpeed = (moveInput.sqrMagnitude < InputThreshold)
             ? 0f
             : (sprintInput
@@ -216,8 +230,6 @@ public class MovementController : MonoBehaviour {
         if (currentHorizontalSpeed < targetSpeed - speedOffset) {
             currentSpeed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed, speedChangeRate * Time.deltaTime);
         } else if (currentHorizontalSpeed > targetSpeed + speedOffset) {
-            targetSpeed += (currentHorizontalSpeed - targetSpeed) * (1f - GripMultiplier*0.7f);
-            
             currentSpeed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed, speedChangeRate * Time.deltaTime);
         } else {
             currentSpeed = targetSpeed;
@@ -230,7 +242,7 @@ public class MovementController : MonoBehaviour {
 
         Vector3 currentHorizontalVelocity = new Vector3(controller.velocity.x, 0f, controller.velocity.z);
 
-        Vector3 finalHorizontalVelocity = Vector3.Lerp(currentHorizontalVelocity, targetHorizontalVelocity, GripMultiplier * basicGrip * Time.deltaTime);
+        Vector3 finalHorizontalVelocity = Vector3.MoveTowards(currentHorizontalVelocity, targetHorizontalVelocity, GripMultiplier * basicGrip * Time.deltaTime);
 
         Vector3 finalVelocity = finalHorizontalVelocity + Vector3.up * verticalVelocity;
 
@@ -250,7 +262,7 @@ public class MovementController : MonoBehaviour {
 
     private void CalculateSlopeSliding(ref Vector3 moveVector) {
         if (!grounded && _isTouchingSurface) {
-            float slideFactor = (1f - _hitNormal.y) * (1 - GripMultiplier);
+            float slideFactor = (1f - _hitNormal.y) * 2f * (1f - GripMultiplier);
 
             // Добавляем боковую скорость вдоль склона
             moveVector.x += slideFactor * _hitNormal.x;

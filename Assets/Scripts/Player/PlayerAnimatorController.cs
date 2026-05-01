@@ -10,10 +10,10 @@ public class PlayerAnimationController : MonoBehaviour
     [SerializeField] private MovementController movement;
     
     private Animator _animator;
-    private static readonly int HashGrounded = Animator.StringToHash("Grounded");
-    private static readonly int HashMoveSpeed = Animator.StringToHash("MoveSpeed");
-    private static readonly int HashSprint = Animator.StringToHash("Sprint");
-    private static readonly int HashVerticalVel = Animator.StringToHash("VerticalVelocity"); // Опционально
+    private static readonly int animIDSpeed = Animator.StringToHash("Speed");
+    private static readonly int animIDGrounded = Animator.StringToHash("Grounded");
+    private static readonly int animIDJump = Animator.StringToHash("Jump");
+    private static readonly int animIDFreeFall = Animator.StringToHash("FreeFall");
 
     private void Awake()
     {
@@ -25,16 +25,20 @@ public class PlayerAnimationController : MonoBehaviour
     {
         if (movement == null || _animator == null) return;
 
-        // 1. Земля
-        _animator.SetBool(HashGrounded, movement.IsGrounded);
+        _animator.SetFloat(animIDSpeed, movement.GetAnimationBlend());
 
-        // 2. Скорость (Blend Tree: Idle → Walk → Run → Sprint)
-        _animator.SetFloat(HashMoveSpeed, movement.GetAnimationBlend());
+        _animator.SetBool(animIDGrounded, movement.IsGrounded);
+        if (movement.IsGrounded) {            
+            _animator.SetBool(animIDJump, false);
+            _animator.SetBool(animIDFreeFall, false);
+        } else {
+            _animator.SetBool(animIDFreeFall, movement.IsFalling);
+        }
 
-        // 3. Факт бега (если скорость превысила порог walk)
-        _animator.SetBool(HashSprint, movement.IsSprinting);
+        if (movement.Jumped) {
+            _animator.SetBool(animIDJump, true);
+        }
 
-        // 4. Вертикальная скорость (для анимаций взлёта/падения/приземления)
-        _animator.SetFloat(HashVerticalVel, movement.VerticalVelocity);
+        
     }
 }
