@@ -2,17 +2,54 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FlashlightItem : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+public class FlashlightItem : BaseItem {
+    [Header("Settings")]
+    public Light lightComp;
+    public AudioClip clickSound;
+    private AudioSource audioSource;
+
+    public bool isOn;
+
+    [Header("Flicker")]
+    public float flickerIntensity = 0.4f;
+
+    private float _flickerTimer;
+
+    private void Awake() {
+        audioSource = GetComponent<AudioSource>();
+        if (visualModel) visualModel.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public override void OnEquip(ItemSlot slot) {
+        isOn = true;
+        lightComp.enabled = true;
+        PlayClick();
     }
+
+    public override void OnUnequip(ItemSlot slot) {
+        isOn = false;
+        lightComp.enabled = false;
+    }
+
+    public override void OnUse(ItemSlot slot) {
+        isOn = !isOn;
+        lightComp.enabled = isOn;
+        PlayClick();
+    }
+
+    public override void OnTick(ItemSlot slot, float dt) {
+        if (!isOn) return;
+
+        _flickerTimer -= dt;
+        if (_flickerTimer <= 0f) {
+            _flickerTimer = Random.Range(0.05f, 0.3f);
+            lightComp.intensity = Random.Range(1f - flickerIntensity, 1f + flickerIntensity * 0.5f);
+        }
+
+    }
+
+    private void PlayClick() {
+        if (audioSource && clickSound) audioSource.PlayOneShot(clickSound);
+    }
+
 }
