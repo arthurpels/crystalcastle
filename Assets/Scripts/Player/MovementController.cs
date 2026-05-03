@@ -9,6 +9,7 @@ using UnityEngine;
 [DefaultExecutionOrder(-10)] // Выполняется ДО других систем, чтобы они читали актуальное состояние
 public class MovementController : MonoBehaviour {
     #region === Настройки ===
+    [SerializeField] private PlayerAttributes playerAttributes;
 
     [Header("Speed")]
     [Tooltip("Базовая скорость ходьбы")]
@@ -17,6 +18,7 @@ public class MovementController : MonoBehaviour {
     [SerializeField] private float baseSprintSpeed = 5.335f;
     [Tooltip("Скорость разгона/торможения (чем больше, тем резче)")]
     [SerializeField] private float speedChangeRate = 10.0f;
+    [SerializeField] private float basicGrip = 10.0f;
 
     [Header("Rotate")]
     [Tooltip("Время плавного доворота в сторону движения")]
@@ -30,7 +32,6 @@ public class MovementController : MonoBehaviour {
     [SerializeField] private float jumpHeight = 1.2f;
     [Tooltip("Задержка между прыжками")]
     [SerializeField] private float jumpTimeout = 0.50f;
-    [Tooltip("Задержка перед переходом в состояние падения")]
     [SerializeField] private float fallTimeout = 0.15f;
     [Tooltip("Максимальная скорость падения")]
     [SerializeField] private float terminalVelocity = 53.0f;
@@ -39,9 +40,12 @@ public class MovementController : MonoBehaviour {
     [Tooltip("Смещение сферы проверки заземления (отрицательное = ниже позиции)")]
     [SerializeField] private float groundedOffset = -0.14f;
     [Tooltip("Радиус сферы проверки (должен совпадать с радиусом контроллера)")]
-    [SerializeField] private float groundedRadius = 0.28f;
+    [SerializeField] private float maxGroundedRadius = 0.28f;
+    [SerializeField] private float minGroundedRadius = 0.28f;
     [Tooltip("Слои, которые считаются землёй")]
     [SerializeField] private LayerMask groundLayers;
+
+
 
     #endregion
 
@@ -58,6 +62,11 @@ public class MovementController : MonoBehaviour {
 
     /// <summary>Касается ли земли</summary>
     public bool IsGrounded => grounded;
+    public bool IsSprinting => currentSpeed > baseMoveSpeed;
+    public bool IsFalling => fallTimeoutDelta < 0;
+    public bool Jumped => jumpInput && jumpTimeoutDelta <= 0f;
+
+    public float VerticalVelocity => verticalVelocity;
 
     #endregion
 
@@ -90,6 +99,10 @@ public class MovementController : MonoBehaviour {
     private const float InputThreshold = 0.01f;
     private const float GroundedVelocityReset = -2f;
 
+    private Vector3 _hitNormal = Vector3.up;
+    private bool _isTouchingSurface = false;
+
+
     #endregion
 
     #region === Unity Events ===
@@ -109,6 +122,7 @@ public class MovementController : MonoBehaviour {
         CheckGrounded();
         ApplyGravityAndJump();
         ApplyMovement();
+
     }
 
     #endregion
@@ -136,12 +150,12 @@ public class MovementController : MonoBehaviour {
     private void CheckGrounded() {
         // проверка: сфера со смещением, игнорируя триггеры
         Vector3 spherePosition = transform.position + Vector3.up * groundedOffset;
-        grounded = Physics.CheckSphere(spherePosition, groundedRadius, groundLayers, QueryTriggerInteraction.Ignore);
+        float sphereRadius = Mathf.Lerp(minGroundedRadius, maxGroundedRadius, GripMultiplier);
+        grounded = Physics.CheckSphere(spherePosition, sphereRadius, groundLayers, QueryTriggerInteraction.Ignore);
     }
 
     private void ApplyGravityAndJump() {
         if (grounded) {
-            // Сброс таймаута падения
             fallTimeoutDelta = fallTimeout;
 
             // Сброс вертикальной скорости при приземлении
@@ -159,13 +173,12 @@ public class MovementController : MonoBehaviour {
             if (jumpTimeoutDelta > 0f)
                 jumpTimeoutDelta -= Time.deltaTime;
         } else {
-            // В воздухе: сброс таймаута прыжка, отсчёт до "падения"
             jumpTimeoutDelta = jumpTimeout;
 
-            if (fallTimeoutDelta > 0f)
+            if (fallTimeoutDelta >= 0.0f) {
                 fallTimeoutDelta -= Time.deltaTime;
+            }
 
-            // Блокировка прыжка в воздухе
             jumpInput = false;
         }
 
@@ -177,38 +190,20 @@ public class MovementController : MonoBehaviour {
     }
 
     private void ApplyMovement() {
-        // 1. Если нет ввода — плавно тормозим до 0
-        float targetSpeed = (moveInput.sqrMagnitude < InputThreshold)
-            ? 0f
-            : (sprintInput ? baseSprintSpeed : baseMoveSpeed);
-
-        // 2. Применяем модификатор к скорости
-        targetSpeed *= SpeedMultiplier;
-
-        // 3. нелинейная акселерация
-        float currentHorizontalSpeed = new Vector3(controller.velocity.x, 0f, controller.velocity.z).magnitude;
-        float speedOffset = 0.1f;
-        float inputMagnitude = Mathf.Clamp01(moveInput.magnitude); // Для аналогового джойстика
-
-        // Применяем модификатор сцепления 
-        float effectiveChangeRate = speedChangeRate * GripMultiplier;
-
-        if (currentHorizontalSpeed < targetSpeed - speedOffset ||
-            currentHorizontalSpeed > targetSpeed + speedOffset) {
-            // Lerp даёт изменение скорости, что является ускорением
-            currentSpeed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude,
-                Time.deltaTime * effectiveChangeRate);
-        } else {
-            currentSpeed = targetSpeed;
+        if (sprintInput && !playerAttributes.CanSprint) {
+            sprintInput = false;
         }
 
-        // Затухание анимаций
-        animationBlend = Mathf.Lerp(animationBlend, targetSpeed, Time.deltaTime * effectiveChangeRate);
-        if (animationBlend < 0.01f) animationBlend = 0f;
+        float targetSpeed = (moveInput.sqrMagnitude < InputThreshold)
+            ? 0f
+            : (sprintInput
+                ? baseSprintSpeed * SpeedMultiplier * SpeedMultiplier
+                : baseMoveSpeed * SpeedMultiplier);
 
-        // 4. Поворот 
+
+        Vector3 inputDirection = Vector3.zero;
+
         if (moveInput.sqrMagnitude >= InputThreshold && mainCameraTransform != null) {
-            // Направление относительно камеры (без наклона по Y)
             Vector3 camForward = mainCameraTransform.forward;
             camForward.y = 0f;
             camForward.Normalize();
@@ -217,35 +212,83 @@ public class MovementController : MonoBehaviour {
             camRight.y = 0f;
             camRight.Normalize();
 
-            Vector3 MoveDir = (camForward * moveInput.y + camRight * moveInput.x).normalized;
+            inputDirection = (camForward * moveInput.y + camRight * moveInput.x).normalized;
 
-            // Целевой угол поворота
-            targetRotation = Mathf.Atan2(MoveDir.x, MoveDir.z) * Mathf.Rad2Deg;
+            targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg;
 
-            // Плавный поворот через SmoothDamp
             float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation,
                 ref rotationVelocity, rotationSmoothTime);
 
             transform.rotation = Quaternion.Euler(0f, rotation, 0f);
         }
 
-        // 5. Финальный вектор движения
-        Vector3 moveDirection = Quaternion.Euler(0f, targetRotation, 0f) * Vector3.forward;
-        Vector3 finalVelocity = moveDirection.normalized * currentSpeed + Vector3.up * verticalVelocity;
+        float currentHorizontalSpeed = new Vector3(controller.velocity.x, 0f, controller.velocity.z).magnitude;
 
-        // 6. Применение к контроллеру (ОДИН вызов за кадр!)
+        // 3. нелинейная акселерация        
+        float speedOffset = 0.1f;
+
+        if (currentHorizontalSpeed < targetSpeed - speedOffset) {
+            currentSpeed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed, speedChangeRate * Time.deltaTime);
+        } else if (currentHorizontalSpeed > targetSpeed + speedOffset) {
+            currentSpeed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed, speedChangeRate * Time.deltaTime);
+        } else {
+            currentSpeed = targetSpeed;
+        }
+
+        animationBlend = Mathf.Lerp(animationBlend, targetSpeed, speedChangeRate * Time.deltaTime);
+        if (animationBlend < 0.01f) animationBlend = 0f;
+
+        Vector3 targetHorizontalVelocity = inputDirection * currentSpeed;
+
+        Vector3 currentHorizontalVelocity = new Vector3(controller.velocity.x, 0f, controller.velocity.z);
+
+        Vector3 finalHorizontalVelocity = Vector3.MoveTowards(currentHorizontalVelocity, targetHorizontalVelocity, GripMultiplier * basicGrip * Time.deltaTime);
+
+        Vector3 finalVelocity = finalHorizontalVelocity + Vector3.up * verticalVelocity;
+
+        CalculateSlopeSliding(ref finalVelocity);
+
         controller.Move(finalVelocity * Time.deltaTime);
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit) {
+        // Берем нормаль, только если ударился нижней частью капсулы
+        // (чтобы не скользить, задев стену головой)
+        if (hit.normal.y > 0f) {
+            _hitNormal = hit.normal;
+            _isTouchingSurface = true;
+        }
+    }
+
+    private void CalculateSlopeSliding(ref Vector3 moveVector) {
+        if (!grounded && _isTouchingSurface) {
+            float slideFactor = (1f - _hitNormal.y) * 2f * (1f - GripMultiplier);
+
+            // Добавляем боковую скорость вдоль склона
+            moveVector.x += slideFactor * _hitNormal.x;
+            moveVector.z += slideFactor * _hitNormal.z;
+
+            if (verticalVelocity < 0) {
+                verticalVelocity = GroundedVelocityReset; //перс будет плавно соскадьзывать и не притянется к земле в конце скольжения а плавно начнет падать
+            }
+
+            _isTouchingSurface = false;
+        }
     }
 
     #endregion
 
     #region === Отладка ===
 
-    private void OnDrawGizmosSelected() {
+    private void OnDrawGizmos() {
         // Визуализация сферы заземления в редакторе
         Color gizmoColor = grounded ? new Color(0f, 1f, 0f, 0.35f) : new Color(1f, 0f, 0f, 0.35f);
         Gizmos.color = gizmoColor;
-        Gizmos.DrawSphere(transform.position + Vector3.up * groundedOffset, groundedRadius);
+        float sphereRadius = Mathf.Lerp(minGroundedRadius, maxGroundedRadius, GripMultiplier);
+        Gizmos.DrawSphere(transform.position + Vector3.up * groundedOffset, sphereRadius);
+
+
+        // Gizmos.DrawSphere(transform.position + Vector3.up * slopeOffset, slopeRadius);
     }
 
     #endregion
