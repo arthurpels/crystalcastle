@@ -9,12 +9,12 @@ using UnityEditor;
 /// </summary>
 [RequireComponent(typeof(MovementController))]
 public class MovementModifierStack : MonoBehaviour {
-    [Header("Сглаживание")]
+    [Header("Smoothing")]
     [Tooltip("Время плавного перехода между значениями (сек)")]
     [Range(0f, 2f)][SerializeField] private float transitionTime = 0.3f;
 
 
-    [Header("Базовые настройки (Воздух)")]
+    [Header("Base settings")]
     [Tooltip("Множитель скорости по умолчанию (когда нет поверхностей)")]
     [Range(0.1f, 3f)][SerializeField] private float baseSpeedMultiplier = 1.0f;
 

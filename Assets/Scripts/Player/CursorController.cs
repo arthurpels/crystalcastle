@@ -13,7 +13,7 @@ public class CursorController : MonoBehaviour
         Hidden     // Катсцена: скрыт, но не зацентрен (для контроллеров)
     }
 
-    [Header("Настройки")]
+    [Header("Settings")]
     [SerializeField] private CursorMode defaultMode = CursorMode.Locked;
     [SerializeField] private bool lockWhenOutOfFocus = true;
 

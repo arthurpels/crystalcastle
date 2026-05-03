@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(PlayerInputHandler))]
 public class CameraController : MonoBehaviour {
-    [Header("Настройки")]
+    [Header("Settings")]
     [SerializeField] private GameObject cameraTarget;
     [SerializeField] private float mouseSensitivity = 2.0f;
     [SerializeField] private float minVerticalAngle = -60f;

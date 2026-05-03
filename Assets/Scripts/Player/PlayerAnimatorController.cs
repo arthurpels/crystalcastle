@@ -7,7 +7,7 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class PlayerAnimationController : MonoBehaviour
 {
-    [SerializeField] private MovementController movement;
+    [SerializeField] private MovementController movementController;
     
     private Animator _animator;
     private static readonly int animIDSpeed = Animator.StringToHash("Speed");
@@ -18,24 +18,24 @@ public class PlayerAnimationController : MonoBehaviour
     private void Awake()
     {
         _animator = GetComponent<Animator>();
-        if (movement == null) movement = GetComponent<MovementController>();
+        if (movementController == null) movementController = GetComponent<MovementController>();
     }
 
     private void LateUpdate()
     {
-        if (movement == null || _animator == null) return;
+        if (movementController == null || _animator == null) return;
 
-        _animator.SetFloat(animIDSpeed, movement.GetAnimationBlend());
+        _animator.SetFloat(animIDSpeed, movementController.GetAnimationBlend());
 
-        _animator.SetBool(animIDGrounded, movement.IsGrounded);
-        if (movement.IsGrounded) {            
+        _animator.SetBool(animIDGrounded, movementController.IsGrounded);
+        if (movementController.IsGrounded) {            
             _animator.SetBool(animIDJump, false);
             _animator.SetBool(animIDFreeFall, false);
         } else {
-            _animator.SetBool(animIDFreeFall, movement.IsFalling);
+            _animator.SetBool(animIDFreeFall, movementController.IsFalling);
         }
 
-        if (movement.Jumped) {
+        if (movementController.Jumped) {
             _animator.SetBool(animIDJump, true);
         }
 

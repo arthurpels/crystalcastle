@@ -62,7 +62,7 @@ public class MovementController : MonoBehaviour {
 
     /// <summary>Касается ли земли</summary>
     public bool IsGrounded => grounded;
-    public bool IsSprinting => currentSpeed > baseMoveSpeed;
+    public bool IsSprinting => sprintInput && moveInput.magnitude == 1;
     public bool IsFalling => fallTimeoutDelta < 0;
     public bool Jumped => jumpInput && jumpTimeoutDelta <= 0f;
 
