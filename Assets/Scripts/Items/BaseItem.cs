@@ -6,7 +6,7 @@ using UnityEngine;
 /// </summary>
 public abstract class BaseItem : MonoBehaviour
 {
-    [Header("Data")]
+    [Header("Data")]    
     public string displayName = "Item";
     public Sprite icon;
     

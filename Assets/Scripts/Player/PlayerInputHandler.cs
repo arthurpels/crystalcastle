@@ -6,6 +6,7 @@ using System;
 /// Чистый обработчик ввода. Читает действия, буферизует прыжок, отдает готовые данные в MovementController.
 /// </summary>
 [RequireComponent(typeof(MovementController))]
+[RequireComponent(typeof(ItemManager))]
 public class PlayerInputHandler : MonoBehaviour
 {
     
@@ -16,7 +17,7 @@ public class PlayerInputHandler : MonoBehaviour
     [Range(0f, 0.5f)] [SerializeField] private float jumpBufferTime = 0.1f;
 
     
-    private PlayerInputAction inputActionsAsset;
+    private PlayerInputAction playerInputAction;
     // Публичный интерфейс
     public bool InputEnabled { get; set; } = true;
     public Vector2 MoveInput { get; private set; }
@@ -24,24 +25,26 @@ public class PlayerInputHandler : MonoBehaviour
 
     // Внутреннее состояние
     private MovementController _movementController;
+    private ItemManager _itemManager;
     private float _jumpBufferTimer;
 
     private void Awake() {
 
-        inputActionsAsset = new PlayerInputAction();
+        playerInputAction = new PlayerInputAction();
         _movementController = GetComponent<MovementController>();
-        if (inputActionsAsset == null)
+        _itemManager = GetComponent<ItemManager>();
+        if (playerInputAction == null)
         {
             Debug.LogError($"[{name}] Missing InputActions Asset.", this);
             enabled = false; return;
         }
 
         // Подписка на событие прыжка
-        inputActionsAsset.Player.Jump.performed += _ => TriggerJumpBuffer();
+        playerInputAction.Player.Jump.performed += _ => TriggerJumpBuffer();
     }
 
-    private void OnEnable() => inputActionsAsset.Enable();
-    private void OnDisable() => inputActionsAsset.Disable();
+    private void OnEnable() => playerInputAction.Enable();
+    private void OnDisable() => playerInputAction.Disable();
 
     private void Update()
     {
@@ -49,11 +52,18 @@ public class PlayerInputHandler : MonoBehaviour
 
         if (_jumpBufferTimer > 0f) _jumpBufferTimer -= Time.deltaTime;
 
-        MoveInput = inputActionsAsset.Player.Move.ReadValue<Vector2>();
-        bool sprint = inputActionsAsset.Player.Sprint.IsPressed();
+        MoveInput = playerInputAction.Player.Move.ReadValue<Vector2>();
+        bool sprint = playerInputAction.Player.Sprint.IsPressed();
         bool jump = _jumpBufferTimer > 0f;
 
         _movementController.SetInput(MoveInput, sprint, jump);
+
+        if (Keyboard.current.fKey.wasPressedThisFrame) {
+            _itemManager.OnLeftHandAction();
+        }
+            
+        // if (Keyboard.current.gKey.wasPressedThisFrame)
+        //     _itemManager.OnRightHandAction();
     }
 
     private void TriggerJumpBuffer()
