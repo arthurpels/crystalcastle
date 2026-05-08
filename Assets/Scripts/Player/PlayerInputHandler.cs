@@ -6,7 +6,7 @@ using System;
 /// Чистый обработчик ввода. Читает действия, буферизует прыжок, отдает готовые данные в MovementController.
 /// </summary>
 [RequireComponent(typeof(MovementController))]
-[RequireComponent(typeof(ItemManager))]
+[RequireComponent(typeof(PlayerInventory))]
 public class PlayerInputHandler : MonoBehaviour
 {
     
@@ -25,14 +25,14 @@ public class PlayerInputHandler : MonoBehaviour
 
     // Внутреннее состояние
     private MovementController _movementController;
-    private ItemManager _itemManager;
+    private PlayerInventory _playerInventory;
     private float _jumpBufferTimer;
 
     private void Awake() {
 
         playerInputAction = new PlayerInputAction();
         _movementController = GetComponent<MovementController>();
-        _itemManager = GetComponent<ItemManager>();
+        _playerInventory = GetComponent<PlayerInventory>();
         if (playerInputAction == null)
         {
             Debug.LogError($"[{name}] Missing InputActions Asset.", this);
@@ -58,8 +58,20 @@ public class PlayerInputHandler : MonoBehaviour
 
         _movementController.SetInput(MoveInput, sprint, jump);
 
+        if (Mouse.current.leftButton.wasPressedThisFrame) {
+            _playerInventory.UseRightHandItem();
+        }
+
         if (Keyboard.current.fKey.wasPressedThisFrame) {
-            _itemManager.OnLeftHandAction();
+            _playerInventory.UseFlashlight();
+        }
+
+        if (Keyboard.current.qKey.wasPressedThisFrame) {
+            _playerInventory.Drop();
+        }
+        
+        if (Keyboard.current.eKey.wasPressedThisFrame) {
+            _playerInventory.TryPickup();
         }
             
         // if (Keyboard.current.gKey.wasPressedThisFrame)

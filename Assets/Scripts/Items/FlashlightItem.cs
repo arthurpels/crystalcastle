@@ -1,61 +1,57 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class FlashlightItem : BaseItem {
-    [Header("Settings")]
+public class FlashlightHandItem : HandItem {
+    [Header("Components")]
     public Light lightComp;
     public AudioClip clickSound;
-    private AudioSource audioSource;
 
-    public bool isOn;
-
-    [Header("Flicker")]
     public float flickerIntensity = 0.4f;
 
+    // [Header("Rig")]
+    // public HandRigConfig rigConfig = new HandRigConfig {
+    //     behavior = HandRigConfig.RigBehavior.AimAtCamera,
+    //     AimWeight = 0.8f,
+    //     blendInSpeed = 4f,
+    //     blendOutSpeed = 2f
+    // };
+
+    public bool IsOn { get; private set; }
     private float _flickerTimer;
+    private AudioSource _audio;
 
     private void Awake() {
-        audioSource = GetComponent<AudioSource>();
-        if (visualModel) visualModel.SetActive(false);
+        _audio = GetComponent<AudioSource>();
+        if (lightComp) lightComp.enabled = false;
     }
 
-    public override void OnEquip(ItemSlot slot) {
-        isOn = true;
-        lightComp.enabled = true;
-        PlayClick();
+    public override void OnEquip() {
+        ToggleLight();
     }
 
-    public override void OnUnequip(ItemSlot slot) {
-        isOn = false;
-        lightComp.enabled = false;
+    public override void OnUnequip() {
+        TurnLightOff();
     }
 
-    public override void OnUse(ItemSlot slot) {
-        isOn = !isOn;
-        lightComp.enabled = isOn;
-        PlayClick();
-    }
+    public override void OnUse() => ToggleLight();
 
-    public override void OnTick(ItemSlot slot, float dt) {
-        if (!isOn) return;
+    public override void OnTick(float dt) {
+        if (!IsOn) return;
 
         _flickerTimer -= dt;
         if (_flickerTimer <= 0f) {
-            _flickerTimer = Random.Range(0.05f, 0.3f);
-            // lightComp.intensity = Random.Range(5f - flickerIntensity, 5f + flickerIntensity * 0.5f);
-            if (Random.Range(0, 100) < 10) {
-                lightComp.intensity = Random.Range(2f - flickerIntensity, 2f + flickerIntensity * 0.5f);
-            } else {
-                lightComp.intensity = Random.Range(5f - flickerIntensity, 5f + flickerIntensity * 0.5f);
-            }
-            
+            _flickerTimer = Random.Range(0.05f, 0.2f);
+            lightComp.intensity = Random.Range(5f - flickerIntensity, 5f + flickerIntensity * 0.5f);
         }
-
     }
 
-    private void PlayClick() {
-        if (audioSource && clickSound) audioSource.PlayOneShot(clickSound);
+    private void ToggleLight() {
+        IsOn = !IsOn;
+        lightComp.enabled = IsOn;
+        if (_audio && clickSound) _audio.PlayOneShot(clickSound);
     }
 
+    private void TurnLightOff() {
+        IsOn = false;
+        lightComp.enabled = false;
+    }
 }
