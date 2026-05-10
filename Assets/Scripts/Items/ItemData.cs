@@ -8,7 +8,7 @@ public class ItemData : ScriptableObject
     public Sprite icon;
     public int maxStack = 1;
 
-    [Header("Visuals")]
+    [Header("Prefabs")]
     public GameObject handPrefab;  // Модель для руки (без Rigidbody, оптимизирована)
     public GameObject worldPrefab; // Модель для мира (с LOD, Rigidbody, коллайдером)
 

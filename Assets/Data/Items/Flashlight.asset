@@ -15,6 +15,8 @@ MonoBehaviour:
   displayName: Flashlight
   icon: {fileID: 21300000, guid: cb589de753460589280707e404288b4f, type: 3}
   maxStack: 1
-  handPrefab: {fileID: 0}
+  handPrefab: {fileID: 3898696583279353310, guid: 55c3aafe00a2243b9a14d9f23bdff520,
+    type: 3}
   worldPrefab: {fileID: 0}
   weight: 1
+  pickupRange: 2

@@ -63,11 +63,11 @@ public class PlayerInputHandler : MonoBehaviour
         }
 
         if (Keyboard.current.fKey.wasPressedThisFrame) {
-            _playerInventory.UseFlashlight();
+            _playerInventory.UseLeftHandItem();
         }
 
         if (Keyboard.current.qKey.wasPressedThisFrame) {
-            _playerInventory.Drop();
+            _playerInventory.Drop(_playerInventory.rightHandSlot);
         }
         
         if (Keyboard.current.eKey.wasPressedThisFrame) {

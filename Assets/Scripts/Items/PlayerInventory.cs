@@ -7,12 +7,10 @@ public class PlayerInventory : MonoBehaviour {
 
     [Header("Slots")]
     public ItemSlot leftHandSlot;
-    public HandItem flashlight;
-    public ItemSlot rightHandSlot; // Левая рука — отдельно, под фонарик
+    public ItemData flashlight;
+    public ItemSlot rightHandSlot;
 
     [Header("Settings")]
-    public KeyCode pickupKey = KeyCode.E;
-    public KeyCode dropKey = KeyCode.Q;
     public LayerMask interactableLayer;
 
     [Header("Inventory")]
@@ -30,6 +28,10 @@ public class PlayerInventory : MonoBehaviour {
         else Destroy(gameObject);
 
         _cam = Camera.main;
+
+        Add(flashlight);
+        Equip(flashlight, leftHandSlot);
+        
     }
 
     private void Update() {
@@ -48,30 +50,39 @@ public class PlayerInventory : MonoBehaviour {
     }
 
     public void TryPickup() {
-        if (_targetPickup != null && inventory.Count < maxSlots) {
-            Add(_targetPickup.data);
-            _targetPickup.Pickup();
-        }
-    }
+        // 1. Проверка: есть ли таргет и место в инвентаре?
+        if (_targetPickup == null || _targetPickup.data == null) return;
+        if (inventory.Count >= maxSlots) return; // или логика стаков
 
+        // 2. Добавляем данные в инвентарь
+        Add(_targetPickup.data);
+
+        // 3. Говорим предмету в мире: "Забираю" — он просто уничтожается
+        _targetPickup.Pickup();
+
+        // 4. Если правая рука пуста — сразу экипируем (опционально)
+        if (rightHandSlot.CurrentItem == null)
+            Equip(_targetPickup.data, rightHandSlot);
+    }
     public void UseRightHandItem() {
         rightHandSlot.CurrentItem?.OnUse();
+    }
+
+    public void UseLeftHandItem() {
+        leftHandSlot.CurrentItem?.OnUse();
     }
 
     public void Add(ItemData data) {
         if (data == null) return;
         inventory.Add(data);
         OnInventoryChanged?.Invoke();
-
-        if (rightHandSlot.CurrentItem == null)
-            Equip(data);
     }
 
-    public void Equip(ItemData data) {
+    public void Equip(ItemData data, ItemSlot slot) {
         if (data == null || !inventory.Contains(data)) return;
-        if (rightHandSlot.CurrentItem != null) Unequip();
+        if (slot.CurrentItem != null) Unequip(slot);
 
-        var handObj = Instantiate(data.handPrefab, rightHandSlot.holdPoint);
+        var handObj = Instantiate(data.handPrefab, slot.holdPoint);
         handObj.transform.localPosition = Vector3.zero;
         handObj.transform.localRotation = Quaternion.identity;
 
@@ -79,22 +90,22 @@ public class PlayerInventory : MonoBehaviour {
         if (handItem != null) {
             handItem.data = data;
             handItem.OnEquip();
-            rightHandSlot.CurrentItem = handItem;
+            slot.CurrentItem = handItem;
         }
     }
 
-    public void Unequip() {
-        if (rightHandSlot.CurrentItem == null) return;
-        rightHandSlot.CurrentItem.OnUnequip();
-        Destroy(rightHandSlot.CurrentItem.gameObject);
-        rightHandSlot.CurrentItem = null;
+    public void Unequip(ItemSlot slot) {
+        if (slot.CurrentItem == null) return;
+        slot.CurrentItem.OnUnequip();
+        Destroy(slot.CurrentItem.gameObject);
+        slot.CurrentItem = null;
     }
 
-    public void Drop() {
-        var item = rightHandSlot.CurrentItem;
+    public void Drop(ItemSlot slot) {
+        var item = slot.CurrentItem;
         if (item == null || item.data == null) return;
 
-        Unequip();
+        Unequip(slot);
         inventory.Remove(item.data);
         OnInventoryChanged?.Invoke();
 
@@ -110,7 +121,8 @@ public class PlayerInventory : MonoBehaviour {
     }
 
     public void RemoveFromInventory(ItemData data) {
-        if (rightHandSlot.CurrentItem?.data == data) Unequip();
+        if (rightHandSlot.CurrentItem?.data == data) Unequip(rightHandSlot);
+        if (leftHandSlot.CurrentItem?.data == data) Unequip(leftHandSlot);
         inventory.Remove(data);
         OnInventoryChanged?.Invoke();
     }
