@@ -37,13 +37,14 @@ public class PlayerInventory : MonoBehaviour {
     private void Update() {
         ScanForPickup();
         rightHandSlot.CurrentItem?.OnTick(Time.deltaTime);
+        leftHandSlot.CurrentItem?.OnTick(Time.deltaTime);
     }
 
     private void ScanForPickup() {
         _targetPickup = null;
         Ray ray = _cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
 
-        if (Physics.Raycast(ray, out RaycastHit hit, 3f, interactableLayer)) {
+        if (Physics.Raycast(ray, out RaycastHit hit, 6f, interactableLayer)) {
             if (hit.collider.TryGetComponent(out WorldItem wi) && wi.data != null)
                 _targetPickup = wi;
         }

@@ -9,7 +9,7 @@ public class WorldItem : MonoBehaviour
     {
         if (TryGetComponent(out Collider col))
         {
-            col.isTrigger = true;
+            col.isTrigger = false;
             col.gameObject.layer = LayerMask.NameToLayer("Interactable");
         }
     }

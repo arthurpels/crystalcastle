@@ -17,6 +17,7 @@ MonoBehaviour:
   maxStack: 1
   handPrefab: {fileID: 3898696583279353310, guid: 55c3aafe00a2243b9a14d9f23bdff520,
     type: 3}
-  worldPrefab: {fileID: 0}
+  worldPrefab: {fileID: 3088703665348345471, guid: 4102fced9e17ab1c4b28eff6af81812f,
+    type: 3}
   weight: 1
   pickupRange: 2
