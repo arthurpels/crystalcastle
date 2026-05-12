@@ -7,6 +7,7 @@ using System;
 /// </summary>
 [RequireComponent(typeof(MovementController))]
 [RequireComponent(typeof(PlayerInventory))]
+[RequireComponent(typeof(InteractionManager))]
 public class PlayerInputHandler : MonoBehaviour
 {
     
@@ -26,6 +27,7 @@ public class PlayerInputHandler : MonoBehaviour
     // Внутреннее состояние
     private MovementController _movementController;
     private PlayerInventory _playerInventory;
+    private InteractionManager _interactionManager;
     private float _jumpBufferTimer;
 
     private void Awake() {
@@ -33,6 +35,7 @@ public class PlayerInputHandler : MonoBehaviour
         playerInputAction = new PlayerInputAction();
         _movementController = GetComponent<MovementController>();
         _playerInventory = GetComponent<PlayerInventory>();
+        _interactionManager = GetComponent<InteractionManager>();
         if (playerInputAction == null)
         {
             Debug.LogError($"[{name}] Missing InputActions Asset.", this);
@@ -71,7 +74,7 @@ public class PlayerInputHandler : MonoBehaviour
         }
         
         if (Keyboard.current.eKey.wasPressedThisFrame) {
-            _playerInventory.TryPickup();
+            _interactionManager.TryInteract();
         }
             
         // if (Keyboard.current.gKey.wasPressedThisFrame)

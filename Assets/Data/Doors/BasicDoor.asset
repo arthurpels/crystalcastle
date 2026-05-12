@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddec9976c55e2532ea5f34af9392054a, type: 3}
+  m_Name: BasicDoor
+  m_EditorClassIdentifier: 
+  autoClose: 0
+  closeDelay: 3
+  requiresKey: 0
+  keyItem: {fileID: 0}
+  openSound: {fileID: 8300000, guid: 767272612c8e8320b96ab33ae45d030a, type: 3}
+  closeSound: {fileID: 8300000, guid: a56d207b7aefef3e2bc754a8dd78637b, type: 3}
+  lockedSound: {fileID: 8300000, guid: 615491da6da6d9e50a45544bd1d82f19, type: 3}

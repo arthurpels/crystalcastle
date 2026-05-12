@@ -10,9 +10,6 @@ public class PlayerInventory : MonoBehaviour {
     public ItemData flashlight;
     public ItemSlot rightHandSlot;
 
-    [Header("Settings")]
-    public LayerMask interactableLayer;
-
     [Header("Inventory")]
     public List<ItemData> inventory = new();
     public int maxSlots = 6;
@@ -21,49 +18,34 @@ public class PlayerInventory : MonoBehaviour {
     public static event Action OnInventoryChanged;
 
     private Camera _cam;
-    private WorldItem _targetPickup;
 
     private void Awake() {
         if (Instance == null) Instance = this;
-        else Destroy(gameObject);
+        // else Destroy(gameObject);
 
         _cam = Camera.main;
 
         Add(flashlight);
         Equip(flashlight, leftHandSlot);
-        
+
     }
 
     private void Update() {
-        ScanForPickup();
+
         rightHandSlot.CurrentItem?.OnTick(Time.deltaTime);
         leftHandSlot.CurrentItem?.OnTick(Time.deltaTime);
     }
 
-    private void ScanForPickup() {
-        _targetPickup = null;
-        Ray ray = _cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+    public void PickupItem(WorldItem item) {
 
-        if (Physics.Raycast(ray, out RaycastHit hit, 6f, interactableLayer)) {
-            if (hit.collider.TryGetComponent(out WorldItem wi) && wi.data != null)
-                _targetPickup = wi;
+        if (inventory.Count < maxSlots) {
+            Add(item.data);
+            
+            item.Pickup();
+
+            if (rightHandSlot.CurrentItem == null)
+                Equip(item.data, rightHandSlot);
         }
-    }
-
-    public void TryPickup() {
-        // 1. Проверка: есть ли таргет и место в инвентаре?
-        if (_targetPickup == null || _targetPickup.data == null) return;
-        if (inventory.Count >= maxSlots) return; // или логика стаков
-
-        // 2. Добавляем данные в инвентарь
-        Add(_targetPickup.data);
-
-        // 3. Говорим предмету в мире: "Забираю" — он просто уничтожается
-        _targetPickup.Pickup();
-
-        // 4. Если правая рука пуста — сразу экипируем (опционально)
-        if (rightHandSlot.CurrentItem == null)
-            Equip(_targetPickup.data, rightHandSlot);
     }
     public void UseRightHandItem() {
         rightHandSlot.CurrentItem?.OnUse();
@@ -126,5 +108,9 @@ public class PlayerInventory : MonoBehaviour {
         if (leftHandSlot.CurrentItem?.data == data) Unequip(leftHandSlot);
         inventory.Remove(data);
         OnInventoryChanged?.Invoke();
+    }
+
+    public bool HasItem(ItemData data) {
+        return inventory.Contains(data);
     }
 }
