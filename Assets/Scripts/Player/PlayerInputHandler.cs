@@ -8,16 +8,17 @@ using System;
 [RequireComponent(typeof(MovementController))]
 [RequireComponent(typeof(PlayerInventory))]
 [RequireComponent(typeof(InteractionManager))]
-public class PlayerInputHandler : MonoBehaviour
-{
-    
-    
-    
+public class PlayerInputHandler : MonoBehaviour {
+
+
+
     [Header("Config")]
     [Tooltip("Время хранения нажатия прыжка (сек). Позволяет 'спамить' до приземления")]
-    [Range(0f, 0.5f)] [SerializeField] private float jumpBufferTime = 0.1f;
+    [Range(0f, 0.5f)][SerializeField] private float jumpBufferTime = 0.1f;
 
-    
+
+    [SerializeField] private InventoryUI inventoryUI;
+
     private PlayerInputAction playerInputAction;
     // Публичный интерфейс
     public bool InputEnabled { get; set; } = true;
@@ -28,7 +29,14 @@ public class PlayerInputHandler : MonoBehaviour
     private MovementController _movementController;
     private PlayerInventory _playerInventory;
     private InteractionManager _interactionManager;
+
+
     private float _jumpBufferTimer;
+
+
+    public void SetInputEnabled(bool enabled) {
+        InputEnabled = enabled;
+    }
 
     private void Awake() {
 
@@ -36,8 +44,7 @@ public class PlayerInputHandler : MonoBehaviour
         _movementController = GetComponent<MovementController>();
         _playerInventory = GetComponent<PlayerInventory>();
         _interactionManager = GetComponent<InteractionManager>();
-        if (playerInputAction == null)
-        {
+        if (playerInputAction == null) {
             Debug.LogError($"[{name}] Missing InputActions Asset.", this);
             enabled = false; return;
         }
@@ -49,8 +56,11 @@ public class PlayerInputHandler : MonoBehaviour
     private void OnEnable() => playerInputAction.Enable();
     private void OnDisable() => playerInputAction.Disable();
 
-    private void Update()
-    {
+    private void Update() {
+        if (Keyboard.current.tabKey.wasPressedThisFrame) { // или iKey
+            inventoryUI.Toggle();
+        }
+        
         if (!InputEnabled) return;
 
         if (_jumpBufferTimer > 0f) _jumpBufferTimer -= Time.deltaTime;
@@ -70,19 +80,20 @@ public class PlayerInputHandler : MonoBehaviour
         }
 
         if (Keyboard.current.qKey.wasPressedThisFrame) {
-            _playerInventory.Drop(_playerInventory.rightHandSlot);
+            _playerInventory.DropFromSlot(_playerInventory.rightHandSlot);
         }
-        
+
         if (Keyboard.current.eKey.wasPressedThisFrame) {
             _interactionManager.TryInteract();
         }
-            
+
+        
+
         // if (Keyboard.current.gKey.wasPressedThisFrame)
         //     _itemManager.OnRightHandAction();
     }
 
-    private void TriggerJumpBuffer()
-    {
+    private void TriggerJumpBuffer() {
         if (!InputEnabled) return;
         _jumpBufferTimer = jumpBufferTime;
         JumpPressed?.Invoke();

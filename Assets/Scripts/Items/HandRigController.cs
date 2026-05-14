@@ -20,7 +20,7 @@ public class HandRigController : MonoBehaviour
         float targetWeight = 0f;
         
         // Проверяем, есть ли предмет в слоте и есть ли у него конфиг
-        if (itemSlot?.CurrentItem != null && itemSlot.CurrentItem is HandItem handItem)
+        if (itemSlot?.SpawnedItem != null && itemSlot.SpawnedItem is HandItem handItem)
         {
             var newConfig = handItem.rigConfig;
             

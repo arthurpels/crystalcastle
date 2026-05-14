@@ -1,7 +1,6 @@
 using UnityEngine;
 
 public abstract class Door : MonoBehaviour {
-    // === Состояние (настраивается в инспекторе) ===
     [Header("State")]
     [SerializeField] protected bool isOpen;
     [SerializeField] protected bool isLocked;
