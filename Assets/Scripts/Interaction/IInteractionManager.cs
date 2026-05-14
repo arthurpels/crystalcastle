@@ -5,6 +5,7 @@ public class InteractionManager : MonoBehaviour {
     [SerializeField] private Camera playerCamera;
     [SerializeField] private float maxRange = 3f;
     [SerializeField] private LayerMask interactableLayer;
+    [SerializeField] private LayerMask obstacleLayers;
     [SerializeField] private float aimAssistRadius = 0.2f; // Сфера на конце луча
 
     private IInteractable _currentTarget;
@@ -17,6 +18,8 @@ public class InteractionManager : MonoBehaviour {
 
     private void UpdateTarget() {
         IInteractable newTarget = null;
+        float sphereDistance = maxRange;
+
         Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f));
 
         // 1. Точный рейкаст
@@ -26,7 +29,11 @@ public class InteractionManager : MonoBehaviour {
 
         // 2. Если луч промахнулся → проверяем сферу на конце
         if (newTarget == null && aimAssistRadius > 0f) {
-            Vector3 sphereCenter = ray.GetPoint(maxRange);
+            if (Physics.Raycast(ray, out RaycastHit obstacleHit, maxRange, obstacleLayers)) {
+                sphereDistance = obstacleHit.distance;
+            }
+
+            Vector3 sphereCenter = ray.GetPoint(sphereDistance);
             Collider[] hits = Physics.OverlapSphere(sphereCenter, aimAssistRadius, interactableLayer);
 
             if (hits.Length > 0)

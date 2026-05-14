@@ -44,7 +44,7 @@ public class InventoryUI : MonoBehaviour {
             Destroy(child.gameObject);
         activeSlots.Clear();
 
-        // Создаём заново только актуальные предметы
+        // Создаём новые
         foreach (var item in inventory.inventory) {
             var go = Instantiate(slotPrefab, slotContainer);
             var ui = go.GetComponent<ItemSlotUI>();
@@ -57,6 +57,7 @@ public class InventoryUI : MonoBehaviour {
 
     public void EquipItemToRight(InventoryItem item) => inventory.Equip(item, inventory.rightHandSlot);
     public void EquipItemToLeft(InventoryItem item) => inventory.Equip(item, inventory.leftHandSlot);
-
+    public void UnequipItem(InventoryItem item) => inventory.Unequip(item?.itemSlot);
     public void DropItem(InventoryItem item) => inventory.DropFromInventory(item);
+    
 }

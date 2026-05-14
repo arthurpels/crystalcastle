@@ -59,6 +59,9 @@ public class PlayerInventory : MonoBehaviour {
     }
 
     public void Equip(InventoryItem item, ItemSlot slot) {
+        if (item.itemData.allowedHand == HandSlot.Left && slot != leftHandSlot) return;
+        if (item.itemData.allowedHand == HandSlot.Right && slot != rightHandSlot) return;
+        
         if (slot.CurrentItem != null) Unequip(slot);
         if (item.isEquiped) Unequip(item.itemSlot);
 
@@ -73,12 +76,14 @@ public class PlayerInventory : MonoBehaviour {
             slot.Equip(item, handItem);
             item.Equip(slot);
         }
+        OnInventoryChanged?.Invoke();
     }
 
     public void Unequip(ItemSlot slot) {
         if (slot.CurrentItem == null) return;
         slot.CurrentItem.Unequip();
         slot.Unequip();
+        OnInventoryChanged?.Invoke();
     }
 
     public void DropFromInventory(InventoryItem item) {
@@ -137,10 +142,12 @@ public class PlayerInventory : MonoBehaviour {
 
     public void UseRightHandItem() {
         rightHandSlot.SpawnedItem?.OnUse();
+        OnInventoryChanged?.Invoke();
     }
 
     public void UseLeftHandItem() {
         leftHandSlot.SpawnedItem?.OnUse();
+        OnInventoryChanged?.Invoke();
     }
 
 }
