@@ -22,6 +22,7 @@ public class PlayerInputHandler : MonoBehaviour {
     private PlayerInputAction playerInputAction;
     // Публичный интерфейс
     public bool InputEnabled { get; set; } = true;
+    public bool InputEnabledSoft { get; set; } = true;
     public Vector2 MoveInput { get; private set; }
     public event Action JumpPressed;
 
@@ -38,6 +39,10 @@ public class PlayerInputHandler : MonoBehaviour {
         InputEnabled = enabled;
     }
 
+    public void SetInputEnabledSoft(bool enabled) {
+        InputEnabledSoft = enabled;
+    }
+    
     private void Awake() {
 
         playerInputAction = new PlayerInputAction();
@@ -57,11 +62,13 @@ public class PlayerInputHandler : MonoBehaviour {
     private void OnDisable() => playerInputAction.Disable();
 
     private void Update() {
+        if (!InputEnabled) return;
+        
         if (Keyboard.current.tabKey.wasPressedThisFrame) { // или iKey
             inventoryUI.Toggle();
         }
         
-        if (!InputEnabled) return;
+        if (!InputEnabledSoft) return;
 
         if (_jumpBufferTimer > 0f) _jumpBufferTimer -= Time.deltaTime;
 

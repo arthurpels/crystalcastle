@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: Crowbar
   icon: {fileID: 21300000, guid: fbaac908e36b9bdc9b522517e0f33d84, type: 3}
-  handPrefab: {fileID: 0}
-  worldPrefab: {fileID: 0}
+  handPrefab: {fileID: 3929053903920010342, guid: cfd67290beb3ee4b9b83b0ed5ddd3b15,
+    type: 3}
+  worldPrefab: {fileID: 3790411748433844741, guid: 3290a36e453fc413bbf2c93b5ef7c327,
+    type: 3}
   allowedHand: 2
   hasRightHandAnimation: 0

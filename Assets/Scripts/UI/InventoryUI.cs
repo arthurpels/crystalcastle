@@ -28,7 +28,7 @@ public class InventoryUI : MonoBehaviour {
     public void Toggle() {
         isOpen = !isOpen;
         inventoryPanel?.SetActive(isOpen);
-        if (inputHandler != null) inputHandler.SetInputEnabled(!isOpen);
+        if (inputHandler != null) inputHandler.SetInputEnabledSoft(!isOpen);
         if (isOpen) {
             Refresh();
             cursorController.UnlockForUI();

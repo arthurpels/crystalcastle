@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
-public class WorldItem : MonoBehaviour
+public class WorldItem : MonoBehaviour, IInteractable
 {
     public ItemData data;
 
@@ -14,6 +14,9 @@ public class WorldItem : MonoBehaviour
         }
     }
 
-    // Просто уничтожает себя. ВСЮ логику подбора делает инвентарь.
     public void Pickup() => Destroy(gameObject);
+    public string PromptText => "Поднять";
+    public void Interact() {
+        FindObjectOfType<PlayerInventory>().PickupItem(this);
+    }
 }
