@@ -4,17 +4,16 @@ using UnityEngine;
 public class PowerNetwork : MonoBehaviour {
   public static PowerNetwork Instance { get; private set; }
 
-  [SerializeField]
-  private List<PowerGenerator> generators = new();
-  [SerializeField]
-  private List<PowerNode> _allNodes = new();
+  [SerializeField] private List<PowerGenerator> generators = new();
+  [SerializeField]  private List<PowerNode> _allNodes = new();
 
   void Awake() {
-    if (Instance == null)
-      Instance = this;
-    else
-      Destroy(gameObject);
+    if (Instance == null) Instance = this;
+    else Destroy(gameObject);
     CollectNodes();
+    // Evaluate();
+
+
   }
 
   void CollectNodes() {
@@ -24,11 +23,13 @@ public class PowerNetwork : MonoBehaviour {
 
   [ContextMenu("Evaluate Grid")]
   public void Evaluate() {
-    HashSet < PowerNode > powered = new();
-    Queue < PowerNode > queue = new();
+    CollectNodes(); // Пересобираем на всякий случай (если объекты спавнились позже)
+
+    HashSet<PowerNode> powered = new();
+    Queue<PowerNode> queue = new();
 
     foreach (var gen in generators) {
-      if (!gen.IsActive) continue;
+      if (gen == null || !gen.IsActive) continue;
       if (gen.OutputNode != null)
         queue.Enqueue(gen.OutputNode);
     }
@@ -36,12 +37,13 @@ public class PowerNetwork : MonoBehaviour {
     while (queue.Count > 0) {
       var current = queue.Dequeue();
 
-      // 🔥 ФИКС: если на ноде есть выключенный PowerBreaker — контакты разомкнуты
-      // Питание не доходит ни до этой ноды, ни дальше по цепи
-      var breaker = current.GetComponent < PowerBreaker > ();
+      // 🔥 ФИКС: если на ноде выключенный Breaker — контакты разомкнуты, дальше не идём
+      var breaker = current.GetComponent<PowerBreaker>();
       if (breaker != null && !breaker.IsOn) continue;
 
       if (!powered.Add(current)) continue;
+
+      if (current.connections == null) continue;
 
       foreach (var cable in current.connections) {
         if (cable == null || cable.isBroken) continue;
@@ -50,13 +52,14 @@ public class PowerNetwork : MonoBehaviour {
       }
     }
 
-    foreach (var node in _allNodes)
+    foreach (var node in _allNodes) {
+      if (node == null) continue;
       node.SetPowered(powered.Contains(node), true);
+    }
   }
 
   public void RegisterGenerator(PowerGenerator gen) {
-    if (!generators.Contains(gen))
-      generators.Add(gen);
+    if (gen != null && !generators.Contains(gen)) generators.Add(gen);
   }
 
   public void UnregisterGenerator(PowerGenerator gen) => generators.Remove(gen);

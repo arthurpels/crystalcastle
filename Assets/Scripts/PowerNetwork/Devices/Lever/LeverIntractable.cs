@@ -7,7 +7,7 @@ public class LeverInteractable : MonoBehaviour, IInteractable
     [SerializeField] private UnityEvent<bool> onToggle;
     [SerializeField] private Animator animator;
 
-    public string PromptText => isOn ? "[E] Выключить" : "[E] Включить";
+    public string PromptText => isOn ? "Выключить" : "Включить";
 
     void Start() => UpdateVisual();
 

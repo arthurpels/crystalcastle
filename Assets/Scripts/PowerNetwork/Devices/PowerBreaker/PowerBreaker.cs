@@ -1,7 +1,6 @@
 using UnityEngine;
 
-public class PowerBreaker : MonoBehaviour, IInteractable
-{
+public class PowerBreaker : MonoBehaviour, IInteractable {
     [Header("Grid")]
     [SerializeField] private PowerNode controlledNode;
     [SerializeField] private bool startsOn = true;
@@ -12,42 +11,40 @@ public class PowerBreaker : MonoBehaviour, IInteractable
 
     public bool IsOn { get; private set; }
 
-    void Start()
-    {
+    void Start() {
         IsOn = startsOn;
-        controlledNode?.SetPowered(IsOn, true);
+        controlledNode?.SetPowered(IsOn, false);
+        PowerNetwork.Instance?.Evaluate(); // Пересчитаем при старте
         UpdateVisual();
     }
 
     public void Interact() => Toggle();
 
-    public void Trip()
-    {
+    public void Trip() {
         if (!IsOn) return;
         IsOn = false;
         controlledNode?.SetPowered(false, true);
-        PowerNetwork.Instance?.Evaluate(); // 🔥
         UpdateVisual();
+        PowerNetwork.Instance?.Evaluate(); // 🔥
     }
 
-    public void ResetBreaker()
-    {
+    public void ResetBreaker() {
         if (IsOn) return;
         IsOn = true;
         controlledNode?.SetPowered(true, true);
-        PowerNetwork.Instance?.Evaluate(); // 🔥
         UpdateVisual();
+        PowerNetwork.Instance?.Evaluate(); // 🔥
     }
 
-    void Toggle()
-    {
+    void Toggle() {
         IsOn = !IsOn;
         controlledNode?.SetPowered(IsOn, true);
+
         PowerNetwork.Instance?.Evaluate(); // 🔥
         UpdateVisual();
     }
 
     void UpdateVisual() => animator?.SetBool(boolParam, IsOn);
 
-    public string PromptText => IsOn ? "[E] Обесточить" : "[E] Подать питание";
+    public string PromptText => IsOn ? "Обесточить" : "Подать питание";
 }

@@ -64,6 +64,7 @@ Assets/
    FrostbittenEnemy.cs
    FrozenEnemy.cs
    GameManager.cs
+   SimpleEnemyAI.cs
   Interaction/
    IInteractable.cs
    IInteractionManager.cs

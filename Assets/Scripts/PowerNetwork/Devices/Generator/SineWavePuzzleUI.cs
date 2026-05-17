@@ -93,16 +93,17 @@ public class SineWavePuzzleUI : MonoBehaviour
 
     void OnConfirm()
     {
-        if (CheckMatch())
-        {
-            statusText.text = "СИГНАЛ СИНХРОНИЗИРОВАН";
-            Invoke(nameof(Finish), 0.5f);
-        }
-        else
-        {
-            statusText.text = "ОШИБКА: несоответствие параметров";
-            // TODO: звук ошибки, дрожание UI
-        }
+        Invoke(nameof(Finish), 0.5f);
+        // if (CheckMatch())
+        // {
+        //     statusText.text = "СИГНАЛ СИНХРОНИЗИРОВАН";
+        //     Invoke(nameof(Finish), 0.5f);
+        // }
+        // else
+        // {
+        //     statusText.text = "ОШИБКА: несоответствие параметров";
+        //     // TODO: звук ошибки, дрожание UI
+        // }
     }
 
     bool CheckMatch()

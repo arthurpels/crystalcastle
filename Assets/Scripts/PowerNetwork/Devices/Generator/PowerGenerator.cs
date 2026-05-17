@@ -33,5 +33,5 @@ public class PowerGenerator : MonoBehaviour, IInteractable {
   }
 
   public string PromptText =>
-      IsActive ? "Генератор активен" : "[E] Настроить генератор";
+      IsActive ? "Генератор активен" : "Настроить генератор";
 }
