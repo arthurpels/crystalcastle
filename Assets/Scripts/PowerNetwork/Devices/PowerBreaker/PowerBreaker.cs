@@ -44,7 +44,10 @@ public class PowerBreaker : MonoBehaviour, IInteractable {
         UpdateVisual();
     }
 
-    void UpdateVisual() => animator?.SetBool(boolParam, IsOn);
+    void UpdateVisual() {
+        if (animator != null)
+            animator.SetBool(boolParam, IsOn);
+    }
 
     public string PromptText => IsOn ? "Обесточить" : "Подать питание";
 }

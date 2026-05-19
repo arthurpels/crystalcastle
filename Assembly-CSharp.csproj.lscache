@@ -61,6 +61,7 @@ Assets/
    RotatingDoor.cs
    SlidingDoor.cs
   Enemy/
+   EnemyJump.cs
    FrostbittenEnemy.cs
    FrozenEnemy.cs
    GameManager.cs
@@ -381,6 +382,10 @@ Temp/bin/Debug/
  Cinemachine.dll
  com.unity.cinemachine.editor.dll
  PPv2URPConverters.dll
+ Unity.AI.Navigation.dll
+ Unity.AI.Navigation.Editor.ConversionSystem.dll
+ Unity.AI.Navigation.Editor.dll
+ Unity.AI.Navigation.Updater.dll
  Unity.Animation.Rigging.dll
  Unity.Animation.Rigging.Editor.dll
  Unity.Burst.dll

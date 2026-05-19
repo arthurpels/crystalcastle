@@ -47,7 +47,8 @@ public class FrozenEnemy : MonoBehaviour {
         if (damageCollider != null)
             damageCollider.enabled = true;
 
-        animator?.SetTrigger("WakeUp");
+        if (animator != null)
+            animator.SetTrigger("WakeUp");
 
         if (meshRenderer != null && normalMaterial != null)
             meshRenderer.material = normalMaterial;
@@ -70,7 +71,9 @@ public class FrozenEnemy : MonoBehaviour {
         // if (damageCollider != null)
         //     damageCollider.enabled = false;
 
-        animator?.SetBool("Frozen", true);
+        if (animator != null)
+            animator.SetBool("Frozen", true);
+        
 
         if (meshRenderer != null && frozenMaterial != null)
             meshRenderer.material = frozenMaterial;

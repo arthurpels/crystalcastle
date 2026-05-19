@@ -1,8 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class LeverInteractable : MonoBehaviour, IInteractable
-{
+public class LeverInteractable : MonoBehaviour, IInteractable {
     [SerializeField] private bool isOn;
     [SerializeField] private UnityEvent<bool> onToggle;
     [SerializeField] private Animator animator;
@@ -11,15 +10,14 @@ public class LeverInteractable : MonoBehaviour, IInteractable
 
     void Start() => UpdateVisual();
 
-    public void Interact()
-    {
+    public void Interact() {
         isOn = !isOn;
         onToggle?.Invoke(isOn);
         UpdateVisual();
     }
 
-    void UpdateVisual()
-    {
-        animator?.SetBool("IsOn", isOn);
+    void UpdateVisual() {
+        if (animator != null)
+            animator.SetBool("IsOn", isOn);
     }
 }

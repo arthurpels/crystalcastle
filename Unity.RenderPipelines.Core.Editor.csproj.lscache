@@ -459,7 +459,6 @@ Library/PackageCache/
   Runtime/VisualScripting.Flow/Dependencies/NCalc/Unity.VisualScripting.Antlr3.Runtime.dll
 Temp/bin/Debug/
  Unity.Burst.dll
- Unity.InputSystem.dll
  Unity.RenderPipelines.Core.Runtime.dll
  UnityEditor.TestRunner.dll
  UnityEditor.UI.dll
