@@ -1,68 +1,85 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
-using System.Collections;
 
+/// <summary>
+/// Ручной траверс off-mesh связей: проигрывает дугу прыжка, когда агент
+/// заходит на NavMeshLink (или legacy OffMeshLink).
+///
+/// «Off-mesh link» — общий термин Unity для обоих типов связей. Класс
+/// работает с любым из них, потому что читает данные из
+/// agent.currentOffMeshLinkData, а не из конкретного компонента связи.
+/// </summary>
 [RequireComponent(typeof(NavMeshAgent))]
-[RequireComponent(typeof(Animator))]
-public class OffMeshLinkJump : MonoBehaviour
-{
-    [SerializeField] private float jumpDuration = 0.5f;
-    [SerializeField] private float jumpHeight = 1.0f;
-    [SerializeField] private AnimationCurve heightCurve = AnimationCurve.EaseInOut(0, 0, 1, 0);
+public class OffMeshLinkJump : MonoBehaviour {
+    [Header("Прыжок")]
+    [SerializeField] private float jumpSpeed = 4f;          // скорость вдоль связи, м/с
+    [SerializeField] private float jumpArc = 1.2f;          // высота дуги над прямой
+    [SerializeField] private float minJumpDuration = 0.25f; // минимальная длительность
+
+    [Header("Анимация (опционально)")]
+    [SerializeField] private string jumpTrigger = "Jump";
+    [SerializeField] private string landTrigger = "Land";
 
     private NavMeshAgent agent;
     private Animator animator;
-    private bool isTraversing;
+    private bool _traversing;
 
-    void Awake()
-    {
+    /// <summary>Идёт ли сейчас прыжок через связь.</summary>
+    public bool IsTraversing => _traversing;
+
+    void Awake() {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
-    }
 
-    void Update()
-    {
-        if (agent.isOnOffMeshLink && !isTraversing)
-        {
-            StartCoroutine(TraverseLink());
-        }
-    }
-
-    IEnumerator TraverseLink()
-    {
-        isTraversing = true;
+        // Траверс ведём вручную — выставляем ОДИН раз здесь.
+        // Если оставить значение по умолчанию (true), агент проскочит
+        // связь сам, до того как корутина успеет её перехватить.
         agent.autoTraverseOffMeshLink = false;
+    }
+
+    void Update() {
+        if (!agent.enabled || !agent.isOnNavMesh) return;
+
+        if (agent.isOnOffMeshLink && !_traversing)
+            StartCoroutine(TraverseLink());
+    }
+
+    private IEnumerator TraverseLink() {
+        _traversing = true;
 
         OffMeshLinkData data = agent.currentOffMeshLinkData;
-        Vector3 start = agent.transform.position;
-        Vector3 end = data.endPos + Vector3.up * agent.baseOffset;
+        Vector3 start = transform.position;                   // от текущей позиции — без рывка
+        Vector3 end   = data.endPos + Vector3.up * agent.baseOffset;
 
-        float dist = Vector3.Distance(start, end);
-        bool isJump = Mathf.Abs(start.y - end.y) < 0.5f && dist > 1f;
+        float duration = Mathf.Max(Vector3.Distance(start, end) / jumpSpeed, minJumpDuration);
 
-        if (isJump && animator != null)
-            animator.SetTrigger("Jump");
+        // Поворот лицом к точке приземления
+        Vector3 flatDir = end - start;
+        flatDir.y = 0f;
+        if (flatDir.sqrMagnitude > 0.001f)
+            transform.rotation = Quaternion.LookRotation(flatDir);
+
+        if (animator && !string.IsNullOrEmpty(jumpTrigger))
+            animator.SetTrigger(jumpTrigger);
 
         float t = 0f;
-        while (t < 1f)
-        {
-            t += Time.deltaTime / jumpDuration;
+        while (t < 1f) {
+            t += Time.deltaTime / duration;
+            float p = Mathf.Clamp01(t);
 
-            Vector3 pos = Vector3.Lerp(start, end, t);
-            float height = heightCurve.Evaluate(t) * jumpHeight;
-            pos.y += height;
-
-            agent.transform.position = pos;
+            Vector3 pos = Vector3.Lerp(start, end, p);
+            pos.y += 4f * jumpArc * p * (1f - p); // парабола: 0 на концах, пик в середине
+            transform.position = pos;
             yield return null;
         }
 
-        agent.transform.position = end;
-        agent.CompleteOffMeshLink();
-        agent.autoTraverseOffMeshLink = true;
+        transform.position = end;
+        agent.CompleteOffMeshLink(); // агент снова на NavMesh целевого острова
 
-        if (isJump && animator != null)
-            animator.SetTrigger("Land");
+        if (animator && !string.IsNullOrEmpty(landTrigger))
+            animator.SetTrigger(landTrigger);
 
-        isTraversing = false;
+        _traversing = false;
     }
 }
