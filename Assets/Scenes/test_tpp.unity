@@ -722,6 +722,7 @@ MonoBehaviour:
   chaseSpeed: 5.5
   patrolSpeed: 2.5
   searchGiveUpTime: 5
+  approachStopDistance: 0.3
 --- !u!195 &132952872
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -853,7 +854,7 @@ Transform:
   m_GameObject: {fileID: 132952869}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.5843056, z: -0, w: 0.8115337}
-  m_LocalPosition: {x: 5.412, y: 0.91, z: -16.736}
+  m_LocalPosition: {x: 5.6, y: 0.91, z: -16.79}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1718,7 +1719,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 880836735}
   m_HandleRect: {fileID: 880836734}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -2973,37 +2974,6 @@ MonoBehaviour:
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
   m_ScrollDeltaPerTick: 6
---- !u!1 &512850097
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 512850098}
-  m_Layer: 0
-  m_Name: OffMeshLinkGenerator.cs
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &512850098
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 512850097}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 23.432972, y: 23.109919, z: -8.231779}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &535577490
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7011,11 +6981,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AgentTypeID: 0
   m_StartPoint: {x: 0, y: 0, z: 0}
-  m_EndPoint: {x: 0, y: 0.9, z: 2.63}
+  m_EndPoint: {x: 0, y: 1, z: 2.47}
   m_Width: 2.7
   m_CostModifier: -1
-  m_Bidirectional: 1
-  m_AutoUpdatePosition: 0
+  m_Bidirectional: 0
+  m_AutoUpdatePosition: 1
   m_Area: 0
 --- !u!1 &1453388003
 GameObject:
@@ -9956,6 +9926,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2000142366}
+  - component: {fileID: 2000142367}
   m_Layer: 0
   m_Name: Fixed_NavMesh_Links
   m_TagString: Untagged
@@ -9978,6 +9949,25 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2000142367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2000142365}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8887a03a71620eac696a76ff38f13713, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scanRadius: 8
+  maxJumpHeight: 2.5
+  maxJumpDistance: 3
+  minHeightDiff: 0.3
+  linkWidth: 0.5
+  maxLinks: 20
+  showGizmos: 1
 --- !u!1 &2005384741
 GameObject:
   m_ObjectHideFlags: 0
@@ -11729,5 +11719,4 @@ SceneRoots:
   - {fileID: 1779404237}
   - {fileID: 1379878651}
   - {fileID: 132952877}
-  - {fileID: 512850098}
   - {fileID: 2000142366}

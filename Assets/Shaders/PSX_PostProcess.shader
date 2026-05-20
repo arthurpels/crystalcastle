@@ -17,7 +17,24 @@ Shader "CrystalCastle/PSX_PostProcess"
             #pragma fragment frag
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-            #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Blit.hlsl"
+
+            // Blit.hlsl exists only in URP 14+ (Unity 2022.2+); define the
+            // necessary blit infrastructure manually for wider compatibility.
+            TEXTURE2D_X(_BlitTexture);
+            SAMPLER(sampler_PointClamp);
+
+            struct Attributes { uint vertexID : SV_VertexID; UNITY_VERTEX_INPUT_INSTANCE_ID };
+            struct Varyings   { float4 positionCS : SV_POSITION; float2 texcoord : TEXCOORD0; UNITY_VERTEX_OUTPUT_STEREO };
+
+            Varyings Vert(Attributes IN)
+            {
+                Varyings OUT;
+                UNITY_SETUP_INSTANCE_ID(IN);
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(OUT);
+                OUT.positionCS = GetFullScreenTriangleVertexPosition(IN.vertexID);
+                OUT.texcoord   = GetFullScreenTriangleTexCoord(IN.vertexID);
+                return OUT;
+            }
 
             float _ColorLevels;     // число градаций на канал (PS1 ≈ 32)
             float _DitherStrength;  // 0 — жёсткая постеризация, 1 — полный дизеринг
