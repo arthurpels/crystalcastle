@@ -1,11 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-/// <summary>
-/// Базовый ИИ врага: патруль / преследование / поиск / атака.
-/// Прыжки между разорванными островами NavMesh выполняются автоматически:
-/// агент строит маршрут через NavMeshLink сам, траверс ведёт OffMeshLinkJump.
-/// </summary>
 [RequireComponent(typeof(NavMeshAgent))]
 public class SimpleEnemyAI : MonoBehaviour {
     public enum State { Idle, Chase, Search, Attack }
@@ -31,10 +26,17 @@ public class SimpleEnemyAI : MonoBehaviour {
     [Header("Search")]
     [SerializeField] private float searchGiveUpTime = 5f;
 
+    // === НОВОЕ: настройки подхода к краю для прыжка ===
+    [Header("Off-Mesh Approach")]
+    [SerializeField] private float approachStopDistance = 0.3f; // насколько близко подойти к краю
+
     private NavMeshAgent agent;
     private Transform player;
     private State currentState = State.Idle;
     private Vector3 lastKnownPosition;
+
+    private Vector3 lastReachablePosition;
+
 
     private float attackTimer;
     private int patrolIndex;
@@ -43,6 +45,9 @@ public class SimpleEnemyAI : MonoBehaviour {
     private bool _playerInMemory;
     private float _memoryTimer;
     private float _searchTimer;
+
+    // === НОВОЕ: флаг что мы идём к точке входа, а не напрямую к цели ===
+    private bool _approachingEdge;
 
     public State CurrentState => currentState;
     public Vector3 LastKnownPosition => lastKnownPosition;
@@ -55,8 +60,7 @@ public class SimpleEnemyAI : MonoBehaviour {
     void Update() {
         if (player == null) return;
 
-        // Пока агент проходит off-mesh связь (NavMeshLink) — траверс ведёт
-        // OffMeshLinkJump, FSM ставится на паузу до завершения прыжка.
+        // Пока агент проходит off-mesh связь — FSM на паузе
         if (agent.isOnOffMeshLink) return;
 
         UpdateMemory();
@@ -69,19 +73,26 @@ public class SimpleEnemyAI : MonoBehaviour {
         }
     }
 
-    // --- Память: враг помнит позицию игрока memoryDuration секунд ---
-    private void UpdateMemory() {
-        if (CanSeePlayer()) {
+    private void UpdateMemory()
+    {
+        if (CanSeePlayer())
+        {
             _playerInMemory = true;
             _memoryTimer = memoryDuration;
             lastKnownPosition = player.position;
-        } else if (_playerInMemory) {
+
+            // === НОВОЕ: если можем построить путь — запоминаем как "доступную" ===
+            if (HasPathTo(player.position))
+            {
+                lastReachablePosition = player.position;
+            }
+        }
+        else if (_playerInMemory)
+        {
             _memoryTimer -= Time.deltaTime;
             if (_memoryTimer <= 0f) _playerInMemory = false;
         }
     }
-
-    // --- Состояния ---
 
     private void TickIdle() {
         agent.speed = patrolSpeed;
@@ -89,38 +100,60 @@ public class SimpleEnemyAI : MonoBehaviour {
         Patrol();
     }
 
-    private void TickChase() {
+    private void TickChase()
+    {
         agent.speed = chaseSpeed;
 
         if (!_playerInMemory) { EnterSearch(); return; }
 
-        // Unity сама построит маршрут через NavMeshLink, если он есть
-        agent.isStopped = false;
-        agent.SetDestination(player.position);
+        // === ИЗМЕНЕНО: идём к последней ДОСТИЖИМОЙ позиции, не к текущей ===
+        Vector3 target = lastReachablePosition;
 
-        if (Vector3.Distance(transform.position, player.position) <= attackRange) {
+        // Если игрок снова доступен (спрыгнул) — обновляем
+        if (HasPathTo(player.position))
+        {
+            target = player.position;
+            lastReachablePosition = player.position;
+        }
+
+        agent.isStopped = false;
+        agent.SetDestination(target);
+
+        float dist = Vector3.Distance(transform.position, player.position);
+        if (dist <= attackRange)
+        {
             agent.isStopped = true;
             currentState = State.Attack;
         }
     }
 
-    private void TickSearch() {
+    private void TickSearch()
+    {
         agent.speed = patrolSpeed * 1.2f;
         agent.isStopped = false;
-        agent.SetDestination(lastKnownPosition);
+
+        // === ИЗМЕНЕНО: идём к последней достижимой позиции ===
+        agent.SetDestination(lastReachablePosition);
 
         if (_playerInMemory) { EnterChase(); return; }
 
         _searchTimer += Time.deltaTime;
         if (_searchTimer > searchGiveUpTime) { currentState = State.Idle; return; }
 
-        // Дошёл до последней известной точки — постоял и сдался
-        if (!agent.pathPending
-            && agent.remainingDistance < 1f
-            && agent.pathStatus == NavMeshPathStatus.PathComplete) {
+        // Дошли до точки — постояли, сдались
+        if (!agent.pathPending && agent.remainingDistance < 1f)
+        {
             waitTimer += Time.deltaTime;
             if (waitTimer > 2f) currentState = State.Idle;
         }
+    }
+
+    // === НОВЫЙ МЕТОД ===
+    private bool HasPathTo(Vector3 target)
+    {
+        NavMeshPath path = new NavMeshPath();
+        bool hasPath = NavMesh.CalculatePath(transform.position, target, NavMesh.AllAreas, path);
+        return hasPath && path.status == NavMeshPathStatus.PathComplete;
     }
 
     private void TickAttack() {
@@ -128,7 +161,7 @@ public class SimpleEnemyAI : MonoBehaviour {
         LookAtPlayer();
 
         if (attackTimer <= 0f) {
-            Debug.Log("АТАКА!"); // TODO: нанести урон игроку
+            Debug.Log("АТАКА!");
             attackTimer = attackCooldown;
         }
 
@@ -142,21 +175,60 @@ public class SimpleEnemyAI : MonoBehaviour {
         }
     }
 
-    // --- Переходы ---
+    // === НОВЫЕ МЕТОДЫ ===
+
+    /// <summary>
+    /// Проверяет, есть ли полный путь по NavMesh до точки (без разрывов)
+    /// </summary>
+    private bool HasCompletePathTo(Vector3 target) {
+        NavMeshPath path = new NavMeshPath();
+        bool hasPath = NavMesh.CalculatePath(transform.position, target, NavMesh.AllAreas, path);
+        return hasPath && path.status == NavMeshPathStatus.PathComplete;
+    }
+
+    /// <summary>
+    /// Находит ближайшую точку на краю текущего NavMesh-острова к цели.
+    /// Агент пойдёт сюда, и DynamicNavMeshLink создаст связь отсюда к целевому острову.
+    /// </summary>
+    private Vector3 FindNearestNavMeshEdge(Vector3 target) {
+        // Строим путь — он дойдёт до ближайшей точки на нашем острове
+        NavMeshPath path = new NavMeshPath();
+        bool hasPath = NavMesh.CalculatePath(transform.position, target, NavMesh.AllAreas, path);
+
+        if (hasPath && path.corners.Length > 0) {
+            // Последняя достижимая точка — край нашего острова
+            Vector3 edgePoint = path.corners[path.corners.Length - 1];
+
+            // Если это уже цель — путь полный, не нужен край
+            if (Vector3.Distance(edgePoint, target) < 0.5f)
+                return Vector3.zero;
+
+            return edgePoint;
+        }
+
+        // Fallback: ищем ближайшую точку на NavMesh к цели
+        if (NavMesh.SamplePosition(target, out NavMeshHit hit, 10f, NavMesh.AllAreas)) {
+            // Проверяем, что это на другом острове (выше или дальше)
+            if (Mathf.Abs(hit.position.y - transform.position.y) > 0.5f)
+                return hit.position;
+        }
+
+        return Vector3.zero;
+    }
 
     private void EnterChase() {
         currentState = State.Chase;
         agent.isStopped = false;
         _searchTimer = 0f;
+        _approachingEdge = false;
     }
 
     private void EnterSearch() {
         currentState = State.Search;
         waitTimer = 0f;
         _searchTimer = 0f;
+        _approachingEdge = false;
     }
-
-    // --- Утилиты ---
 
     private bool CanSeePlayer() {
         float dist = Vector3.Distance(transform.position, player.position);
@@ -211,6 +283,13 @@ public class SimpleEnemyAI : MonoBehaviour {
         if (currentState == State.Search || currentState == State.Chase) {
             Gizmos.color = Color.red;
             Gizmos.DrawSphere(lastKnownPosition, 0.3f);
+        }
+
+        // === НОВОЕ: рисуем точку края, куда идём ===
+        if (_approachingEdge) {
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawSphere(agent.destination, 0.2f);
+            Gizmos.DrawLine(transform.position, agent.destination);
         }
     }
 }
