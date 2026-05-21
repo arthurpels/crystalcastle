@@ -66,7 +66,9 @@ public class PlayerInventory : MonoBehaviour {
 
     if (inventory.Count >= maxSlots) return null;
 
-    InventoryItem inventoryItem = new(data);
+    // Для стакуемых предметов создаём стек с нужным количеством (важно при загрузке).
+    // Для нестакуемых count всегда = 1.
+    InventoryItem inventoryItem = new(data, data.isStackable ? amount : 1);
     inventory.Add(inventoryItem);
     OnInventoryChanged?.Invoke();
 
