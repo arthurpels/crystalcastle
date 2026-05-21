@@ -16,11 +16,12 @@ public class InteractionPromptUI : MonoBehaviour
     private void Update()
     {
         var target = manager.CurrentTarget;
-        if (target != null)
+        string prompt = target?.PromptText;
+
+        if (target != null && !string.IsNullOrEmpty(prompt))
         {
             promptPanel?.SetActive(true);
-            promptText.text = $"[E] {target.PromptText}";
-            
+            promptText.text = $"[E] {prompt}";
         }
         else
         {

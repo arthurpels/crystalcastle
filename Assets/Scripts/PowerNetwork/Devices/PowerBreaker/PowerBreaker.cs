@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PowerBreaker : MonoBehaviour, IInteractable {
+public class PowerBreaker : MonoBehaviour, IInteractable, ISaveable {
     [Header("Grid")]
     [SerializeField] private PowerNode controlledNode;
     [SerializeField] private bool startsOn = true;
@@ -50,4 +50,20 @@ public class PowerBreaker : MonoBehaviour, IInteractable {
     }
 
     public string PromptText => IsOn ? "Обесточить" : "Подать питание";
+
+    // ── ISaveable ──────────────────────────────────────────────────────────
+
+    [System.Serializable]
+    private struct BreakerSaveData { public bool isOn; }
+
+    public string CaptureState() =>
+        JsonUtility.ToJson(new BreakerSaveData { isOn = IsOn });
+
+    public void RestoreState(string json)
+    {
+        var d = JsonUtility.FromJson<BreakerSaveData>(json);
+        IsOn  = d.isOn;
+        UpdateVisual();
+        // Evaluate() — см. SaveManager.
+    }
 }

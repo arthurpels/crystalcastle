@@ -19,10 +19,16 @@ public class SlidingDoor : Door
     
     protected override void OnStateChanged()
     {
-        // Вычисляем целевую позицию
-        targetPosition = isOpen 
-            ? closedPosition + openOffset 
+        targetPosition = isOpen
+            ? closedPosition + openOffset
             : closedPosition;
+    }
+
+    // Мгновенный снэп при загрузке сохранения — без анимации.
+    protected override void OnStateChangedImmediate()
+    {
+        OnStateChanged();
+        if (mover != null) mover.localPosition = targetPosition;
     }
     
     private void Update()

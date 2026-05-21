@@ -150,6 +150,20 @@ public class PlayerInventory : MonoBehaviour {
     return inventory.Any(item => item.itemData == data);
   }
 
+  // ── Save system support ──────────────────────────────────────────────────
+
+  /// <summary>
+  /// Снять всё экипированное и очистить инвентарь.
+  /// Вызывается SaveManager перед восстановлением инвентаря из сохранения.
+  /// </summary>
+  public void ClearForLoad()
+  {
+    if (leftHandSlot.CurrentItem  != null) Unequip(leftHandSlot);
+    if (rightHandSlot.CurrentItem != null) Unequip(rightHandSlot);
+    inventory.Clear();
+    OnInventoryChanged?.Invoke();
+  }
+
   public void UseRightHandItem() {
     rightHandSlot.SpawnedItem?.OnUse();
     OnInventoryChanged?.Invoke();

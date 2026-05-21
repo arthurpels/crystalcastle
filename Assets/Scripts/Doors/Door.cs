@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public abstract class Door : MonoBehaviour, IInteractable {
+public abstract class Door : MonoBehaviour, IInteractable, ISaveable {
     [Header("State")]
     [SerializeField] protected bool isOpen;
     [SerializeField] protected bool isLocked;
@@ -61,8 +61,27 @@ public abstract class Door : MonoBehaviour, IInteractable {
     }
 
     public void Unlock() => isLocked = false;
-    public void Lock() => isLocked = true;
-    public bool IsOpen => isOpen;
+    public void Lock()   => isLocked = true;
+    public bool IsOpen   => isOpen;
     public bool IsLocked => isLocked;
     public DoorConfig DoorConfig => config;
+
+    // ── ISaveable ────────────────────────────────────────────────────────
+
+    [System.Serializable]
+    private struct DoorSaveData { public bool isOpen; public bool isLocked; }
+
+    public string CaptureState() =>
+        JsonUtility.ToJson(new DoorSaveData { isOpen = this.isOpen, isLocked = this.isLocked });
+
+    public void RestoreState(string json)
+    {
+        var d    = JsonUtility.FromJson<DoorSaveData>(json);
+        isOpen   = d.isOpen;
+        isLocked = d.isLocked;
+        OnStateChangedImmediate();  // мгновенный снэп, без анимации
+    }
+
+    /// <summary>Применить состояние мгновенно (без анимации). Переопределяй в подклассах.</summary>
+    protected virtual void OnStateChangedImmediate() => OnStateChanged();
 }

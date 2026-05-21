@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PowerGenerator : MonoBehaviour, IInteractable {
+public class PowerGenerator : MonoBehaviour, IInteractable, ISaveable {
   [Header("Grid")]
   [SerializeField]
   private PowerNode outputNode;
@@ -34,4 +34,19 @@ public class PowerGenerator : MonoBehaviour, IInteractable {
 
   public string PromptText =>
       IsActive ? "Генератор активен" : "Настроить генератор";
+
+  // ── ISaveable ──────────────────────────────────────────────────────────
+
+  [System.Serializable]
+  private struct GeneratorSaveData { public bool isActive; }
+
+  public string CaptureState() =>
+      JsonUtility.ToJson(new GeneratorSaveData { isActive = IsActive });
+
+  public void RestoreState(string json)
+  {
+      var d   = JsonUtility.FromJson<GeneratorSaveData>(json);
+      IsActive = d.isActive;
+      // PowerNetwork.Evaluate() вызовет SaveManager один раз в конце загрузки.
+  }
 }

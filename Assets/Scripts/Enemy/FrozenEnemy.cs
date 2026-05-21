@@ -56,6 +56,19 @@ public class FrozenEnemy : MonoBehaviour {
         Debug.Log($"[{name}] ВРАГ ОЖИЛ!", this);
     }
 
+    /// <summary>Вызывается SaveManager — восстанавливает состояние заморозки без задержки.</summary>
+    public void RestoreForLoad(bool frozen)
+    {
+        if (frozen)
+        {
+            if (!IsFrozen) Freeze();
+        }
+        else
+        {
+            if (IsFrozen) { IsFrozen = false; DoThaw(); }
+        }
+    }
+
     void Freeze() {
         IsFrozen = true;
 

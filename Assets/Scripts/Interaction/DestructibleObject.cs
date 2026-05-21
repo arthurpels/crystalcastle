@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class DestructibleObject : MonoBehaviour, IHealth {
+public class DestructibleObject : MonoBehaviour, IHealth, ISaveable {
     [SerializeField] private float maxHP = 30f;
     [SerializeField] private GameObject destroyedPrefab; // обломки (опционально)
     [SerializeField] private AudioClip destroySound;
@@ -36,13 +36,31 @@ public class DestructibleObject : MonoBehaviour, IHealth {
         // TODO: частицы, звук удара по дереву/металлу
     }
 
-    private void DestroyObject() {
+    private void DestroyObject()
+    {
         if (destroySound != null)
             AudioSource.PlayClipAtPoint(destroySound, transform.position);
 
         if (destroyedPrefab != null)
             Instantiate(destroyedPrefab, transform.position, transform.rotation);
 
+        // Уведомляем SaveManager перед уничтожением
+        SaveManager.Instance?.RegisterDestroyed(this);
         Destroy(gameObject);
+    }
+
+    // ── ISaveable ──────────────────────────────────────────────────────────
+
+    [System.Serializable]
+    private struct DestructibleSaveData { public float hp; }
+
+    public string CaptureState() =>
+        JsonUtility.ToJson(new DestructibleSaveData { hp = CurrentHP });
+
+    public void RestoreState(string json)
+    {
+        var d = JsonUtility.FromJson<DestructibleSaveData>(json);
+        CurrentHP = d.hp;
+        OnHPChanged?.Invoke(CurrentHP);
     }
 }

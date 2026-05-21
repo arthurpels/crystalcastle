@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
-public class WorldItem : MonoBehaviour, IInteractable
+public class WorldItem : MonoBehaviour, IInteractable, ISaveable
 {
     public ItemData data;
 
@@ -14,9 +14,19 @@ public class WorldItem : MonoBehaviour, IInteractable
         }
     }
 
-    public void Pickup() => Destroy(gameObject);
-    public string PromptText => "Поднять";
-    public void Interact() {
-        FindObjectOfType<PlayerInventory>().PickupItem(this);
+    public void Pickup()
+    {
+        // Уведомляем SaveManager перед уничтожением
+        SaveManager.Instance?.RegisterDestroyed(this);
+        Destroy(gameObject);
     }
+
+    public string PromptText => "Поднять";
+    public void Interact() => FindObjectOfType<PlayerInventory>().PickupItem(this);
+
+    // ── ISaveable ──────────────────────────────────────────────────────────
+    // WorldItem не имеет изменяемого состояния (только "есть / уничтожен").
+    // Факт уничтожения фиксируется в SaveManager.destroyedIds через RegisterDestroyed.
+    public string CaptureState()    => "{}";
+    public void   RestoreState(string _) { /* ничего — объект либо есть, либо нет */ }
 }

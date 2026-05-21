@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 using Unity.AI.Navigation;
@@ -59,3 +60,4 @@ public class AdvancedLinkGenerator : EditorWindow
         Debug.Log($"Готово! Создано {linkCount} честных двусторонних линков для запрыгивания.");
     }
 }
+#endif

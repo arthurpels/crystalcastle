@@ -19,9 +19,16 @@ public class RotatingDoor : Door
     
     protected override void OnStateChanged()
     {
-        targetRotation = isOpen 
-            ? Quaternion.Euler(openAngle) * closedRotation 
+        targetRotation = isOpen
+            ? Quaternion.Euler(openAngle) * closedRotation
             : closedRotation;
+    }
+
+    // Мгновенный снэп при загрузке сохранения — без анимации.
+    protected override void OnStateChangedImmediate()
+    {
+        OnStateChanged();
+        if (pivot != null) pivot.localRotation = targetRotation;
     }
     
     private void Update()

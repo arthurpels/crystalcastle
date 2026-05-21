@@ -174,14 +174,8 @@ public class SimpleEnemyAI : MonoBehaviour {
         LookAtPlayer();
 
         if (attackTimer <= 0f) {
-<<<<<<< Updated upstream
-            // === НОВОЕ: наносим урон игроку ===
             DealDamageToPlayer();
-
-=======
-            Debug.Log("АТАКА!");
             _audio?.OnAttack();
->>>>>>> Stashed changes
             attackTimer = attackCooldown;
         }
 
@@ -256,47 +250,6 @@ public class SimpleEnemyAI : MonoBehaviour {
         }
     }
 
-    // === НОВЫЕ МЕТОДЫ ===
-
-    /// <summary>
-    /// Проверяет, есть ли полный путь по NavMesh до точки (без разрывов)
-    /// </summary>
-    private bool HasCompletePathTo(Vector3 target) {
-        NavMeshPath path = new NavMeshPath();
-        bool hasPath = NavMesh.CalculatePath(transform.position, target, NavMesh.AllAreas, path);
-        return hasPath && path.status == NavMeshPathStatus.PathComplete;
-    }
-
-    /// <summary>
-    /// Находит ближайшую точку на краю текущего NavMesh-острова к цели.
-    /// Агент пойдёт сюда, и DynamicNavMeshLink создаст связь отсюда к целевому острову.
-    /// </summary>
-    private Vector3 FindNearestNavMeshEdge(Vector3 target) {
-        // Строим путь — он дойдёт до ближайшей точки на нашем острове
-        NavMeshPath path = new NavMeshPath();
-        bool hasPath = NavMesh.CalculatePath(transform.position, target, NavMesh.AllAreas, path);
-
-        if (hasPath && path.corners.Length > 0) {
-            // Последняя достижимая точка — край нашего острова
-            Vector3 edgePoint = path.corners[path.corners.Length - 1];
-
-            // Если это уже цель — путь полный, не нужен край
-            if (Vector3.Distance(edgePoint, target) < 0.5f)
-                return Vector3.zero;
-
-            return edgePoint;
-        }
-
-        // Fallback: ищем ближайшую точку на NavMesh к цели
-        if (NavMesh.SamplePosition(target, out NavMeshHit hit, 10f, NavMesh.AllAreas)) {
-            // Проверяем, что это на другом острове (выше или дальше)
-            if (Mathf.Abs(hit.position.y - transform.position.y) > 0.5f)
-                return hit.position;
-        }
-
-        return Vector3.zero;
-    }
-
     private void EnterChase() {
         currentState = State.Chase;
         agent.isStopped = false;
@@ -351,6 +304,20 @@ public class SimpleEnemyAI : MonoBehaviour {
                 agent.isStopped = true;
             }
         }
+    }
+
+    /// <summary>Вызывается SaveManager после загрузки сцены.</summary>
+    public void RestoreForLoad(State state, Vector3 lastKnown)
+    {
+        currentState        = state;
+        lastKnownPosition   = lastKnown;
+        lastReachablePosition = lastKnown;
+        _playerInMemory     = state == State.Chase || state == State.Search || state == State.Attack;
+        if (_playerInMemory) _memoryTimer = memoryDuration;
+        _isDirectChasing    = false;
+        _searchTimer        = 0f;
+        waitTimer           = 0f;
+        agent.isStopped     = false;
     }
 
     public void OnDamaged(float damage) {

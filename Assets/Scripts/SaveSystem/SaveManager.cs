@@ -1,0 +1,315 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+/// <summary>
+/// Синглтон. DontDestroyOnLoad.
+///
+/// === Как использовать ===
+///   // Сохранить в слот 0:
+///   SaveManager.Instance.Save(0);
+///
+///   // Загрузить из слота 0:
+///   SaveManager.Instance.Load(0);
+///
+///   // Узнать есть ли сохранение:
+///   SaveManager.Instance.SlotExists(0);
+///
+///   // Получить метаданные слота (для UI):
+///   SaveFile meta = SaveManager.Instance.PeekSlot(0);
+///
+///   // Уведомить о уничтожении (из EnemyHealth, WorldItem, DestructibleObject):
+///   SaveManager.Instance?.RegisterDestroyed(this);
+///
+/// === Как добавить новый сохраняемый объект ===
+///   1. Добавь SaveableIdentity на GameObject.
+///   2. Реализуй ISaveable на компоненте (CaptureState / RestoreState).
+///   3. Готово — SaveManager найдёт его автоматически.
+/// </summary>
+public class SaveManager : MonoBehaviour
+{
+    // ── Singleton ─────────────────────────────────────────────────────────
+    public static SaveManager Instance { get; private set; }
+
+    // ── Settings ──────────────────────────────────────────────────────────
+    public const int SlotCount = 3;
+
+    [Header("Ссылки")]
+    [SerializeField] private ItemDatabase itemDatabase;
+
+    [Header("Дебаг")]
+    [SerializeField] private bool verboseLog = true;
+
+    // ── Events ────────────────────────────────────────────────────────────
+    /// <summary>Вызывается после полного применения данных загрузки.</summary>
+    public static event Action OnAfterLoad;
+
+    // ── Runtime state ─────────────────────────────────────────────────────
+    /// <summary>
+    /// ID объектов, уничтоженных во время текущей игровой сессии.
+    /// Заполняется через RegisterDestroyed().
+    /// </summary>
+    private readonly HashSet<string> _destroyedIds = new HashSet<string>();
+
+    /// <summary>Данные для загрузки, ожидающие применения после смены сцены.</summary>
+    private SaveFile _pendingLoad;
+
+    // ── Lifecycle ─────────────────────────────────────────────────────────
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
+
+    private void OnEnable()  => SceneManager.sceneLoaded += OnSceneLoaded;
+    private void OnDisable() => SceneManager.sceneLoaded -= OnSceneLoaded;
+
+    // ── Public API ────────────────────────────────────────────────────────
+
+    /// <summary>Сохранить текущее состояние в указанный слот.</summary>
+    public void Save(int slot)
+    {
+        var file = new SaveFile
+        {
+            saveTime  = DateTime.Now.ToString("dd.MM.yyyy HH:mm"),
+            sceneName = SceneManager.GetActiveScene().name,
+            destroyedIds = new List<string>(_destroyedIds)
+        };
+
+        // ── Объекты сцены ──────────────────────────────────────────────
+        foreach (var identity in FindObjectsOfType<SaveableIdentity>(true))
+        {
+            var saveable = identity.GetComponent<ISaveable>();
+            if (saveable == null) continue;
+
+            file.objects.Add(new ObjectEntry
+            {
+                id   = identity.Id,
+                data = saveable.CaptureState()
+            });
+        }
+
+        // ── Игрок ──────────────────────────────────────────────────────
+        var playerAttribs = FindObjectOfType<PlayerAttributes>();
+        var playerInv     = FindObjectOfType<PlayerInventory>();
+        if (playerAttribs != null)
+            file.player = CapturePlayer(playerAttribs, playerInv);
+
+        WriteSlot(slot, file);
+        Log($"[SaveManager] Сохранено в слот {slot}: {file.objects.Count} объектов, " +
+            $"{file.destroyedIds.Count} уничтожено.");
+    }
+
+    /// <summary>Загрузить из слота: перезагружает сцену, затем применяет данные.</summary>
+    public void Load(int slot)
+    {
+        var file = ReadSlot(slot);
+        if (file == null) { Debug.LogWarning($"[SaveManager] Слот {slot} пуст."); return; }
+
+        _pendingLoad = file;
+        _destroyedIds.Clear(); // сброс — загруженные destroyedIds придут из файла
+        SceneManager.LoadScene(file.sceneName);
+    }
+
+    /// <summary>Удалить сохранение из слота.</summary>
+    public void DeleteSlot(int slot)
+    {
+        var path = GetPath(slot);
+        if (File.Exists(path)) File.Delete(path);
+    }
+
+    /// <returns>true, если в слоте есть сохранение.</returns>
+    public bool SlotExists(int slot) => File.Exists(GetPath(slot));
+
+    /// <summary>Прочитать метаданные слота без загрузки сцены (для UI).</summary>
+    public SaveFile PeekSlot(int slot) => SlotExists(slot) ? ReadSlot(slot) : null;
+
+    /// <summary>
+    /// Вызывай из компонентов ПЕРЕД Destroy(gameObject),
+    /// чтобы SaveManager знал, что объект был уничтожен.
+    /// </summary>
+    public void RegisterDestroyed(MonoBehaviour source)
+    {
+        var identity = source.GetComponent<SaveableIdentity>();
+        if (identity == null || string.IsNullOrEmpty(identity.Id)) return;
+        _destroyedIds.Add(identity.Id);
+        Log($"[SaveManager] RegisterDestroyed: {source.name} ({identity.Id})");
+    }
+
+    // ── Scene loaded ──────────────────────────────────────────────────────
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (_pendingLoad == null) return;
+        var data = _pendingLoad;
+        _pendingLoad = null;
+        StartCoroutine(ApplySaveFile(data));
+    }
+
+    // ── Apply save file ───────────────────────────────────────────────────
+
+    private IEnumerator ApplySaveFile(SaveFile file)
+    {
+        // Один кадр — ждём Awake/Start всех объектов сцены.
+        yield return null;
+
+        Log($"[SaveManager] Применяю сохранение: {file.objects.Count} объектов, " +
+            $"{file.destroyedIds.Count} уничтожено.");
+
+        // Сброс архива документов перед восстановлением
+        DocumentManager.Instance?.ResetForLoad();
+
+        // Строим словарь id → (identity, saveable) для быстрого поиска.
+        var map = new Dictionary<string, (SaveableIdentity id, ISaveable s)>();
+        foreach (var identity in FindObjectsOfType<SaveableIdentity>(true))
+        {
+            var saveable = identity.GetComponent<ISaveable>();
+            if (saveable != null)
+                map[identity.Id] = (identity, saveable);
+        }
+
+        // 1. Уничтожаем объекты, удалённые в сохранённой сессии.
+        var destroyedSet = new HashSet<string>(file.destroyedIds);
+        foreach (var id in destroyedSet)
+        {
+            if (map.TryGetValue(id, out var entry))
+            {
+                Log($"[SaveManager] Уничтожаю (был удалён): {entry.id.name}");
+                Destroy(entry.id.gameObject);
+            }
+        }
+        _destroyedIds.UnionWith(destroyedSet); // восстанавливаем в памяти
+
+        // 2. Восстанавливаем живые объекты.
+        foreach (var entry in file.objects)
+        {
+            if (destroyedSet.Contains(entry.id)) continue;
+            if (!map.TryGetValue(entry.id, out var obj))
+            {
+                Log($"[SaveManager] Объект не найден: {entry.id}");
+                continue;
+            }
+            obj.s.RestoreState(entry.data);
+        }
+
+        // 3. Игрок.
+        RestorePlayer(file.player);
+
+        // Ещё один кадр перед пересчётом сети (чтобы Start() объектов отработал).
+        yield return null;
+
+        // 4. Пересчитываем сеть питания.
+        PowerNetwork.Instance?.Evaluate();
+
+        OnAfterLoad?.Invoke();
+        Log("[SaveManager] Загрузка завершена.");
+    }
+
+    // ── Player capture / restore ──────────────────────────────────────────
+
+    private PlayerSaveData CapturePlayer(PlayerAttributes attribs, PlayerInventory inv)
+    {
+        var data = new PlayerSaveData
+        {
+            px      = attribs.transform.position.x,
+            py      = attribs.transform.position.y,
+            pz      = attribs.transform.position.z,
+            ry      = attribs.transform.eulerAngles.y,
+            hp      = attribs.CurrentHP,
+            stamina = attribs.CurrentStamina
+        };
+
+        if (inv != null)
+        {
+            data.inventoryItems = inv.inventory
+                .Where(i => i?.itemData != null)
+                .Select(i => i.itemData.name)
+                .ToList();
+
+            data.leftHandItem  = inv.leftHandSlot?.CurrentItem?.itemData?.name ?? "";
+            data.rightHandItem = inv.rightHandSlot?.CurrentItem?.itemData?.name ?? "";
+        }
+
+        return data;
+    }
+
+    private void RestorePlayer(PlayerSaveData data)
+    {
+        var attribs = FindObjectOfType<PlayerAttributes>();
+        var inv     = FindObjectOfType<PlayerInventory>();
+
+        if (attribs == null) { Debug.LogWarning("[SaveManager] PlayerAttributes не найден!"); return; }
+
+        // ── Позиция ────────────────────────────────────────────────────
+        // CharacterController нужно отключить перед телепортацией.
+        var cc = attribs.GetComponent<CharacterController>();
+        if (cc != null) cc.enabled = false;
+        attribs.transform.SetPositionAndRotation(
+            new Vector3(data.px, data.py, data.pz),
+            Quaternion.Euler(0f, data.ry, 0f));
+        if (cc != null) cc.enabled = true;
+
+        // ── Здоровье / стамина ────────────────────────────────────────
+        // Используем TakeDamage/Heal через разницу, чтобы не ломать события.
+        float hpDiff = data.hp - attribs.CurrentHP;
+        if (hpDiff > 0) attribs.Heal(hpDiff);
+        else if (hpDiff < 0) attribs.TakeDamage(-hpDiff);
+
+        // Стамина: TryConsumeStamina(-x) с x<0 → регенерация; x>0 → трата.
+        float staminaDiff = data.stamina - attribs.CurrentStamina;
+        if (!Mathf.Approximately(staminaDiff, 0f))
+            attribs.TryConsumeStamina(-staminaDiff);
+
+        // ── Инвентарь ──────────────────────────────────────────────────
+        if (inv == null || itemDatabase == null) return;
+
+        inv.ClearForLoad();
+
+        InventoryItem leftItem  = null;
+        InventoryItem rightItem = null;
+
+        foreach (var itemName in data.inventoryItems)
+        {
+            var itemData = itemDatabase.Find(itemName);
+            if (itemData == null)
+            {
+                Debug.LogWarning($"[SaveManager] ItemData не найдена: '{itemName}'");
+                continue;
+            }
+            var added = inv.Add(itemData);
+            if (added == null) continue;
+
+            if (!string.IsNullOrEmpty(data.leftHandItem)  && itemName == data.leftHandItem)  leftItem  = added;
+            if (!string.IsNullOrEmpty(data.rightHandItem) && itemName == data.rightHandItem) rightItem = added;
+        }
+
+        if (leftItem  != null) inv.Equip(leftItem,  inv.leftHandSlot);
+        if (rightItem != null) inv.Equip(rightItem, inv.rightHandSlot);
+    }
+
+    // ── File I/O ──────────────────────────────────────────────────────────
+
+    private static string GetPath(int slot) =>
+        Path.Combine(Application.persistentDataPath, $"cc_save_{slot}.json");
+
+    private static void WriteSlot(int slot, SaveFile file) =>
+        File.WriteAllText(GetPath(slot), JsonUtility.ToJson(file, prettyPrint: true));
+
+    private static SaveFile ReadSlot(int slot)
+    {
+        var path = GetPath(slot);
+        if (!File.Exists(path)) return null;
+        try   { return JsonUtility.FromJson<SaveFile>(File.ReadAllText(path)); }
+        catch { Debug.LogError($"[SaveManager] Ошибка чтения слота {slot}."); return null; }
+    }
+
+    // ── Utils ─────────────────────────────────────────────────────────────
+
+    private void Log(string msg) { if (verboseLog) Debug.Log(msg); }
+}
