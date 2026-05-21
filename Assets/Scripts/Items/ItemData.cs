@@ -18,4 +18,7 @@ public class ItemData : ScriptableObject {
 
     [Tooltip("Если true, предмет имеет анимацию только для правой руки")]
     public bool hasRightHandAnimation = false;
+
+    public bool isStackable = false;      // можно ли стакать
+    public int maxStackSize = 1;          // максимум в одном слоте (1 = не стакается)
 }

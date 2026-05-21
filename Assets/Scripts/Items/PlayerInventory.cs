@@ -49,9 +49,23 @@ public class PlayerInventory : MonoBehaviour {
     }
   }
 
-  public InventoryItem Add(ItemData data) {
+  public InventoryItem Add(ItemData data, int amount = 1) {
     if (data == null)
       return null;
+
+    if (data.isStackable) {
+      var existing = inventory.Find(item =>
+          item.itemData == data && item.CanAddToStack(amount));
+
+      if (existing != null) {
+        existing.AddToStack(amount);
+        OnInventoryChanged?.Invoke();
+        return existing;
+      }
+    }
+
+    if (inventory.Count >= maxSlots) return null;
+
     InventoryItem inventoryItem = new(data);
     inventory.Add(inventoryItem);
     OnInventoryChanged?.Invoke();
@@ -146,8 +160,9 @@ public class PlayerInventory : MonoBehaviour {
     OnInventoryChanged?.Invoke();
   }
 
-  public bool HasItem(ItemData data) {
-    return inventory.Any(item => item.itemData == data);
+  public bool HasItem(ItemData data, int amount = 1) {
+    var item = inventory.Find(i => i.itemData == data);
+    return item != null && item.count >= amount;
   }
 
   // ── Save system support ──────────────────────────────────────────────────
@@ -172,5 +187,21 @@ public class PlayerInventory : MonoBehaviour {
   public void UseLeftHandItem() {
     leftHandSlot.SpawnedItem?.OnUse();
     OnInventoryChanged?.Invoke();
+  }
+
+  public bool Consume(ItemData data, int amount = 1) {
+    var item = inventory.Find(i => i.itemData == data);
+    if (item == null) return false;
+
+    if (!item.RemoveFromStack(amount)) return false;
+
+    // Если стак опустел — убираем из инвентаря
+    if (item.count <= 0) {
+      if (item.isEquiped) Unequip(item.itemSlot);
+      inventory.Remove(item);
+    }
+
+    OnInventoryChanged?.Invoke();
+    return true;
   }
 }
