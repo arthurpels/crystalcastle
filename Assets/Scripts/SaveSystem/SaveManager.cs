@@ -229,7 +229,7 @@ public class SaveManager : MonoBehaviour
         {
             data.inventoryItems = inv.inventory
                 .Where(i => i?.itemData != null)
-                .Select(i => i.itemData.name)
+                .Select(i => new InventoryItemEntry { itemName = i.itemData.name, count = i.count })
                 .ToList();
 
             data.leftHandItem  = inv.leftHandSlot?.CurrentItem?.itemData?.name ?? "";
@@ -274,19 +274,19 @@ public class SaveManager : MonoBehaviour
         InventoryItem leftItem  = null;
         InventoryItem rightItem = null;
 
-        foreach (var itemName in data.inventoryItems)
+        foreach (var entry in data.inventoryItems)
         {
-            var itemData = itemDatabase.Find(itemName);
+            var itemData = itemDatabase.Find(entry.itemName);
             if (itemData == null)
             {
-                Debug.LogWarning($"[SaveManager] ItemData не найдена: '{itemName}'");
+                Debug.LogWarning($"[SaveManager] ItemData не найдена: '{entry.itemName}'");
                 continue;
             }
-            var added = inv.Add(itemData);
+            var added = inv.Add(itemData, entry.count);
             if (added == null) continue;
 
-            if (!string.IsNullOrEmpty(data.leftHandItem)  && itemName == data.leftHandItem)  leftItem  = added;
-            if (!string.IsNullOrEmpty(data.rightHandItem) && itemName == data.rightHandItem) rightItem = added;
+            if (!string.IsNullOrEmpty(data.leftHandItem)  && entry.itemName == data.leftHandItem)  leftItem  = added;
+            if (!string.IsNullOrEmpty(data.rightHandItem) && entry.itemName == data.rightHandItem) rightItem = added;
         }
 
         if (leftItem  != null) inv.Equip(leftItem,  inv.leftHandSlot);
