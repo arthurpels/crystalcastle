@@ -15229,7 +15229,7 @@ MonoBehaviour:
   statusShowDuration: 2
   mainMenuScene: MainMenu
   inputHandler: {fileID: 885617023}
-  saveSlotUI: {fileID: 0}
+  saveSlotUI: {fileID: 361073079}
 --- !u!1 &2049105032
 GameObject:
   m_ObjectHideFlags: 0
