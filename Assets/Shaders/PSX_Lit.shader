@@ -148,8 +148,11 @@ Shader "CrystalCastle/PSX_Lit"
             #pragma shader_feature_local _ALPHATEST_ON
             #pragma multi_compile_vertex _ _CASTING_PUNCTUAL_LIGHT_SHADOW
 
+            // ПОРЯДОК ИНКЛЮДОВ: Добавляем CommonMaterial для исправления ошибки LerpWhiteTo
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/CommonMaterial.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Shadows.hlsl"
+            #include "PSX_Common.hlsl" // Подключаем для стабильного снэппинга теней
 
             CBUFFER_START(UnityPerMaterial)
                 float4 _BaseMap_ST;
@@ -189,7 +192,8 @@ Shader "CrystalCastle/PSX_Lit"
                     clip.z = max(clip.z, UNITY_NEAR_CLIP_VALUE);
                 #endif
 
-                OUT.positionCS = clip;
+                // Применяем PSX-снэппинг для карты теней, чтобы тень дрожала в такт геометрии
+                OUT.positionCS = PSX_SnapVertex(clip, _SnapResolution);
                 OUT.uv = TRANSFORM_TEX(IN.uv, _BaseMap);
                 return OUT;
             }

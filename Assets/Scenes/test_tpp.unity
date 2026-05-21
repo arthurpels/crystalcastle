@@ -17,7 +17,7 @@ RenderSettings:
   m_Fog: 1
   m_FogColor: {r: 0, g: 0, b: 0, a: 1}
   m_FogMode: 3
-  m_FogDensity: 0.05
+  m_FogDensity: 0.1
   m_LinearFogStart: 5
   m_LinearFogEnd: 20
   m_AmbientSkyColor: {r: 0, g: 0, b: 0, a: 1}
@@ -693,7 +693,7 @@ MonoBehaviour:
   aiComponent: {fileID: 132952871}
   animator: {fileID: 0}
   damageCollider: {fileID: 132952874}
-  startFrozen: 1
+  startFrozen: 0
   meshRenderer: {fileID: 132952875}
   frozenMaterial: {fileID: 2100000, guid: 521373fadfb95bef3b653c0ae5ebe799, type: 2}
   normalMaterial: {fileID: 2100000, guid: 979aef027a1c86c42a15ce35fce366fa, type: 2}
@@ -723,6 +723,8 @@ MonoBehaviour:
   patrolSpeed: 2.5
   searchGiveUpTime: 5
   approachStopDistance: 0.3
+  directChaseDistance: 3
+  directChaseSpeed: 3
 --- !u!195 &132952872
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -2856,7 +2858,7 @@ Transform:
   m_GameObject: {fileID: 486245899}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.4, y: -0.08, z: 3.69}
+  m_LocalPosition: {x: 6.4, y: 0.02, z: 3.69}
   m_LocalScale: {x: 5, y: 0.1, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6981,7 +6983,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AgentTypeID: 0
   m_StartPoint: {x: 0, y: 0, z: 0}
-  m_EndPoint: {x: 0, y: 1, z: 2.47}
+  m_EndPoint: {x: 0, y: 1, z: 2}
   m_Width: 2.7
   m_CostModifier: -1
   m_Bidirectional: 0

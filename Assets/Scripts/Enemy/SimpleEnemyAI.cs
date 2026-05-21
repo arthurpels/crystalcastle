@@ -14,6 +14,7 @@ public class SimpleEnemyAI : MonoBehaviour {
     [Header("Attack")]
     [SerializeField] private float attackRange = 1.5f;
     [SerializeField] private float attackCooldown = 1f;
+    [SerializeField] private float attackDamage = 10f;
 
     [Header("Patrol")]
     [SerializeField] private Transform[] patrolPoints;
@@ -33,6 +34,9 @@ public class SimpleEnemyAI : MonoBehaviour {
     [Header("Direct Chase")]
     [SerializeField] private float directChaseDistance = 3f; // на какой дистанции от lastReachablePosition идём напрямую
     [SerializeField] private float directChaseSpeed = 3f;
+
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip attackSound;
 
     private NavMeshAgent agent;
     private Transform player;
@@ -168,7 +172,9 @@ public class SimpleEnemyAI : MonoBehaviour {
         LookAtPlayer();
 
         if (attackTimer <= 0f) {
-            Debug.Log("АТАКА!");
+            // === НОВОЕ: наносим урон игроку ===
+            DealDamageToPlayer();
+
             attackTimer = attackCooldown;
         }
 
@@ -179,6 +185,28 @@ public class SimpleEnemyAI : MonoBehaviour {
         } else if (!_playerInMemory) {
             agent.isStopped = false;
             currentState = State.Search;
+        }
+    }
+
+    // === НОВЫЙ МЕТОД ===
+    private void DealDamageToPlayer() {
+        if (player == null) return;
+
+        // Ищем IHealth на игроке
+        IHealth playerHealth = player.GetComponent<IHealth>();
+        if (playerHealth == null)
+            playerHealth = player.GetComponentInParent<IHealth>();
+
+        if (playerHealth != null) {
+            // Урон от врага — можно вынести в поле SerializeField
+            playerHealth.TakeDamage(attackDamage);
+
+            if (audioSource != null && attackSound != null)
+            audioSource.PlayOneShot(attackSound);
+
+            Debug.Log($"[Enemy] Ударил игрока на {attackDamage} урона!");
+
+            // TODO: звук удара, анимация атаки
         }
     }
 
@@ -317,6 +345,18 @@ public class SimpleEnemyAI : MonoBehaviour {
             }
         }
     }
+
+    public void OnDamaged(float damage) {
+        // Если не в Chase — агримся
+        if (currentState != State.Chase) {
+            // Предполагаем, что ударил игрок (источник не передаём для простоты)
+            lastKnownPosition = PlayerInventory.Instance?.transform.position ?? transform.position;
+            _playerInMemory = true;
+            _memoryTimer = memoryDuration;
+            EnterChase();
+        }
+    }
+    // TODO: анимация получения урона, звук
 
     private void OnDrawGizmosSelected() {
         Gizmos.color = Color.yellow;

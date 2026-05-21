@@ -3,9 +3,9 @@ using System;
 
 /// <summary>
 /// Управляет здоровьем, стаминой и базовыми состояниями игрока.
-/// Событийно-ориентированная архитектура: UI и системы подписываются, а не опрашивают.
+/// Реализует IHealth для системы урона через интерфейсы.
 /// </summary>
-public class PlayerAttributes : MonoBehaviour {
+public class PlayerAttributes : MonoBehaviour, IHealth {
     #region === Настройки ===
     [Header("Links")]
     [SerializeField] private PlayerInputHandler inputHandler;
@@ -23,8 +23,18 @@ public class PlayerAttributes : MonoBehaviour {
     [Tooltip("Сколько стамины тратится в секунду при беге")]
     [SerializeField] private float sprintCostPerSecond = 15f;
     [SerializeField] private float jumpCostOnce = 50f;
+    #endregion
 
+    #region === IHealth ===
+    public float CurrentHP => CurrentHealth;
+    public float MaxHP => maxHealth;
+    public bool IsAlive => !IsDead;
 
+    // Событие IHealth
+    public event Action<float> OnHPChanged;
+    public event Action OnDeath;
+
+    public event System.Action<float> OnDamaged; 
     #endregion
 
     #region === Публичный интерфейс ===
@@ -33,12 +43,11 @@ public class PlayerAttributes : MonoBehaviour {
     public float CurrentHealth { get; private set; }
     public float CurrentStamina { get; private set; }
     public bool IsDead => CurrentHealth <= 0f;
-    public bool CanSprint => CurrentStamina > 1f; // Порог, чтобы не дёргать sprint на 0.01
+    public bool CanSprint => CurrentStamina > 1f;
 
-    // События для UI, звука, анимаций, систем боя
-    public event Action<float, float> OnHealthChanged;   // (current, max)
+    // Старые события для совместимости с UI
+    public event Action<float, float> OnHealthChanged;
     public event Action<float, float> OnStaminaChanged;
-    public event Action OnDeath;
     public event Action OnStaminaDepleted;
     public event Action OnStaminaRecovered;
     #endregion
@@ -57,8 +66,8 @@ public class PlayerAttributes : MonoBehaviour {
         if (movementController == null) movementController = GetComponent<MovementController>();
 
         OnHealthChanged?.Invoke(CurrentHealth, maxHealth);
-
         OnStaminaChanged?.Invoke(CurrentStamina, maxStamina);
+        OnHPChanged?.Invoke(CurrentHealth);
     }
 
     private void Update() {
@@ -69,25 +78,19 @@ public class PlayerAttributes : MonoBehaviour {
     }
 
     private void UpdateStamina() {
-
         if (movementController == null) return;
-        
+
         if (movementController.Jumped) {
             TryConsumeStamina(jumpCostOnce);
         }
-        
+
         if (movementController.IsSprinting) {
             TryConsumeStamina(sprintCostPerSecond * Time.deltaTime);
             _staminaRegenTimer = 0f;
         }
         _staminaRegenTimer += Time.deltaTime;
-
     }
 
-    /// <summary>
-    /// Пытается потратить стамину. Возвращает true, если хватает.
-    /// Используется MovementController для проверки возможности бега.
-    /// </summary>
     public bool TryConsumeStamina(float amount) {
         if (CurrentStamina >= amount) {
             ChangeStamina(-amount);
@@ -103,7 +106,6 @@ public class PlayerAttributes : MonoBehaviour {
         CurrentStamina = Mathf.Clamp(CurrentStamina + delta, 0f, maxStamina);
         OnStaminaChanged?.Invoke(CurrentStamina, maxStamina);
 
-        // Отслеживаем переходы через порог
         if (oldStamina > 0f && CurrentStamina <= 0f && !_isStaminaDepleted) {
             _isStaminaDepleted = true;
             OnStaminaDepleted?.Invoke();
@@ -113,10 +115,15 @@ public class PlayerAttributes : MonoBehaviour {
         }
     }
 
+    // === IHealth.TakeDamage ===
     public void TakeDamage(float amount) {
         if (IsDead) return;
+
         ChangeHealth(-amount);
         _healthRegenTimer = 0f;
+
+        // НОВОЕ: событие для звука/эффектов
+        OnDamaged?.Invoke(amount);
     }
 
     public void Heal(float amount) {
@@ -126,31 +133,42 @@ public class PlayerAttributes : MonoBehaviour {
 
     private void ChangeHealth(float delta) {
         CurrentHealth = Mathf.Clamp(CurrentHealth + delta, 0f, maxHealth);
-        OnHealthChanged?.Invoke(CurrentHealth, maxHealth);
 
-        if (CurrentHealth <= 0f && !IsDead)
+        // Старые события
+        OnHealthChanged?.Invoke(CurrentHealth, maxHealth);
+        // IHealth событие
+        OnHPChanged?.Invoke(CurrentHealth);
+
+        if (CurrentHealth <= 0f)
             Die();
     }
 
     private void Die() {
         OnDeath?.Invoke();
         if (inputHandler != null) inputHandler.InputEnabled = false;
-        // Здесь можно проиграть анимацию смерти, отключить коллайдеры, показать UI смерти и т.д.
+
+        // === НОВОЕ: перезапуск уровня через 2 секунды ===
+        Debug.Log("[Player] СМЕРТЬ! Перезапуск уровня...");
+        Invoke(nameof(RestartLevel), 2f);
     }
 
+    private void RestartLevel() {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(
+            UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex
+        );
+    }
     private void UpdateRegeneration() {
-        // Stamina regen
         if (_staminaRegenTimer >= staminaRegenDelay && CurrentStamina < maxStamina) {
             ChangeStamina(staminaRegenRate * Time.deltaTime);
         }
 
-        // Health regen
         if (_healthRegenTimer >= healthRegenDelay && CurrentHealth < maxHealth) {
             ChangeHealth(healthRegenRate * Time.deltaTime);
         }
+        _healthRegenTimer += Time.deltaTime;
     }
 
-    #region === Утилиты для UI и внешних систем ===
+    #region === Утилиты ===
     public float GetHealthPercent() => maxHealth > 0 ? CurrentHealth / maxHealth : 0f;
     public float GetStaminaPercent() => maxStamina > 0 ? CurrentStamina / maxStamina : 0f;
     #endregion

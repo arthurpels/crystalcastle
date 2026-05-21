@@ -8,8 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: IceMaterial
-  m_Shader: {fileID: -6465566751694194690, guid: bb5d299550ddb056ebd05d20c1a119e8,
-    type: 3}
+  m_Shader: {fileID: 4800000, guid: d1b95746f069bbad89a8746404c91b1e, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -24,6 +23,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _BaseMap:
+        m_Texture: {fileID: 2800000, guid: 7889d578d14b1a8f1aaf4ad58f469b9f, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Triplanar_c0e975421d844c83856e79dc26a3d179_Texture_1_Texture2D:
         m_Texture: {fileID: 2800000, guid: 7889d578d14b1a8f1aaf4ad58f469b9f, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -42,9 +45,17 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _AffineAmount: 1
+    - _AlphaClip: 0
+    - _AmbientBoost: 1
+    - _Cull: 2
+    - _Cutoff: 0.5
     - _QueueControl: 0
     - _QueueOffset: 0
-    m_Colors: []
+    - _SnapResolution: 160
+    m_Colors:
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _LightTint: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &108663832709731268
 MonoBehaviour:
