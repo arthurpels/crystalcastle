@@ -165,7 +165,8 @@ MonoBehaviour:
   range: 7
   hitMask:
     serializedVersion: 2
-    m_Bits: 3584
+    m_Bits: 3841
+  attackCooldown: 0.8
   showDebug: 1
   debugLineDuration: 5
   audioSource: {fileID: 2806751211849414161}

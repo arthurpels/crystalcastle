@@ -34,7 +34,7 @@ public class PlayerAttributes : MonoBehaviour, IHealth {
     public event Action<float> OnHPChanged;
     public event Action OnDeath;
 
-    public event System.Action<float> OnDamaged; 
+    public event Action<float> OnDamaged; 
     #endregion
 
     #region === Публичный интерфейс ===
