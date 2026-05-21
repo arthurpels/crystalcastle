@@ -131,6 +131,20 @@ public class PlayerAttributes : MonoBehaviour, IHealth {
         ChangeHealth(amount);
     }
 
+    /// <summary>
+    /// Прямое восстановление HP и стамины без побочных эффектов (звук, вспышка).
+    /// Вызывается SaveManager при загрузке сохранения.
+    /// </summary>
+    public void RestoreForLoad(float hp, float stamina) {
+        CurrentHealth  = Mathf.Clamp(hp,      0f, maxHealth);
+        CurrentStamina = Mathf.Clamp(stamina,  0f, maxStamina);
+        _healthRegenTimer  = 0f;
+        _staminaRegenTimer = 0f;
+        OnHealthChanged?.Invoke(CurrentHealth,  maxHealth);
+        OnStaminaChanged?.Invoke(CurrentStamina, maxStamina);
+        OnHPChanged?.Invoke(CurrentHealth);
+    }
+
     private void ChangeHealth(float delta) {
         CurrentHealth = Mathf.Clamp(CurrentHealth + delta, 0f, maxHealth);
 
@@ -147,12 +161,21 @@ public class PlayerAttributes : MonoBehaviour, IHealth {
         OnDeath?.Invoke();
         if (inputHandler != null) inputHandler.InputEnabled = false;
 
-        // === НОВОЕ: перезапуск уровня через 2 секунды ===
-        Debug.Log("[Player] СМЕРТЬ! Перезапуск уровня...");
-        Invoke(nameof(RestartLevel), 2f);
+        // Показать экран смерти если он есть в сцене
+        var gameOver = FindObjectOfType<GameOverScreen>(true);
+        if (gameOver != null)
+        {
+            gameOver.Show();
+        }
+        else
+        {
+            // Fallback: перезапуск через 2 секунды (если GameOverScreen не размещён)
+            Invoke(nameof(RestartLevel), 2f);
+        }
     }
 
-    private void RestartLevel() {
+    /// <summary>Перезапуск текущей сцены. Вызывается GameOverScreen или как fallback.</summary>
+    public void RestartLevel() {
         UnityEngine.SceneManagement.SceneManager.LoadScene(
             UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex
         );

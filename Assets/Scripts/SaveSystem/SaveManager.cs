@@ -256,15 +256,8 @@ public class SaveManager : MonoBehaviour
         if (cc != null) cc.enabled = true;
 
         // ── Здоровье / стамина ────────────────────────────────────────
-        // Используем TakeDamage/Heal через разницу, чтобы не ломать события.
-        float hpDiff = data.hp - attribs.CurrentHP;
-        if (hpDiff > 0) attribs.Heal(hpDiff);
-        else if (hpDiff < 0) attribs.TakeDamage(-hpDiff);
-
-        // Стамина: TryConsumeStamina(-x) с x<0 → регенерация; x>0 → трата.
-        float staminaDiff = data.stamina - attribs.CurrentStamina;
-        if (!Mathf.Approximately(staminaDiff, 0f))
-            attribs.TryConsumeStamina(-staminaDiff);
+        // RestoreForLoad: прямая установка без звука урона / вспышки вигнетки.
+        attribs.RestoreForLoad(data.hp, data.stamina);
 
         // ── Инвентарь ──────────────────────────────────────────────────
         if (inv == null || itemDatabase == null) return;
