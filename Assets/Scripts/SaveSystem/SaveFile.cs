@@ -33,8 +33,8 @@ public class PlayerSaveData
     public float hp;
     public float stamina;
 
-    // Инвентарь — имена ItemData-ассетов (asset.name)
-    public List<string> inventoryItems = new List<string>();
+    // Инвентарь — имя ассета + количество в стаке
+    public List<InventoryItemEntry> inventoryItems = new List<InventoryItemEntry>();
 
     // Что экипировано в руки (asset.name или "" если пусто)
     public string leftHandItem;
@@ -46,4 +46,11 @@ public class ObjectEntry
 {
     public string id;    // SaveableIdentity.Id
     public string data;  // JsonUtility.ToJson(...) конкретного типа
+}
+
+[Serializable]
+public class InventoryItemEntry
+{
+    public string itemName; // ItemData.name (имя ассета)
+    public int    count;    // количество в стаке
 }
