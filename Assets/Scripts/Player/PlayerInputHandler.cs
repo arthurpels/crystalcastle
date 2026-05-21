@@ -19,6 +19,8 @@ public class PlayerInputHandler : MonoBehaviour {
 
     [SerializeField] private InventoryUI inventoryUI;
 
+    [SerializeField] private PauseMenu pauseMenu;
+
     private PlayerInputAction playerInputAction;
     // Публичный интерфейс
     public bool InputEnabled { get; set; } = true;
@@ -62,8 +64,12 @@ public class PlayerInputHandler : MonoBehaviour {
     private void OnDisable() => playerInputAction.Disable();
 
     private void Update() {
-        if (!InputEnabled) return;
+        if (Keyboard.current.escapeKey.wasPressedThisFrame) {
+            pauseMenu.Toggle();
+        }
         
+        if (!InputEnabled) return;
+
         if (Keyboard.current.tabKey.wasPressedThisFrame) { // или iKey
             inventoryUI.Toggle();
         }

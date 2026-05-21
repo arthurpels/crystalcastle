@@ -71,9 +71,6 @@ public class CrowbarHandItem : HandItem {
         if (_cooldownTimer > 0f) _cooldownTimer -= dt;
     }
 
-    public override void OnEquip()   { }
-    public override void OnUnequip() { }
-
     // ── VFX / SFX helpers ────────────────────────────────────────────────
 
     private static void SpawnFX(ParticleSystem prefab, Vector3 pos, Vector3 normal)
