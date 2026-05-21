@@ -41,6 +41,7 @@ public class SimpleEnemyAI : MonoBehaviour {
     private NavMeshAgent agent;
     private Transform player;
     private State currentState = State.Idle;
+    private EnemyAudioController _audio;
     private Vector3 lastKnownPosition;
 
     private Vector3 lastReachablePosition;
@@ -65,6 +66,7 @@ public class SimpleEnemyAI : MonoBehaviour {
     void Awake() {
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
+        _audio = GetComponent<EnemyAudioController>();
     }
 
     void Update() {
@@ -172,9 +174,14 @@ public class SimpleEnemyAI : MonoBehaviour {
         LookAtPlayer();
 
         if (attackTimer <= 0f) {
+<<<<<<< Updated upstream
             // === НОВОЕ: наносим урон игроку ===
             DealDamageToPlayer();
 
+=======
+            Debug.Log("АТАКА!");
+            _audio?.OnAttack();
+>>>>>>> Stashed changes
             attackTimer = attackCooldown;
         }
 
