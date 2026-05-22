@@ -1,8 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class PistolHandItem : HandItem
-{
+public class PistolHandItem : HandItem {
     [Header("Shooting")]
     [SerializeField] private Transform shootTransform;
     [SerializeField] private float maxRange = 50f;
@@ -24,7 +23,7 @@ public class PistolHandItem : HandItem
 
     [Header("Feedback")]
     [SerializeField] private float shakeIntensity = 0.06f;
-    [SerializeField] private float shakeDuration  = 0.12f;
+    [SerializeField] private float shakeDuration = 0.12f;
 
     private float _cooldownTimer;
     private Camera _cam;
@@ -34,18 +33,15 @@ public class PistolHandItem : HandItem
     public override void OnEquip() { }
     public override void OnUnequip() { }
 
-    public override void OnTick(float dt)
-    {
+    public override void OnTick(float dt) {
         if (_cooldownTimer > 0f) _cooldownTimer -= dt;
     }
 
-    public override void OnUse()
-    {
+    public override void OnUse() {
         if (_cooldownTimer > 0f) return;
 
         // Проверка патронов
-        if (!PlayerInventory.Instance.HasItem(ammoType, ammoPerShot))
-        {
+        if (!PlayerInventory.Instance.HasItem(ammoType, ammoPerShot)) {
             PlaySound(emptyClickSound);
             return;
         }
@@ -56,8 +52,7 @@ public class PistolHandItem : HandItem
         Shoot();
     }
 
-    private void Shoot()
-    {
+    private void Shoot() {
         PlaySound(shootSound);
         if (muzzleFlash) muzzleFlash.Play();
         TriggerShake();
@@ -67,87 +62,80 @@ public class PistolHandItem : HandItem
         Vector3 origin = _cam.transform.position;
 
         // Луч из камеры определяет точку прицеливания
-        if (Physics.Raycast(origin, aimDir, out RaycastHit aimHit, maxRange, hitMask))
-        {
-            SpawnTrail(shootTransform.position, aimHit.point);
+        if (Physics.Raycast(origin, aimDir, out RaycastHit aimHit, maxRange, hitMask)) {
+            SpawnBulletTrail(aimHit.point);
             ApplyDamage(aimHit.collider, aimHit.point);
             PlaySound(impactSound);
-        }
-        else
-        {
+        } else {
             // Промах: пуля летит в бесконечность
-            SpawnTrail(shootTransform.position, origin + aimDir * maxRange);
+            SpawnBulletTrail(origin + aimDir * maxRange);
         }
     }
 
-    private void SpawnTrail(Vector3 start, Vector3 end)
-    {
-        if (bulletTrailPrefab == null) return;
+    private void SpawnBulletTrail(Vector3 endPoint)
+{
+    if (bulletTrailPrefab == null) return;
 
-        LineRenderer trail = Instantiate(bulletTrailPrefab, start, Quaternion.identity);
-        trail.SetPositions(new[] { start, start });
-        trail.gameObject.SetActive(true);
-        StartCoroutine(AnimateTrail(trail, end));
+    LineRenderer line = Instantiate(bulletTrailPrefab, shootTransform.position, Quaternion.identity);
+    line.useWorldSpace = true;
+    line.SetPositions(new[] { shootTransform.position, shootTransform.position }); // стартовая точка
+    line.gameObject.SetActive(true);
+    
+    StartCoroutine(AnimateLine(line, endPoint));
+}
+
+private IEnumerator AnimateLine(LineRenderer line, Vector3 targetEnd)
+{
+    Vector3 start = line.GetPosition(0);
+    float flyTime = 0.06f;   // скорость появления луча
+    float fadeTime = 0.7f;  // время затухания
+    float elapsed = 0f;
+
+    // Фаза 1: Луч "летит" к цели
+    while (elapsed < flyTime)
+    {
+        elapsed += Time.deltaTime;
+        line.SetPosition(1, Vector3.Lerp(start, targetEnd, elapsed / flyTime));
+        yield return null;
+    }
+    line.SetPosition(1, targetEnd);
+
+    // Фаза 2: Плавное затухание
+    elapsed = 0f;
+    Color startCol = line.startColor;
+    Color fadeCol  = new Color(startCol.r, startCol.g, startCol.b, 0f);
+
+    while (elapsed < fadeTime)
+    {
+        elapsed += Time.deltaTime;
+        float t = elapsed / fadeTime;
+        line.startColor = Color.Lerp(startCol, fadeCol, t);
+        line.endColor   = fadeCol;
+        yield return null;
     }
 
-    private IEnumerator AnimateTrail(LineRenderer trail, Vector3 targetEnd)
-    {
-        Vector3 startPos = trail.GetPosition(0);
-        float flyDuration = 0.12f; // Скорость полёта трассера
-        float elapsed = 0f;
+    Destroy(line.gameObject);
+}
 
-        // Фаза 1: Полёт трассера
-        while (elapsed < flyDuration)
-        {
-            elapsed += Time.deltaTime;
-            float t = elapsed / flyDuration;
-            trail.SetPosition(1, Vector3.Lerp(startPos, targetEnd, t));
-            yield return null;
-        }
-
-        trail.SetPosition(1, targetEnd);
-
-        // Фаза 2: Затухание
-        float fadeDuration = 0.15f;
-        elapsed = 0f;
-        Color startColor = trail.startColor;
-        Color fadeColor = new Color(startColor.r, startColor.g, startColor.b, 0f);
-
-        while (elapsed < fadeDuration)
-        {
-            elapsed += Time.deltaTime;
-            float t = elapsed / fadeDuration;
-            trail.startColor = Color.Lerp(startColor, fadeColor, t);
-            trail.endColor   = fadeColor;
-            yield return null;
-        }
-
-        Destroy(trail.gameObject);
-    }
-
-    private void ApplyDamage(Collider target, Vector3 hitPoint)
-    {
+    private void ApplyDamage(Collider target, Vector3 hitPoint) {
         IHealth health = target.GetComponentInParent<IHealth>();
-        if (health != null && health.IsAlive)
-        {
+        if (health != null && health.IsAlive) {
             health.TakeDamage(damage);
             // Сюда можно добавить спавн крови/искр, как в ломе:
             // SpawnHitFX(hitPoint, hit.normal, health is EnemyHealth);
         }
     }
 
-    private void PlaySound(AudioClip clip)
-    {
+    private void PlaySound(AudioClip clip) {
         if (audioSource == null || clip == null) return;
         audioSource.pitch = Random.Range(0.94f, 1.06f);
         audioSource.PlayOneShot(clip);
     }
 
-    private void TriggerShake()
-    {
-        if (Camera.main.GetComponent<CameraShake>() != null ) {
+    private void TriggerShake() {
+        if (Camera.main.GetComponent<CameraShake>() != null) {
             Camera.main.GetComponent<CameraShake>().Shake(shakeIntensity, shakeDuration);
         }
-        
+
     }
 }

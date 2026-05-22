@@ -38,6 +38,15 @@ public class SimpleEnemyAI : MonoBehaviour {
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip attackSound;
 
+    public Animator animator; // перетащи сюда компонент Animator врага
+
+    // Параметры, которые ожидает твой PlayerAnimatorController
+    private int speedHash = Animator.StringToHash("Speed");
+    private int groundedHash = Animator.StringToHash("Grounded");
+    private int jumpHash = Animator.StringToHash("Jump");
+
+    private bool _wasOnOffMeshLink;
+
     private NavMeshAgent agent;
     private Transform player;
     private State currentState = State.Idle;
@@ -72,8 +81,29 @@ public class SimpleEnemyAI : MonoBehaviour {
     void Update() {
         if (player == null) return;
 
-        // Пока агент проходит off-mesh связь — FSM на паузе
-        if (agent.isOnOffMeshLink) return;
+        if (agent == null || animator == null) return;
+
+        // 1. Скорость для Blend Tree (нормализуем по максимальной скорости агента)
+        if (agent.isOnOffMeshLink) {
+            // Только что вошли на ссылку — запускаем анимацию прыжка
+            if (!_wasOnOffMeshLink) {
+                animator.SetBool(jumpHash, true);
+                _wasOnOffMeshLink = true;
+                Debug.Log("[Enemy] Jump triggered!");
+            }
+            // Пока на ссылке — не обновляем FSM, но анимация уже играет
+            return;
+        }
+
+        // Только что сошли с ссылки — сбрасываем триггер
+        if (_wasOnOffMeshLink) {
+            animator.SetBool(jumpHash, false);
+            _wasOnOffMeshLink = false;
+        }
+
+        // === 3. Grounded: обновляем только когда не в прыжке ===
+        bool isGrounded = !agent.isOnOffMeshLink && agent.speed < 0.5f;
+        animator.SetBool(groundedHash, isGrounded);
 
         if (_isDirectChasing) {
             DirectChaseTick();
@@ -203,7 +233,7 @@ public class SimpleEnemyAI : MonoBehaviour {
             playerHealth.TakeDamage(attackDamage);
 
             if (audioSource != null && attackSound != null)
-            audioSource.PlayOneShot(attackSound);
+                audioSource.PlayOneShot(attackSound);
 
             Debug.Log($"[Enemy] Ударил игрока на {attackDamage} урона!");
 
@@ -307,17 +337,16 @@ public class SimpleEnemyAI : MonoBehaviour {
     }
 
     /// <summary>Вызывается SaveManager после загрузки сцены.</summary>
-    public void RestoreForLoad(State state, Vector3 lastKnown)
-    {
-        currentState        = state;
-        lastKnownPosition   = lastKnown;
+    public void RestoreForLoad(State state, Vector3 lastKnown) {
+        currentState = state;
+        lastKnownPosition = lastKnown;
         lastReachablePosition = lastKnown;
-        _playerInMemory     = state == State.Chase || state == State.Search || state == State.Attack;
+        _playerInMemory = state == State.Chase || state == State.Search || state == State.Attack;
         if (_playerInMemory) _memoryTimer = memoryDuration;
-        _isDirectChasing    = false;
-        _searchTimer        = 0f;
-        waitTimer           = 0f;
-        agent.isStopped     = false;
+        _isDirectChasing = false;
+        _searchTimer = 0f;
+        waitTimer = 0f;
+        agent.isStopped = false;
     }
 
     public void OnDamaged(float damage) {
