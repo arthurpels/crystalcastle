@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  CRYSTAL CASTLE — Game Icon
+  512 × 512 px · Silent Hill / PS1 Horror style
+
+  Использование:
+    Экспортируй как PNG 512×512 (и дополнительно 256, 128, 64 для разных платформ).
+    Windows: .ico через IcoFX / online-конвертер.
+    Steam / itch.io: 512×512 PNG.
+    Unity Player Settings → Default Icon: 1024×1024 PNG.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+
+    <!-- ─── Фон ──────────────────────────────────────────────────────── -->
+    <radialGradient id="bg" cx="50%" cy="42%" r="68%">
+      <stop offset="0%"   stop-color="#1e1610"/>
+      <stop offset="60%"  stop-color="#0c0907"/>
+      <stop offset="100%" stop-color="#030202"/>
+    </radialGradient>
+
+    <!-- ─── Угловая рамка: горизонтальный ржавый градиент ───────────── -->
+    <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#3a1008"/>
+      <stop offset="50%"  stop-color="#5c2010"/>
+      <stop offset="100%" stop-color="#2e0c06"/>
+    </linearGradient>
+
+    <!-- ─── Тлеющий ореол (красный жар) ─────────────────────────────── -->
+    <filter id="embers" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="18" result="blur"/>
+      <feColorMatrix type="matrix"
+        values="1.6 0 0 0 0.05
+                0 0.15 0 0 0
+                0 0    0 0 0
+                0 0    0 0.9 0"
+        in="blur" result="red"/>
+      <feMerge>
+        <feMergeNode in="red"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- ─── Ржавчина на кристалле ─────────────────────────────────────── -->
+    <filter id="shardFx" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="3" seed="11" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="4.5"
+                         xChannelSelector="R" yChannelSelector="G" result="d"/>
+      <feGaussianBlur in="d" stdDeviation="1.0"/>
+    </filter>
+
+    <!-- ─── Мягкое свечение текста ────────────────────────────────────── -->
+    <filter id="textGlow" x="-15%" y="-40%" width="130%" height="180%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+      <feColorMatrix type="matrix"
+        values="1.2 0 0 0 0.04
+                0 0.3 0 0 0
+                0 0   0 0 0
+                0 0   0 0.8 0"
+        in="blur" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- ─── Ржавчина текста ────────────────────────────────────────────── -->
+    <filter id="rustText" x="-5%" y="-20%" width="110%" height="140%">
+      <feTurbulence type="turbulence" baseFrequency="0.04" numOctaves="2" seed="7" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="2.5"
+                         xChannelSelector="R" yChannelSelector="G" result="d"/>
+      <feGaussianBlur in="d" stdDeviation="0.5"/>
+    </filter>
+
+    <!-- ─── Виньетка ──────────────────────────────────────────────────── -->
+    <radialGradient id="vign" cx="50%" cy="50%" r="68%">
+      <stop offset="20%" stop-color="#000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0.88"/>
+    </radialGradient>
+
+    <!-- ─── Маска для скруглённых углов (опционально) ────────────────── -->
+    <clipPath id="roundedClip">
+      <rect width="512" height="512" rx="28" ry="28"/>
+    </clipPath>
+
+  </defs>
+
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <!-- Всё содержимое в скруглённом clip                                   -->
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
+  <g clip-path="url(#roundedClip)">
+
+    <!-- ─── ФОН ──────────────────────────────────────────────────────── -->
+    <rect width="512" height="512" fill="url(#bg)"/>
+
+    <!-- Тонкие горизонтальные «промышленные» риски -->
+    <g stroke="#160d08" stroke-width="0.8" opacity="0.7">
+      <line x1="0" y1="128" x2="512" y2="128"/>
+      <line x1="0" y1="256" x2="512" y2="256"/>
+      <line x1="0" y1="384" x2="512" y2="384"/>
+    </g>
+
+    <!-- ─── ТЛЕЮЩИЙ ОРЕОЛ под кристаллом ─────────────────────────────── -->
+    <ellipse cx="256" cy="338" rx="130" ry="80"
+             fill="#7a1a04" opacity="0.55" filter="url(#embers)"/>
+
+    <!-- ─── КРИСТАЛЛ  (центр 256, 210) ──────────────────────────────── -->
+    <g transform="translate(256,248)" filter="url(#shardFx)">
+
+      <!-- Тень-основание -->
+      <ellipse cx="0" cy="155" rx="120" ry="14" fill="#000" opacity="0.7"/>
+
+      <!-- Верх-левый фасет -->
+      <polygon points="0,-155  -130,5  -62,5"
+               fill="#1e1510" opacity="0.97"/>
+
+      <!-- Верх-центр: чуть теплее -->
+      <polygon points="0,-155  -62,5  62,5"
+               fill="#251a12" opacity="0.95"/>
+
+      <!-- Верх-правый фасет -->
+      <polygon points="0,-155  62,5  130,5"
+               fill="#1a120e" opacity="0.96"/>
+
+      <!-- Низ-левый -->
+      <polygon points="-130,5  0,155  -55,5"
+               fill="#120b07" opacity="0.97"/>
+
+      <!-- Низ-центр -->
+      <polygon points="-55,5  0,155  55,5"
+               fill="#1c1510" opacity="0.93"/>
+
+      <!-- Низ-правый -->
+      <polygon points="55,5  130,5  0,155"
+               fill="#17100c" opacity="0.96"/>
+
+      <!-- Грани — ржавые линии -->
+      <g stroke="#5c2010" stroke-width="1.3" fill="none" opacity="0.8">
+        <line x1="-62"  y1="5"    x2="62"  y2="5"/>
+        <line x1="0"    y1="-155" x2="-62" y2="5"/>
+        <line x1="0"    y1="-155" x2="62"  y2="5"/>
+        <line x1="-130" y1="5"    x2="-55" y2="5"/>
+        <line x1="55"   y1="5"    x2="130" y2="5"/>
+      </g>
+
+      <!-- Внешний контур -->
+      <polygon points="0,-155  130,5  0,155  -130,5"
+               fill="none" stroke="#3e1e0e" stroke-width="2.5" opacity="0.9"/>
+
+      <!-- Трещины -->
+      <g stroke="#080503" stroke-width="2" fill="none" opacity="0.85">
+        <polyline points="-18,-105  5,-50  -10,26"/>
+        <polyline points="34,-82   17,10"/>
+        <line x1="-65" y1="48" x2="-36" y2="90"/>
+      </g>
+
+      <!-- Красная «кровавая» прожилка в трещине -->
+      <g stroke="#5a0e06" stroke-width="1" fill="none" opacity="0.6">
+        <polyline points="-18,-105  5,-50  -10,26"/>
+      </g>
+
+      <!-- Тусклый блик -->
+      <polygon points="0,-155  -20,-65  20,-65"
+               fill="#7a5c38" opacity="0.12"/>
+
+      <!-- Тлеющее свечение снизу -->
+      <polygon points="-36,72  36,72  48,155  -48,155"
+               fill="#6b1804" opacity="0.22" filter="url(#embers)"/>
+
+      <!-- Скол слева -->
+      <polygon points="-130,5  -178,-24  -164,50  -140,24"
+               fill="#1c1008" opacity="0.88"/>
+
+      <!-- Скол справа -->
+      <polygon points="130,5  178,-24  164,50  140,24"
+               fill="#1c1008" opacity="0.88"/>
+
+      <!-- Верхний фрагмент -->
+      <polygon points="0,-155  -20,-184  20,-180"
+               fill="#201510" opacity="0.75"/>
+
+    </g>
+
+    <!-- ─── ТРЕУГОЛЬНИКИ-ПРЕДУПРЕЖДЕНИЯ (Silent Hill) ─────────────────── -->
+    <g fill="#280a04" opacity="0.6">
+      <polygon points="238,456  244,468  232,468"/>
+      <polygon points="256,456  262,468  250,468"/>
+      <polygon points="274,456  280,468  268,468"/>
+    </g>
+
+    <!-- ─── ВИНЬЕТКА ──────────────────────────────────────────────────── -->
+    <rect width="512" height="512" fill="url(#vign)"/>
+
+    <!-- PS1-scanlines -->
+    <g fill="#fff">
+      <rect x="0" y="127" width="512" height="1" opacity="0.007"/>
+      <rect x="0" y="255" width="512" height="1" opacity="0.009"/>
+      <rect x="0" y="383" width="512" height="1" opacity="0.007"/>
+    </g>
+
+  </g><!-- /clip -->
+
+  <!-- ─── РАМКА ПОВЕРХ (снаружи clip, поверх всего) ─────────────────── -->
+  <rect width="512" height="512" rx="28" ry="28"
+        fill="none" stroke="url(#borderGrad)" stroke-width="3" opacity="0.75"/>
+
+  <!-- Угловые засечки — советский технический стиль -->
+  <g stroke="#4a1808" stroke-width="1.5" fill="none" opacity="0.7">
+    <polyline points="16,42  16,16  42,16"/>
+    <polyline points="470,16  496,16  496,42"/>
+    <polyline points="496,470  496,496  470,496"/>
+    <polyline points="42,496  16,496  16,470"/>
+  </g>
+
+</svg>
