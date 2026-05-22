@@ -156,6 +156,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: c895592cc8622d712917e5d0702f89bf, type: 2}
+  amount: 1
+  isRuntimeSpawned: 0
 --- !u!136 &6921634123262797570
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -218,7 +220,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e54a06f7b30e1a6daba01589c2fb9183, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _id: ee3cd08d-11be-40c6-82ec-747794f52c5c
+  _id: 
 --- !u!1 &5872259053050948191
 GameObject:
   m_ObjectHideFlags: 0

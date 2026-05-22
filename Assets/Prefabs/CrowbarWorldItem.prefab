@@ -205,6 +205,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: e50c56d1104d47a579a813e52952bff8, type: 2}
+  amount: 1
+  isRuntimeSpawned: 0
 --- !u!114 &9084825803188094117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,7 +219,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e54a06f7b30e1a6daba01589c2fb9183, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _id: ba3f0f2a-1119-498c-8ea7-75bae3e45960
+  _id: 
 --- !u!1 &8847340814321847593
 GameObject:
   m_ObjectHideFlags: 0
