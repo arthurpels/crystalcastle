@@ -45,7 +45,8 @@ public class DestructibleObject : MonoBehaviour, IHealth, ISaveable {
             Instantiate(destroyedPrefab, transform.position, transform.rotation);
 
         // Уведомляем SaveManager перед уничтожением
-        SaveManager.Instance?.RegisterDestroyed(this);
+        if (SaveManager.Instance != null)
+            SaveManager.Instance.RegisterDestroyed(this);
         Destroy(gameObject);
     }
 

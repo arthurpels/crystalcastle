@@ -25,7 +25,8 @@ public class EnemyHealth : MonoBehaviour, IHealth, ISaveable
         OnHPChanged?.Invoke(CurrentHP);
         OnDamaged?.Invoke(amount); // НОВОЕ
         
-        GetComponent<SimpleEnemyAI>()?.OnDamaged(amount);
+        var ai = GetComponent<SimpleEnemyAI>();
+        if (ai != null) ai.OnDamaged(amount);
         
         if (!IsAlive)
         {
@@ -37,7 +38,8 @@ public class EnemyHealth : MonoBehaviour, IHealth, ISaveable
     private IEnumerator DieSequence()
     {
         // Уведомляем SaveManager ДО Destroy
-        SaveManager.Instance?.RegisterDestroyed(this);
+        if (SaveManager.Instance != null)
+            SaveManager.Instance.RegisterDestroyed(this);
 
         var ai = GetComponent<SimpleEnemyAI>();
         if (ai != null) ai.enabled = false;

@@ -42,13 +42,13 @@ public class CrystalEncounter : MonoBehaviour, IInteractable, ISaveable
     [SerializeField] private string sacrificeButtonLabel = "Уничтожить его";
 
     [Header("Звук и VFX")]
-    [SerializeField] private AudioClip     ambientHum;      // тихий гул рядом с кристаллом
-    [SerializeField] private AudioClip     touchSound;      // при взаимодействии
-    [SerializeField] private ParticleSystem glowParticles;  // свечение
+    [SerializeField] private AudioClip      ambientHum;
+    [SerializeField] private AudioClip      touchSound;
+    [SerializeField] private ParticleSystem glowParticles;
 
     [Header("Параметры")]
     [SerializeField] private float choiceFadeDuration = 0.6f;
-    [SerializeField] private bool  alreadyUsed;              // если выбор уже сделан
+    [SerializeField] private bool  alreadyUsed;
 
     private AudioSource _audioSource;
 
@@ -56,21 +56,24 @@ public class CrystalEncounter : MonoBehaviour, IInteractable, ISaveable
 
     private void Awake()
     {
-        _audioSource = gameObject.AddComponent<AudioSource>();
+        _audioSource              = gameObject.AddComponent<AudioSource>();
         _audioSource.spatialBlend = 1f;
         _audioSource.loop         = true;
         _audioSource.playOnAwake  = false;
 
-        // Кнопки
-        dreamButton    ?.onClick.AddListener(() => MakeChoice(GameEnding.EndingType.Dream));
-        sacrificeButton?.onClick.AddListener(() => MakeChoice(GameEnding.EndingType.Sacrifice));
+        if (dreamButton    != null) dreamButton.onClick.AddListener(()    => MakeChoice(GameEnding.EndingType.Dream));
+        if (sacrificeButton != null) sacrificeButton.onClick.AddListener(() => MakeChoice(GameEnding.EndingType.Sacrifice));
 
-        if (choicePanel != null) { choicePanel.alpha = 0f; choicePanel.blocksRaycasts = false; choicePanel.interactable = false; }
+        if (choicePanel != null)
+        {
+            choicePanel.alpha          = 0f;
+            choicePanel.blocksRaycasts = false;
+            choicePanel.interactable   = false;
+        }
     }
 
     private void Start()
     {
-        // Фоновый гул Кристалла
         if (ambientHum != null)
         {
             _audioSource.clip   = ambientHum;
@@ -81,11 +84,19 @@ public class CrystalEncounter : MonoBehaviour, IInteractable, ISaveable
 
         if (glowParticles != null) glowParticles.Play();
 
-        // Заполнить тексты
         if (titleText       != null) titleText.text       = panelTitle;
         if (descriptionText != null) descriptionText.text = panelDescription;
-        if (dreamButton     != null) dreamButton    .GetComponentInChildren<TextMeshProUGUI>()?.SetText(dreamButtonLabel);
-        if (sacrificeButton != null) sacrificeButton.GetComponentInChildren<TextMeshProUGUI>()?.SetText(sacrificeButtonLabel);
+
+        if (dreamButton != null)
+        {
+            var label = dreamButton.GetComponentInChildren<TextMeshProUGUI>();
+            if (label != null) label.SetText(dreamButtonLabel);
+        }
+        if (sacrificeButton != null)
+        {
+            var label = sacrificeButton.GetComponentInChildren<TextMeshProUGUI>();
+            if (label != null) label.SetText(sacrificeButtonLabel);
+        }
     }
 
     // ── IInteractable ──────────────────────────────────────────────────────
@@ -99,7 +110,6 @@ public class CrystalEncounter : MonoBehaviour, IInteractable, ISaveable
 
         if (touchSound != null) _audioSource.PlayOneShot(touchSound);
 
-        // Заблокировать движение
         var input = FindObjectOfType<PlayerInputHandler>();
         if (input != null) input.InputEnabled = false;
 
@@ -130,10 +140,13 @@ public class CrystalEncounter : MonoBehaviour, IInteractable, ISaveable
 
     private void MakeChoice(GameEnding.EndingType ending)
     {
-        // Скрыть панель
-        if (choicePanel != null) { choicePanel.alpha = 0f; choicePanel.blocksRaycasts = false; choicePanel.interactable = false; }
+        if (choicePanel != null)
+        {
+            choicePanel.alpha          = 0f;
+            choicePanel.blocksRaycasts = false;
+            choicePanel.interactable   = false;
+        }
 
-        // Запустить концовку
         if (GameEnding.Instance != null)
         {
             GameEnding.Instance.Trigger(ending);
@@ -141,8 +154,7 @@ public class CrystalEncounter : MonoBehaviour, IInteractable, ISaveable
         else
         {
             Debug.LogWarning("[CrystalEncounter] GameEnding.Instance не найден! Добавь GameEnding на Canvas.");
-            // Fallback: перезапуск
-            UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
+            SceneManager.LoadScene("MainMenu", UnityEngine.SceneManagement.LoadSceneMode.Single);
         }
     }
 
@@ -160,9 +172,8 @@ public class CrystalEncounter : MonoBehaviour, IInteractable, ISaveable
         alreadyUsed = d.alreadyUsed;
         if (alreadyUsed)
         {
-            // Кристалл уже использован — гасим частицы, отключаем гул
             if (glowParticles != null) glowParticles.Stop();
-            if (_audioSource != null)  _audioSource.Stop();
+            if (_audioSource  != null) _audioSource.Stop();
         }
     }
 

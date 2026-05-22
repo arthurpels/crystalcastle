@@ -20,6 +20,10 @@ public class SaveFile
     // Уничтоженные объекты (убитые враги, поднятые предметы, сломанные барьеры)
     // При загрузке эти объекты Destroy-ятся сразу после появления сцены.
     public List<string> destroyedIds = new List<string>();
+
+    // Предметы, созданные во время игры (дроп из инвентаря, спавн из ящиков).
+    // Re-instantiate при загрузке — хранят позицию + тип + количество.
+    public List<SpawnedItemEntry> spawnedItems = new List<SpawnedItemEntry>();
 }
 
 [Serializable]
@@ -53,4 +57,17 @@ public class InventoryItemEntry
 {
     public string itemName; // ItemData.name (имя ассета)
     public int    count;    // количество в стаке
+}
+
+/// <summary>
+/// Предмет, брошенный/созданный во время игры (дроп из инвентаря, спавн из ящика).
+/// Хранится отдельно от scene-объектов, т.к. его GUID меняется при каждом Awake.
+/// </summary>
+[Serializable]
+public class SpawnedItemEntry
+{
+    public string itemName; // ItemData.name
+    public int    amount;   // количество в стаке
+    public float  px, py, pz;
+    public float  ry;       // rotation Y
 }

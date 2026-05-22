@@ -82,16 +82,36 @@ public class SaveManager : MonoBehaviour
             destroyedIds = new List<string>(_destroyedIds)
         };
 
-        // ── Объекты сцены ──────────────────────────────────────────────
+        // ── Объекты сцены (ISaveable + SaveableIdentity) ───────────────
         foreach (var identity in FindObjectsOfType<SaveableIdentity>(true))
         {
             var saveable = identity.GetComponent<ISaveable>();
             if (saveable == null) continue;
 
+            // RuntimeSpawned WorldItems сохраняем в spawnedItems, не здесь.
+            var wi = identity.GetComponent<WorldItem>();
+            if (wi != null && wi.isRuntimeSpawned) continue;
+
             file.objects.Add(new ObjectEntry
             {
                 id   = identity.Id,
                 data = saveable.CaptureState()
+            });
+        }
+
+        // ── Runtime WorldItems (дропнутые / из ящиков) ────────────────
+        foreach (var wi in FindObjectsOfType<WorldItem>(true))
+        {
+            if (!wi.isRuntimeSpawned) continue;
+            if (wi.data == null) continue;
+
+            var pos = wi.transform.position;
+            file.spawnedItems.Add(new SpawnedItemEntry
+            {
+                itemName = wi.data.name,
+                amount   = wi.amount,
+                px = pos.x, py = pos.y, pz = pos.z,
+                ry = wi.transform.eulerAngles.y
             });
         }
 
@@ -103,6 +123,7 @@ public class SaveManager : MonoBehaviour
 
         WriteSlot(slot, file);
         Log($"[SaveManager] Сохранено в слот {slot}: {file.objects.Count} объектов, " +
+            $"{file.spawnedItems.Count} runtime-предметов, " +
             $"{file.destroyedIds.Count} уничтожено.");
     }
 
@@ -202,10 +223,33 @@ public class SaveManager : MonoBehaviour
         // 3. Игрок.
         RestorePlayer(file.player);
 
+        // 4. Respawn runtime WorldItems (дропнутые / из ящиков).
+        foreach (var entry in file.spawnedItems)
+        {
+            if (itemDatabase == null) break;
+            var itemData = itemDatabase.Find(entry.itemName);
+            if (itemData == null || itemData.worldPrefab == null)
+            {
+                Log($"[SaveManager] WorldItem не найден: '{entry.itemName}'");
+                continue;
+            }
+            var go = Instantiate(
+                itemData.worldPrefab,
+                new Vector3(entry.px, entry.py, entry.pz),
+                Quaternion.Euler(0f, entry.ry, 0f));
+
+            var wi = go.GetComponent<WorldItem>();
+            if (wi != null)
+            {
+                wi.amount           = entry.amount;
+                wi.isRuntimeSpawned = true;
+            }
+        }
+
         // Ещё один кадр перед пересчётом сети (чтобы Start() объектов отработал).
         yield return null;
 
-        // 4. Пересчитываем сеть питания.
+        // 5. Пересчитываем сеть питания.
         if (PowerNetwork.Instance != null)
             PowerNetwork.Instance.Evaluate();
 
@@ -230,12 +274,22 @@ public class SaveManager : MonoBehaviour
         if (inv != null)
         {
             data.inventoryItems = inv.inventory
-                .Where(i => i?.itemData != null)
+                .Where(i => i != null && i.itemData != null)
                 .Select(i => new InventoryItemEntry { itemName = i.itemData.name, count = i.count })
                 .ToList();
 
-            data.leftHandItem  = inv.leftHandSlot?.CurrentItem?.itemData?.name ?? "";
-            data.rightHandItem = inv.rightHandSlot?.CurrentItem?.itemData?.name ?? "";
+            // ItemSlot — MonoBehaviour, используем явные null-проверки
+            if (inv.leftHandSlot != null && inv.leftHandSlot.CurrentItem != null
+                && inv.leftHandSlot.CurrentItem.itemData != null)
+                data.leftHandItem = inv.leftHandSlot.CurrentItem.itemData.name;
+            else
+                data.leftHandItem = "";
+
+            if (inv.rightHandSlot != null && inv.rightHandSlot.CurrentItem != null
+                && inv.rightHandSlot.CurrentItem.itemData != null)
+                data.rightHandItem = inv.rightHandSlot.CurrentItem.itemData.name;
+            else
+                data.rightHandItem = "";
         }
 
         return data;

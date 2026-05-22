@@ -35,36 +35,30 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private SaveSlotUI      saveSlotUI;
 
     [Header("Вступительный fade-in")]
-    [SerializeField] private CanvasGroup     blackScreen;
-    [SerializeField] private float           introFadeDuration = 1.5f;
+    [SerializeField] private CanvasGroup blackScreen;
+    [SerializeField] private float       introFadeDuration = 1.5f;
 
     [Header("Музыка")]
-    [SerializeField] private AudioClip       mainMenuMusic;
+    [SerializeField] private AudioClip mainMenuMusic;
 
     // ── Lifecycle ─────────────────────────────────────────────────────────
 
     private void Start()
     {
-        // Разблокировать курсор
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible   = true;
 
-        // Кнопки
-        newGameButton?.onClick.AddListener(StartNewGame);
-        loadGameButton?.onClick.AddListener(OpenLoadMenu);
-        quitButton    ?.onClick.AddListener(QuitGame);
+        if (newGameButton  != null) newGameButton.onClick.AddListener(StartNewGame);
+        if (loadGameButton != null) loadGameButton.onClick.AddListener(OpenLoadMenu);
+        if (quitButton     != null) quitButton.onClick.AddListener(QuitGame);
 
-        // Кнопка загрузки — активна только если есть хоть одно сохранение
         RefreshLoadButton();
 
-        // SaveManager OnAfterLoad (если грузимся из этого меню)
         SaveManager.OnAfterLoad += OnAfterLoad;
 
-        // Музыка
         if (mainMenuMusic != null && AudioManager.Instance != null)
             AudioManager.Instance.PlayTrack(mainMenuMusic);
 
-        // Вступительный fade из чёрного
         if (blackScreen != null)
         {
             blackScreen.alpha = 1f;
@@ -73,13 +67,14 @@ public class MainMenuManager : MonoBehaviour
         }
     }
 
-    private void OnDestroy() => SaveManager.OnAfterLoad -= OnAfterLoad;
+    private void OnDestroy() {
+        SaveManager.OnAfterLoad -= OnAfterLoad;
+    }
 
     // ── Button handlers ────────────────────────────────────────────────────
 
     private void StartNewGame()
     {
-        // Удаляем автосохранение чтобы начать чисто (опционально)
         StartCoroutine(LoadScene(gameScene));
     }
 
@@ -87,8 +82,7 @@ public class MainMenuManager : MonoBehaviour
     {
         if (saveSlotUI == null)
         {
-            // Нет SaveSlotUI — загружаем из слота 0 напрямую
-            if (SaveManager.Instance?.SlotExists(0) == true)
+            if (SaveManager.Instance != null && SaveManager.Instance.SlotExists(0))
                 SaveManager.Instance.Load(0);
             return;
         }
@@ -111,20 +105,18 @@ public class MainMenuManager : MonoBehaviour
         if (loadGameButton == null || SaveManager.Instance == null) return;
         bool anySave = false;
         for (int i = 0; i < SaveManager.SlotCount; i++)
+        {
             if (SaveManager.Instance.SlotExists(i)) { anySave = true; break; }
+        }
         loadGameButton.interactable = anySave;
     }
 
-    private void OnAfterLoad()
-    {
-        // Загрузка завершена — игровая сцена уже активна, ничего не нужно
-    }
+    private void OnAfterLoad() { }
 
     // ── Scene loading ──────────────────────────────────────────────────────
 
     private IEnumerator LoadScene(string sceneName)
     {
-        // Fade to black
         if (blackScreen != null)
         {
             blackScreen.blocksRaycasts = true;

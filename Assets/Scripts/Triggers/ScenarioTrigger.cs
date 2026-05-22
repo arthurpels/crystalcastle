@@ -28,18 +28,20 @@ public class ScenarioTrigger : MonoBehaviour, ISaveable
         _hasTriggered = true;
 
         // 1. Обесточить основную сеть (свет, двери)
-        mainBreaker?.Trip();
+        if (mainBreaker != null) mainBreaker.Trip();
 
         // 2. Принудительно закрыть двери
         foreach (var door in doorsToSeal)
-            door?.ForceClose();
+        {
+            if (door != null) door.ForceClose();
+        }
 
         // 3. Обогреватель остаётся включенным (он на отдельной ноде/генераторе)
         // Враги в зоне обогревателя начнут оттаивать через HeaterThawZone
 
         if (destroyAfterTrigger)
         {
-            SaveManager.Instance?.RegisterDestroyed(this);
+            if (SaveManager.Instance != null) SaveManager.Instance.RegisterDestroyed(this);
             Destroy(gameObject);
         }
     }

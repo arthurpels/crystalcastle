@@ -3,9 +3,8 @@ using UnityEngine;
 
 /// <summary>
 /// Встряска камеры. Добавь на GameObject камеры.
-/// Вызывай: Camera.main.GetComponent&lt;CameraShake&gt;()?.Shake(intensity, duration).
-///
-/// Также работает как singleton: CameraShake.Instance?.Shake(0.1f, 0.2f).
+/// Вызывай через singleton:
+///   if (CameraShake.Instance != null) CameraShake.Instance.Shake(0.1f, 0.2f);
 /// </summary>
 public class CameraShake : MonoBehaviour
 {

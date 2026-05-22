@@ -84,11 +84,11 @@ public class GameEnding : MonoBehaviour
     [SerializeField] private Button          menuButton;
 
     [Header("Тайминги")]
-    [SerializeField] private float preFadePause    = 1.0f;   // задержка перед fade
-    [SerializeField] private float fadeDuration    = 2.5f;   // fade to white/black
-    [SerializeField] private float titleDelay      = 1.0f;   // пауза после fade
-    [SerializeField] private float charsPerSecond  = 18f;    // typewriter скорость
-    [SerializeField] private float postTextDelay   = 1.5f;   // пауза перед кнопкой
+    [SerializeField] private float preFadePause   = 1.0f;
+    [SerializeField] private float fadeDuration   = 2.5f;
+    [SerializeField] private float titleDelay     = 1.0f;
+    [SerializeField] private float charsPerSecond = 18f;
+    [SerializeField] private float postTextDelay  = 1.5f;
 
     [Header("Сцены")]
     [SerializeField] private string mainMenuScene = "MainMenu";
@@ -100,8 +100,8 @@ public class GameEnding : MonoBehaviour
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
 
-        menuButton?.onClick.AddListener(GoToMenu);
-        menuButton?.gameObject.SetActive(false);
+        if (menuButton != null) menuButton.onClick.AddListener(GoToMenu);
+        if (menuButton != null) menuButton.gameObject.SetActive(false);
 
         if (overlay != null) { overlay.alpha = 0f; overlay.blocksRaycasts = false; }
     }
@@ -124,24 +124,30 @@ public class GameEnding : MonoBehaviour
 
         // Встряска камеры для Sacrifice
         if (type == EndingType.Sacrifice)
-            CameraShake.Instance?.Shake(0.25f, 0.8f);
+        {
+            if (CameraShake.Instance != null)
+                CameraShake.Instance.Shake(0.25f, 0.8f);
+        }
 
         yield return new WaitForSecondsRealtime(preFadePause);
 
         // Настроить цвета
-        if (background != null) background.color = data.backgroundColor;
+        if (background  != null) background.color = data.backgroundColor;
         if (endingTitle != null) { endingTitle.color = data.textColor; endingTitle.alpha = 0f; }
-        if (endingBody  != null) { endingBody.color  = data.textColor; endingBody.alpha  = 0f;
-                                    endingBody.text   = string.Empty; }
+        if (endingBody  != null) { endingBody.color  = data.textColor; endingBody.alpha  = 0f; endingBody.text = string.Empty; }
 
         // Активировать overlay
         if (overlay != null) { overlay.blocksRaycasts = true; overlay.interactable = true; }
 
         // Сменить музыку
-        if (data.music != null && AudioManager.Instance != null)
-            AudioManager.Instance.PlayTrack(data.music);
+        if (data.music != null)
+        {
+            if (AudioManager.Instance != null) AudioManager.Instance.PlayTrack(data.music);
+        }
         else
-            AudioManager.Instance?.StopMusic();
+        {
+            if (AudioManager.Instance != null) AudioManager.Instance.StopMusic();
+        }
 
         // Fade
         yield return StartCoroutine(FadeGroup(overlay, 0f, 1f, fadeDuration));
@@ -167,7 +173,7 @@ public class GameEnding : MonoBehaviour
         yield return new WaitForSecondsRealtime(postTextDelay);
 
         // Показать кнопку
-        menuButton?.gameObject.SetActive(true);
+        if (menuButton != null) menuButton.gameObject.SetActive(true);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible   = true;
     }

@@ -3,7 +3,8 @@
     "allow": [
       "Bash(Get-ChildItem -Path \"Assets/Scenes\" -Filter \"*.unity\" -Recurse)",
       "Bash(Select-Object Name, FullName)",
-      "Bash(ConvertTo-Json)"
+      "Bash(ConvertTo-Json)",
+      "Bash(grep -v \"//.*\\\\?\\\\.\")"
     ]
   }
 }

@@ -22,16 +22,16 @@ public class GameOverScreen : MonoBehaviour
     public static GameOverScreen Instance { get; private set; }
 
     [Header("UI")]
-    [SerializeField] private CanvasGroup  overlay;
-    [SerializeField] private GameObject   panel;
+    [SerializeField] private CanvasGroup     overlay;
+    [SerializeField] private GameObject      panel;
     [SerializeField] private TextMeshProUGUI deathTitle;
     [SerializeField] private TextMeshProUGUI subtitle;
-    [SerializeField] private Button       retryButton;
-    [SerializeField] private Button       menuButton;
+    [SerializeField] private Button          retryButton;
+    [SerializeField] private Button          menuButton;
 
     [Header("Тексты")]
-    [SerializeField] private string deathText    = "В Ы  З А М Ё Р З Л И";
-    [SerializeField] private string[] subtitles  = {
+    [SerializeField] private string   deathText = "В Ы  З А М Ё Р З Л И";
+    [SerializeField] private string[] subtitles = {
         "Холод всегда побеждает.",
         "Лаборатория не прощает слабых.",
         "Кристалл помнит всё.",
@@ -39,9 +39,9 @@ public class GameOverScreen : MonoBehaviour
     };
 
     [Header("Тайминги")]
-    [SerializeField] private float blackoutDelay = 0.8f;  // пауза перед fade-in
+    [SerializeField] private float blackoutDelay = 0.8f;
     [SerializeField] private float fadeDuration  = 1.8f;
-    [SerializeField] private float titleDelay    = 0.5f;  // задержка перед текстом
+    [SerializeField] private float titleDelay    = 0.5f;
 
     [Header("Звук")]
     [SerializeField] private AudioClip deathStinger;
@@ -56,8 +56,8 @@ public class GameOverScreen : MonoBehaviour
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
 
-        retryButton?.onClick.AddListener(Retry);
-        menuButton ?.onClick.AddListener(GoToMenu);
+        if (retryButton != null) retryButton.onClick.AddListener(Retry);
+        if (menuButton  != null) menuButton.onClick.AddListener(GoToMenu);
 
         if (overlay != null) { overlay.alpha = 0f; overlay.interactable = false; overlay.blocksRaycasts = false; }
         if (panel   != null) panel.SetActive(false);
@@ -80,10 +80,10 @@ public class GameOverScreen : MonoBehaviour
         if (panel != null) panel.SetActive(true);
 
         // Скрыть кнопки пока не появится текст
-        retryButton?.gameObject.SetActive(false);
-        menuButton ?.gameObject.SetActive(false);
-        if (deathTitle != null) deathTitle.alpha = 0f;
-        if (subtitle   != null) subtitle.alpha   = 0f;
+        if (retryButton != null) retryButton.gameObject.SetActive(false);
+        if (menuButton  != null) menuButton.gameObject.SetActive(false);
+        if (deathTitle  != null) deathTitle.alpha = 0f;
+        if (subtitle    != null) subtitle.alpha   = 0f;
 
         // Разблокировать overlay
         if (overlay != null) { overlay.interactable = true; overlay.blocksRaycasts = true; }
@@ -116,8 +116,8 @@ public class GameOverScreen : MonoBehaviour
         yield return new WaitForSecondsRealtime(0.5f);
 
         // Показать кнопки
-        retryButton?.gameObject.SetActive(true);
-        menuButton ?.gameObject.SetActive(true);
+        if (retryButton != null) retryButton.gameObject.SetActive(true);
+        if (menuButton  != null) menuButton.gameObject.SetActive(true);
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible   = true;

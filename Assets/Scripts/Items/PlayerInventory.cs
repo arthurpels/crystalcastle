@@ -33,20 +33,22 @@ public class PlayerInventory : MonoBehaviour {
 
   private void Update() {
 
-    rightHandSlot.SpawnedItem?.OnTick(Time.deltaTime);
-    leftHandSlot.SpawnedItem?.OnTick(Time.deltaTime);
+    if (rightHandSlot.SpawnedItem != null) rightHandSlot.SpawnedItem.OnTick(Time.deltaTime);
+    if (leftHandSlot.SpawnedItem  != null) leftHandSlot.SpawnedItem.OnTick(Time.deltaTime);
   }
 
   public void PickupItem(WorldItem worldItem) {
+    if (worldItem == null || worldItem.data == null) return;
 
-    if (inventory.Count < maxSlots) {
-      InventoryItem item = Add(worldItem.data);
+    // Для стакуемых предметов: Add найдёт существующий стек даже при полном инвентаре.
+    // Для нестакуемых: нужен свободный слот.
+    InventoryItem item = Add(worldItem.data, worldItem.amount);
+    if (item == null) return; // инвентарь полон и стак не подошёл
 
-      worldItem.Pickup();
+    worldItem.Pickup();
 
-      if (rightHandSlot.CurrentItem == null)
-        Equip(item, rightHandSlot);
-    }
+    if (rightHandSlot.CurrentItem == null)
+      Equip(item, rightHandSlot);
   }
 
   public InventoryItem Add(ItemData data, int amount = 1) {
@@ -109,27 +111,34 @@ public class PlayerInventory : MonoBehaviour {
   }
 
   public void DropFromInventory(InventoryItem item) {
-    if (item.isEquiped) {
-      Unequip(item.itemSlot);
-    }
-
-    // Удаляем из списка
+    int countToDrop = item.count;
+    if (item.isEquiped) Unequip(item.itemSlot);
     inventory.Remove(item);
     OnInventoryChanged?.Invoke();
 
-    // Спавним в мире
     Vector3 dropPos = _cam.transform.position + _cam.transform.forward * 0.7f +
                       Vector3.down * 0.3f;
-    DropItemToWorld(item.itemData, dropPos);
+    DropItemToWorld(item.itemData, dropPos, countToDrop);
   }
 
-  private void DropItemToWorld(ItemData data, Vector3 pos) {
-    if (data.worldPrefab == null)
-      return;
+  /// <summary>
+  /// Создаёт WorldItem в мире. Всегда помечает как RuntimeSpawned = true,
+  /// чтобы SaveManager сохранял его в spawnedItems (а не destroyedIds).
+  /// </summary>
+  public void DropItemToWorld(ItemData data, Vector3 pos, int count = 1) {
+    if (data == null || data.worldPrefab == null) return;
+
     var dropped = Instantiate(data.worldPrefab, pos, Quaternion.identity);
+
+    var wi = dropped.GetComponent<WorldItem>();
+    if (wi != null) {
+      wi.amount           = count;
+      wi.isRuntimeSpawned = true;
+    }
+
     if (dropped.TryGetComponent(out Rigidbody rb)) {
       rb.isKinematic = false;
-      rb.useGravity = true;
+      rb.useGravity  = true;
       rb.AddForce(transform.forward * 3f, ForceMode.Impulse);
     }
   }
@@ -182,12 +191,12 @@ public class PlayerInventory : MonoBehaviour {
   }
 
   public void UseRightHandItem() {
-    rightHandSlot.SpawnedItem?.OnUse();
+    if (rightHandSlot.SpawnedItem != null) rightHandSlot.SpawnedItem.OnUse();
     OnInventoryChanged?.Invoke();
   }
 
   public void UseLeftHandItem() {
-    leftHandSlot.SpawnedItem?.OnUse();
+    if (leftHandSlot.SpawnedItem != null) leftHandSlot.SpawnedItem.OnUse();
     OnInventoryChanged?.Invoke();
   }
 

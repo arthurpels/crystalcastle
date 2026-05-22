@@ -40,7 +40,7 @@ public class PauseMenu : MonoBehaviour {
     [SerializeField] private PlayerInputHandler inputHandler;
     [SerializeField] private SaveSlotUI saveSlotUI;
 
-    private bool _isPaused;
+    private bool  _isPaused;
     private float _statusTimer;
 
     // ── Lifecycle ──────────────────────────────────────────────────────────
@@ -49,10 +49,10 @@ public class PauseMenu : MonoBehaviour {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
 
-        resumeButton?.onClick.AddListener(Resume);
-        saveButton?.onClick.AddListener(OpenSaveSlots);
-        loadButton?.onClick.AddListener(OpenLoadSlots);
-        quitButton?.onClick.AddListener(QuitToMenu);
+        if (resumeButton != null) resumeButton.onClick.AddListener(Resume);
+        if (saveButton   != null) saveButton.onClick.AddListener(OpenSaveSlots);
+        if (loadButton   != null) loadButton.onClick.AddListener(OpenLoadSlots);
+        if (quitButton   != null) quitButton.onClick.AddListener(QuitToMenu);
 
         if (panel != null) panel.SetActive(false);
         if (statusText != null) statusText.gameObject.SetActive(false);
@@ -63,10 +63,11 @@ public class PauseMenu : MonoBehaviour {
         SaveManager.OnAfterLoad += OnAfterLoad;
     }
 
-    private void OnDestroy() => SaveManager.OnAfterLoad -= OnAfterLoad;
+    private void OnDestroy() {
+        SaveManager.OnAfterLoad -= OnAfterLoad;
+    }
 
     private void Update() {
-        // Скрываем статусный текст по таймеру
         if (_statusTimer > 0f) {
             _statusTimer -= Time.unscaledDeltaTime;
             if (_statusTimer <= 0f && statusText != null)
@@ -91,7 +92,7 @@ public class PauseMenu : MonoBehaviour {
         if (panel != null) panel.SetActive(true);
         if (inputHandler != null) inputHandler.InputEnabled = false;
         Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
+        Cursor.visible   = true;
     }
 
     public void Resume() {
@@ -101,7 +102,7 @@ public class PauseMenu : MonoBehaviour {
         if (saveSlotUI != null) saveSlotUI.Close();
         if (inputHandler != null) inputHandler.InputEnabled = true;
         Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        Cursor.visible   = false;
     }
 
     // ── Buttons ────────────────────────────────────────────────────────────
@@ -117,12 +118,13 @@ public class PauseMenu : MonoBehaviour {
     }
 
     private void QuickSave() {
-        SaveManager.Instance?.Save(0);
+        if (SaveManager.Instance != null)
+            SaveManager.Instance.Save(0);
         ShowStatus("Сохранено");
     }
 
     private void QuitToMenu() {
-        Resume(); // вернуть timeScale = 1 перед сменой сцены
+        Resume();
         SceneManager.LoadScene(mainMenuScene);
     }
 
@@ -136,7 +138,6 @@ public class PauseMenu : MonoBehaviour {
     }
 
     private void OnAfterLoad() {
-        // Убеждаемся что пауза снята после загрузки
         Time.timeScale = 1f;
         _isPaused = false;
     }

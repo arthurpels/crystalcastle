@@ -64,7 +64,8 @@ public class DocumentWorldObject : MonoBehaviour, IInteractable, ISaveable
                 gameObject.SetActive(false);
 
             // Восстанавливаем архив документов тихо (без UI)
-            if (data != null) DocumentManager.Instance?.AddToArchiveQuiet(data);
+            if (data != null && DocumentManager.Instance != null)
+                DocumentManager.Instance.AddToArchiveQuiet(data);
         }
     }
 

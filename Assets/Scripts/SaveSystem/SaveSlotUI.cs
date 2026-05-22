@@ -22,24 +22,23 @@ public class SaveSlotUI : MonoBehaviour
     [System.Serializable]
     public struct SlotView
     {
-        public Button       saveButton;
-        public Button       loadButton;
-        public Button       deleteButton;
+        public Button          saveButton;
+        public Button          loadButton;
+        public Button          deleteButton;
         public TextMeshProUGUI infoText;
     }
 
-    [SerializeField] private GameObject     panel;
-    [SerializeField] private SlotView[]     slots = new SlotView[SaveManager.SlotCount];
+    [SerializeField] private GameObject      panel;
+    [SerializeField] private SlotView[]      slots = new SlotView[SaveManager.SlotCount];
     [SerializeField] private TextMeshProUGUI titleText;
 
     [Header("Строки UI")]
-    [SerializeField] private string emptySlotLabel  = "— Пусто —";
-    [SerializeField] private string saveTitle        = "Сохранить";
-    [SerializeField] private string loadTitle        = "Загрузить";
-    [SerializeField] private string confirmSaveText  = "Перезаписать слот {0}?";
+    [SerializeField] private string emptySlotLabel = "— Пусто —";
+    [SerializeField] private string saveTitle       = "Сохранить";
+    [SerializeField] private string loadTitle       = "Загрузить";
 
-    private Mode   _mode;
-    private bool   _isOpen;
+    private Mode _mode;
+    private bool _isOpen;
 
     // ── Lifecycle ──────────────────────────────────────────────────────────
 
@@ -50,19 +49,20 @@ public class SaveSlotUI : MonoBehaviour
 
         for (int i = 0; i < slots.Length; i++)
         {
-            int idx = i; // capture for lambda
-            slots[i].saveButton?.onClick  .AddListener(() => OnSaveClicked(idx));
-            slots[i].loadButton?.onClick  .AddListener(() => OnLoadClicked(idx));
-            slots[i].deleteButton?.onClick.AddListener(() => OnDeleteClicked(idx));
+            int idx = i;
+            if (slots[i].saveButton   != null) slots[i].saveButton.onClick.AddListener(()   => OnSaveClicked(idx));
+            if (slots[i].loadButton   != null) slots[i].loadButton.onClick.AddListener(()   => OnLoadClicked(idx));
+            if (slots[i].deleteButton != null) slots[i].deleteButton.onClick.AddListener(() => OnDeleteClicked(idx));
         }
 
-        // Подписываемся на завершение загрузки чтобы закрыть панель
         SaveManager.OnAfterLoad += Close;
 
         if (panel != null) panel.SetActive(false);
     }
 
-    private void OnDestroy() => SaveManager.OnAfterLoad -= Close;
+    private void OnDestroy() {
+        SaveManager.OnAfterLoad -= Close;
+    }
 
     // ── Public API ─────────────────────────────────────────────────────────
 
@@ -70,7 +70,7 @@ public class SaveSlotUI : MonoBehaviour
     {
         _mode   = mode;
         _isOpen = true;
-        if (panel != null) panel.SetActive(true);
+        if (panel     != null) panel.SetActive(true);
         if (titleText != null) titleText.text = mode == Mode.Save ? saveTitle : loadTitle;
         RefreshAll();
     }
@@ -91,21 +91,22 @@ public class SaveSlotUI : MonoBehaviour
 
     private void OnSaveClicked(int slot)
     {
-        // TODO: показать диалог подтверждения если слот занят
-        SaveManager.Instance?.Save(slot);
+        if (SaveManager.Instance != null)
+            SaveManager.Instance.Save(slot);
         RefreshAll();
     }
 
     private void OnLoadClicked(int slot)
     {
-        if (SaveManager.Instance == null || !SaveManager.Instance.SlotExists(slot)) return;
+        if (SaveManager.Instance == null) return;
+        if (!SaveManager.Instance.SlotExists(slot)) return;
         SaveManager.Instance.Load(slot);
-        // Панель закроется через OnAfterLoad
     }
 
     private void OnDeleteClicked(int slot)
     {
-        SaveManager.Instance?.DeleteSlot(slot);
+        if (SaveManager.Instance != null)
+            SaveManager.Instance.DeleteSlot(slot);
         RefreshAll();
     }
 
@@ -120,10 +121,10 @@ public class SaveSlotUI : MonoBehaviour
     private void RefreshSlot(int slot)
     {
         if (SaveManager.Instance == null) return;
-        var view = slots[slot];
+
+        var  view   = slots[slot];
         bool exists = SaveManager.Instance.SlotExists(slot);
 
-        // Текст слота
         if (view.infoText != null)
         {
             if (exists)
@@ -139,10 +140,9 @@ public class SaveSlotUI : MonoBehaviour
             }
         }
 
-        // Кнопки
         bool isSaveMode = _mode == Mode.Save;
-        view.saveButton?.gameObject  .SetActive(isSaveMode);
-        view.loadButton?.gameObject  .SetActive(!isSaveMode && exists);
-        view.deleteButton?.gameObject.SetActive(exists);
+        if (view.saveButton   != null) view.saveButton.gameObject.SetActive(isSaveMode);
+        if (view.loadButton   != null) view.loadButton.gameObject.SetActive(!isSaveMode && exists);
+        if (view.deleteButton != null) view.deleteButton.gameObject.SetActive(exists);
     }
 }
