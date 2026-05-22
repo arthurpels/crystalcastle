@@ -84,7 +84,6 @@ public class SimpleEnemyAI : MonoBehaviour {
         if (agent == null || animator == null) return;
 
         float currentSpeed = agent.velocity.magnitude;
-        float maxSpeed = agent.speed > 0 ? agent.speed : 5f;
         animator.SetFloat(speedHash, currentSpeed);
 
         // 1. Скорость для Blend Tree (нормализуем по максимальной скорости агента)

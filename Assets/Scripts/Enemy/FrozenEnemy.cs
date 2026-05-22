@@ -21,7 +21,8 @@ public class FrozenEnemy : MonoBehaviour {
     }
 
     void Start() {
-        if (startFrozen) Freeze();
+        if (startFrozen) Freeze(); 
+        else DoThaw();
     }
 
     public void Thaw(float delay = 0f) {

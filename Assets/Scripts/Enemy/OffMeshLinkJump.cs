@@ -19,7 +19,7 @@ public class OffMeshLinkJump : MonoBehaviour {
 
     [Header("Анимация (опционально)")]
     [SerializeField] private string jumpTrigger = "Jump";
-    [SerializeField] private string landTrigger = "Land";
+    private int groundedHash = Animator.StringToHash("Grounded");
 
     private NavMeshAgent agent;
     private Animator animator;
@@ -77,8 +77,8 @@ public class OffMeshLinkJump : MonoBehaviour {
         transform.position = end;
         agent.CompleteOffMeshLink(); // агент снова на NavMesh целевого острова
 
-        if (animator && !string.IsNullOrEmpty(landTrigger))
-            animator.SetTrigger(landTrigger);
+        if (animator)
+            animator.SetBool(groundedHash, true);
 
         _traversing = false;
     }

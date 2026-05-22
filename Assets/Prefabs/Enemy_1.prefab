@@ -1667,7 +1667,6 @@ MonoBehaviour:
   jumpArc: 1.2
   minJumpDuration: 0.25
   jumpTrigger: Jump
-  landTrigger: Land
 --- !u!114 &6829071889727874011
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1817,19 +1816,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17afc5ab50e359d41a8bdc1bf5c394b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  idleBreathClips: []
+  idleBreathClips:
+  - {fileID: 8300000, guid: baa103200f0a22db78cec27ac57224c4, type: 3}
   idleBreathInterval: 4
   idleBreathVariation: 1.5
   chaseBreathClips: []
   chaseBreathInterval: 1.8
   chaseBreathVariation: 0.4
-  alertClip: {fileID: 0}
+  alertClip: {fileID: 8300000, guid: 7a26e9a32c488236d815958cf6e64aba, type: 3}
   attackClips: []
   ambientHumClip: {fileID: 0}
   humVolume: 0.25
   breathVolume: 0.6
   attackVolume: 0.9
   pitchVariation: 0.08
+  footstepSounds:
+  - {fileID: 8300000, guid: 72f526a6a9890f643a88e85a61c86c8a, type: 3}
+  - {fileID: 8300000, guid: 85016e0f2b01da248b9663dd49a161b0, type: 3}
+  - {fileID: 8300000, guid: 186de84b3207156479abe98f4958fed0, type: 3}
+  - {fileID: 8300000, guid: 1a91fcd19acf1e54bba0945d9f390849, type: 3}
+  landSound: {fileID: 8300000, guid: ff697d3070687ce4583faa0561a145a2, type: 3}
+  footstepVolume: 0.4
 --- !u!1 &3025737776460293238
 GameObject:
   m_ObjectHideFlags: 0
