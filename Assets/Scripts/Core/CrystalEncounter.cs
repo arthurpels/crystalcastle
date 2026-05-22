@@ -154,7 +154,7 @@ public class CrystalEncounter : MonoBehaviour, IInteractable, ISaveable
         else
         {
             Debug.LogWarning("[CrystalEncounter] GameEnding.Instance не найден! Добавь GameEnding на Canvas.");
-            SceneManager.LoadScene("MainMenu", UnityEngine.SceneManagement.LoadSceneMode.Single);
+            // SceneManager.LoadScene("MainMenu", UnityEngine.SceneManagement.LoadSceneMode.Single);
         }
     }
 
