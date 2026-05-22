@@ -5,6 +5,7 @@ using TMPro;
 public class ItemSlotUI : MonoBehaviour {
     [SerializeField] private Image iconImage;
     [SerializeField] private TextMeshProUGUI nameText;
+    [SerializeField] private TextMeshProUGUI amountText;
     [SerializeField] private Button equipLeftButton;
     [SerializeField] private Button equipRightButton;
     [SerializeField] private Button unequipButton;
@@ -19,6 +20,7 @@ public class ItemSlotUI : MonoBehaviour {
 
         if (iconImage && item.itemData.icon) iconImage.sprite = item.itemData.icon;
         if (nameText) nameText.text = item.itemData.displayName;
+        if (amountText) amountText.text = item.count.ToString();
 
         if (item.isEquiped) {
             var inventory = FindObjectOfType<PlayerInventory>();

@@ -76,7 +76,8 @@ public class CrowbarHandItem : HandItem {
     private static void SpawnFX(ParticleSystem prefab, Vector3 pos, Vector3 normal)
     {
         if (prefab == null) return;
-        var fx = Instantiate(prefab, pos, Quaternion.LookRotation(normal));
+        Vector3 spawnPos = pos + normal * 0.05f;
+        var fx = Instantiate(prefab, spawnPos, Quaternion.LookRotation(normal));
         fx.Play();
         Destroy(fx.gameObject, fx.main.duration + fx.main.startLifetime.constantMax + 0.1f);
     }

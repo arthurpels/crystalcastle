@@ -7,13 +7,13 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: SnowMaterial
-  m_Shader: {fileID: 4800000, guid: d1b95746f069bbad89a8746404c91b1e, type: 3}
+  m_Name: IceMaterialTriplanar
+  m_Shader: {fileID: 4800000, guid: e1e399eb6a826061db284ad12749ab24, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
-  m_LightmapFlags: 2
+  m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -24,11 +24,11 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: c8f603da20a91adb3bba7da3434cd346, type: 3}
+        m_Texture: {fileID: 2800000, guid: 7889d578d14b1a8f1aaf4ad58f469b9f, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _Triplanar_a825b64d5bfe4a7ebf2af7dc0926840a_Texture_1_Texture2D:
-        m_Texture: {fileID: 2800000, guid: c8f603da20a91adb3bba7da3434cd346, type: 3}
+    - _Triplanar_c0e975421d844c83856e79dc26a3d179_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 7889d578d14b1a8f1aaf4ad58f469b9f, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -53,11 +53,14 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _SnapResolution: 160
+    - _TriplanarSharpness: 2
+    - _WorldSnap: 8
+    - _WorldTiling: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _LightTint: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
---- !u!114 &7846744866608443219
+--- !u!114 &108663832709731268
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

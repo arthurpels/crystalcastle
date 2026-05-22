@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public enum HandSlot { Any, Left, Right }
+public enum HandSlot { Any, Left, Right, None }
 
 [CreateAssetMenu(menuName = "Game/Item Data")]
 public class ItemData : ScriptableObject {

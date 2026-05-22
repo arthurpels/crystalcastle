@@ -1,21 +1,30 @@
 using UnityEngine;
+using System.Collections;
 
 public class PistolHandItem : HandItem
 {
     [Header("Shooting")]
-    [SerializeField] private Transform shootTransform;      // точка вылета пули (конец дула)
+    [SerializeField] private Transform shootTransform;
     [SerializeField] private float maxRange = 50f;
     [SerializeField] private float damage = 35f;
-    [SerializeField] private float fireCooldown = 0.15f;
+    [SerializeField] private float fireCooldown = 0.25f;
     [SerializeField] private LayerMask hitMask;
 
     [Header("Ammo")]
-    [SerializeField] private ItemData ammoType;             // ссылка на ItemData патронов
+    [SerializeField] private ItemData ammoType;
     [SerializeField] private int ammoPerShot = 1;
 
-    [Header("Visual")]
-    [SerializeField] private ParticleSystem muzzleFlash;    // вспышка выстрела
-    [SerializeField] private TrailRenderer bulletTrail;     // след пули (префаб)
+    [Header("Visuals & Audio")]
+    [SerializeField] private ParticleSystem muzzleFlash;
+    [SerializeField] private LineRenderer bulletTrailPrefab;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip shootSound;
+    [SerializeField] private AudioClip emptyClickSound;
+    [SerializeField] private AudioClip impactSound; // звук попадания (опционально)
+
+    [Header("Feedback")]
+    [SerializeField] private float shakeIntensity = 0.06f;
+    [SerializeField] private float shakeDuration  = 0.12f;
 
     private float _cooldownTimer;
     private Camera _cam;
@@ -34,83 +43,111 @@ public class PistolHandItem : HandItem
     {
         if (_cooldownTimer > 0f) return;
 
-        // Проверяем патроны
+        // Проверка патронов
         if (!PlayerInventory.Instance.HasItem(ammoType, ammoPerShot))
         {
-            Debug.Log("[Pistol] Нет патронов!");
-            // TODO: звук щелчка пустого магазина
+            PlaySound(emptyClickSound);
             return;
         }
 
-        // Тратим патрон
+        // Трата патронов
         PlayerInventory.Instance.Consume(ammoType, ammoPerShot);
-
         _cooldownTimer = fireCooldown;
         Shoot();
     }
 
     private void Shoot()
     {
-        // === 1. Луч из камеры — куда целится игрок ===
-        Vector3 screenCenter = _cam.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0f));
+        PlaySound(shootSound);
+        if (muzzleFlash) muzzleFlash.Play();
+        TriggerShake();
+
+        // Направление взгляда игрока
         Vector3 aimDir = _cam.transform.forward;
+        Vector3 origin = _cam.transform.position;
 
-        // Raycast из камеры для определения точки прицеливания
-        Vector3 aimPoint = screenCenter + aimDir * maxRange;
-        if (Physics.Raycast(screenCenter, aimDir, out RaycastHit aimHit, maxRange, hitMask))
+        // Луч из камеры определяет точку прицеливания
+        if (Physics.Raycast(origin, aimDir, out RaycastHit aimHit, maxRange, hitMask))
         {
-            aimPoint = aimHit.point;
+            SpawnTrail(shootTransform.position, aimHit.point);
+            ApplyDamage(aimHit.collider, aimHit.point);
+            PlaySound(impactSound);
         }
-
-        // === 2. Основной луч из дула в точку прицеливания ===
-        Vector3 shootDir = (aimPoint - shootTransform.position).normalized;
-        
-        bool hasHit = Physics.Raycast(shootTransform.position, shootDir, out RaycastHit hit, maxRange, hitMask);
-
-        // === 3. Визуал ===
-        Vector3 endPoint = hasHit ? hit.point : shootTransform.position + shootDir * maxRange;
-        SpawnBulletTrail(endPoint);
-        if (muzzleFlash != null) muzzleFlash.Play();
-
-        // === 4. Урон ===
-        if (hasHit)
+        else
         {
-            IHealth target = hit.collider.GetComponentInParent<IHealth>();
-            if (target != null && target.IsAlive)
-            {
-                target.TakeDamage(damage);
-            }
+            // Промах: пуля летит в бесконечность
+            SpawnTrail(shootTransform.position, origin + aimDir * maxRange);
         }
     }
 
-    private void SpawnBulletTrail(Vector3 endPoint)
+    private void SpawnTrail(Vector3 start, Vector3 end)
     {
-        if (bulletTrail == null) return;
+        if (bulletTrailPrefab == null) return;
 
-        TrailRenderer trail = Instantiate(bulletTrail, shootTransform.position, Quaternion.identity);
-        trail.AddPosition(shootTransform.position);
-
-        // Анимируем след к точке попадания
-        float distance = Vector3.Distance(shootTransform.position, endPoint);
-        float duration = distance / 100f; // скорость следа ~100 м/с
-
-        StartCoroutine(AnimateTrail(trail, endPoint, duration));
+        LineRenderer trail = Instantiate(bulletTrailPrefab, start, Quaternion.identity);
+        trail.SetPositions(new[] { start, start });
+        trail.gameObject.SetActive(true);
+        StartCoroutine(AnimateTrail(trail, end));
     }
 
-    private System.Collections.IEnumerator AnimateTrail(TrailRenderer trail, Vector3 end, float duration)
+    private IEnumerator AnimateTrail(LineRenderer trail, Vector3 targetEnd)
     {
-        float t = 0f;
-        Vector3 start = trail.transform.position;
+        Vector3 startPos = trail.GetPosition(0);
+        float flyDuration = 0.12f; // Скорость полёта трассера
+        float elapsed = 0f;
 
-        while (t < 1f)
+        // Фаза 1: Полёт трассера
+        while (elapsed < flyDuration)
         {
-            t += Time.deltaTime / duration;
-            trail.transform.position = Vector3.Lerp(start, end, t);
+            elapsed += Time.deltaTime;
+            float t = elapsed / flyDuration;
+            trail.SetPosition(1, Vector3.Lerp(startPos, targetEnd, t));
             yield return null;
         }
 
-        trail.transform.position = end;
-        yield return new WaitForSeconds(trail.time); // ждём пока след растворится
+        trail.SetPosition(1, targetEnd);
+
+        // Фаза 2: Затухание
+        float fadeDuration = 0.15f;
+        elapsed = 0f;
+        Color startColor = trail.startColor;
+        Color fadeColor = new Color(startColor.r, startColor.g, startColor.b, 0f);
+
+        while (elapsed < fadeDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / fadeDuration;
+            trail.startColor = Color.Lerp(startColor, fadeColor, t);
+            trail.endColor   = fadeColor;
+            yield return null;
+        }
+
         Destroy(trail.gameObject);
+    }
+
+    private void ApplyDamage(Collider target, Vector3 hitPoint)
+    {
+        IHealth health = target.GetComponentInParent<IHealth>();
+        if (health != null && health.IsAlive)
+        {
+            health.TakeDamage(damage);
+            // Сюда можно добавить спавн крови/искр, как в ломе:
+            // SpawnHitFX(hitPoint, hit.normal, health is EnemyHealth);
+        }
+    }
+
+    private void PlaySound(AudioClip clip)
+    {
+        if (audioSource == null || clip == null) return;
+        audioSource.pitch = Random.Range(0.94f, 1.06f);
+        audioSource.PlayOneShot(clip);
+    }
+
+    private void TriggerShake()
+    {
+        if (Camera.main.GetComponent<CameraShake>() != null ) {
+            Camera.main.GetComponent<CameraShake>().Shake(shakeIntensity, shakeDuration);
+        }
+        
     }
 }

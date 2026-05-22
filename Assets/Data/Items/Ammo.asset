@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddef785595402597eab488aaa7f309f4, type: 3}
+  m_Name: Ammo
+  m_EditorClassIdentifier: 
+  displayName: Ammo
+  icon: {fileID: 0}
+  handPrefab: {fileID: 6026534224738529072, guid: de455d800a7f42fc19f2e64308f8716f,
+    type: 3}
+  worldPrefab: {fileID: 3269335242080888702, guid: 503784bd0b3532227806fcf1cbd8373a,
+    type: 3}
+  allowedHand: 2
+  hasRightHandAnimation: 0
+  isStackable: 1
+  maxStackSize: 999

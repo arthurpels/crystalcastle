@@ -165,12 +165,20 @@ MonoBehaviour:
   range: 7
   hitMask:
     serializedVersion: 2
-    m_Bits: 3841
+    m_Bits: 3969
   attackCooldown: 0.8
-  showDebug: 1
-  debugLineDuration: 5
   audioSource: {fileID: 2806751211849414161}
   swingSound: {fileID: 8300000, guid: 15caa2469635c105ab7eb2bf0fdceadd, type: 3}
+  hitFleshSounds: []
+  hitHardSounds:
+  - {fileID: 8300000, guid: 535ffbad3671636efbbd789cea7f7a1a, type: 3}
+  hitSparksPrefab: {fileID: 1783947092276630502, guid: 9b4f5af269236c1f09a4105b4cdcb758,
+    type: 3}
+  hitBloodPrefab: {fileID: 478480990258403889, guid: b40f07a3063901eacbcab71867734205,
+    type: 3}
+  shakeIntensity: 0.08
+  shakeDuration: 0.1
+  showDebug: 1
 --- !u!1001 &7824411190010842540
 PrefabInstance:
   m_ObjectHideFlags: 0

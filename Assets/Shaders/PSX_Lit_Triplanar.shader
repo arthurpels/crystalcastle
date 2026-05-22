@@ -1,21 +1,26 @@
-// PS1-стилизованный поверхностный шейдер для URP.
-// Эффекты: снэп вершин, аффинные текстуры, ПОПИКСЕЛЬНОЕ освещение, туман.
-Shader "CrystalCastle/PSX_Lit"
+// PS1-стилизованный шейдер с Triplanar Mapping (World Space Tiling).
+// Идеально для террейна, снега, льда, грязи и больших поверхностей.
+Shader "CrystalCastle/PSX_Lit_Triplanar"
 {
     Properties
     {
         [MainTexture] _BaseMap        ("Текстура", 2D)            = "white" {}
         [MainColor]   _BaseColor      ("Цвет",      Color)        = (1,1,1,1)
-
         [Toggle(_ALPHATEST_ON)] _AlphaClip ("Alpha Clip", Float)  = 0
-        _Cutoff        ("Порог прозрачности",    Range(0,1))      = 0.5
+        _Cutoff        ("Порог прозрачности", Range(0,1))      = 0.5
         [Enum(UnityEngine.Rendering.CullMode)] _Cull ("Cull", Float) = 2
 
+        // --- Настройки тайлинга в мировых координатах ---
+        _WorldTiling      ("Мировой тайлинг (размер)", Float)   = 1.0
+        _TriplanarSharpness("Резкость бленда (стены/пол)", Float)= 2.0
+
+        // --- PSX Эффекты ---
         _SnapResolution ("Снэп вершин (px)",     Float)           = 160
         _AffineAmount   ("Аффинная деформация",  Range(0,1))      = 1
 
         _LightTint     ("Оттенок света",         Color)           = (1,1,1,1)
         _AmbientBoost  ("Усиление ambient",      Range(0,2))      = 1
+        _WorldSnap       ("Снэп мира (прилипание)", Float) = 8.0
     }
 
     SubShader
@@ -30,7 +35,7 @@ Shader "CrystalCastle/PSX_Lit"
             Cull [_Cull]
 
             HLSLPROGRAM
-            #pragma vertex   vert
+            #pragma vertex vert
             #pragma fragment frag
 
             #pragma shader_feature_local _ALPHATEST_ON
@@ -52,6 +57,9 @@ Shader "CrystalCastle/PSX_Lit"
                 float  _AffineAmount;
                 float  _AmbientBoost;
                 float  _Cutoff;
+                float  _WorldTiling;
+                float  _TriplanarSharpness;
+                float  _WorldSnap;
             CBUFFER_END
 
             TEXTURE2D(_BaseMap);
@@ -61,18 +69,18 @@ Shader "CrystalCastle/PSX_Lit"
             {
                 float4 positionOS : POSITION;
                 float3 normalOS   : NORMAL;
-                float2 uv         : TEXCOORD0;
                 float4 color      : COLOR;
             };
 
             struct Varyings
             {
                 float4 positionCS : SV_POSITION;
-                float2 uvPersp    : TEXCOORD0;               // перспективно-корректные UV
-                noperspective float2 uvAffine : TEXCOORD1;   // аффинные UV (искажение PS1)
-                float3 normalWS   : TEXCOORD2;               // Нормаль для попиксельного света
-                float3 positionWS : TEXCOORD3;               // Мировая позиция для попиксельного света
-                float  fogFactor  : TEXCOORD4;
+                float3 positionWS : TEXCOORD0;               
+                noperspective float3 uvAffineX : TEXCOORD1;  
+                noperspective float3 uvAffineY : TEXCOORD2;  
+                noperspective float3 uvAffineZ : TEXCOORD3;  
+                float3 normalWS   : TEXCOORD4;
+                float  fogFactor  : TEXCOORD5;
                 float4 color      : COLOR;
             };
 
@@ -83,27 +91,52 @@ Shader "CrystalCastle/PSX_Lit"
                 float3 positionWS = TransformObjectToWorld(IN.positionOS.xyz);
                 float3 normalWS   = normalize(TransformObjectToWorldNormal(IN.normalOS));
                 float4 clipPos    = TransformWorldToHClip(positionWS);
-
+ 
                 // PS1 вершинный джиттер
                 OUT.positionCS = PSX_SnapVertex(clipPos, _SnapResolution);
 
-                OUT.uvPersp  = TRANSFORM_TEX(IN.uv, _BaseMap);
-                OUT.uvAffine = OUT.uvPersp;
-
-                // Передаем данные во фрагментный шейдер
+                // Передаем данные во фрагментный шейдер для попиксельного света
                 OUT.positionWS = positionWS;
-                OUT.normalWS   = normalWS;
-                OUT.color      = IN.color;
-                OUT.fogFactor  = ComputeFogFactor(OUT.positionCS.z);
+                OUT.normalWS = normalWS;
+                OUT.color     = IN.color;
+                OUT.fogFactor = ComputeFogFactor(OUT.positionCS.z);
                 
+                // Предрасчет базовых мировых UV
+                float3 worldUV = positionWS * _WorldTiling;
+                OUT.uvAffineX = float3(worldUV.zy, 1.0); 
+                OUT.uvAffineY = float3(worldUV.xz, 1.0); 
+                OUT.uvAffineZ = float3(worldUV.xy, 1.0); 
+
                 return OUT;
             }
 
             float4 frag (Varyings IN) : SV_Target
             {
-                // Аффинное искажение текстур
-                float2 uv  = lerp(IN.uvPersp, IN.uvAffine, _AffineAmount);
-                float4 col = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, uv) * _BaseColor * IN.color;
+                // --- Квантование мировых координат ---
+                float3 snappedPosWS = IN.positionWS;
+                if (_WorldSnap > 0.1)
+                {
+                    snappedPosWS = floor(IN.positionWS * _WorldSnap) / _WorldSnap;
+                }
+
+                float3 worldUV = snappedPosWS * _WorldTiling;
+
+                // Triplanar blending weights
+                float3 blendWeights = abs(IN.normalWS);
+                blendWeights = pow(blendWeights, _TriplanarSharpness);
+                blendWeights /= (blendWeights.x + blendWeights.y + blendWeights.z);
+
+                // Аффинное искажение
+                float2 uvX = worldUV.zy / IN.uvAffineX.z;
+                float2 uvY = worldUV.xz / IN.uvAffineY.z;
+                float2 uvZ = worldUV.xy / IN.uvAffineZ.z;
+                
+                float4 colX = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, uvX);
+                float4 colY = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, uvY);
+                float4 colZ = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, uvZ);
+
+                float4 col = colX * blendWeights.x + colY * blendWeights.y + colZ * blendWeights.z;
+                col *= _BaseColor * IN.color;
 
                 #ifdef _ALPHATEST_ON
                     clip(col.a - _Cutoff);
@@ -124,7 +157,7 @@ Shader "CrystalCastle/PSX_Lit"
 
                 float ndotl = saturate(dot(normalWS, mainLight.direction));
                 lighting += mainLight.color * ndotl
-                          * mainLight.shadowAttenuation * mainLight.distanceAttenuation;
+                           * mainLight.shadowAttenuation * mainLight.distanceAttenuation;
 
                 // Additional Lights
                 #if defined(_ADDITIONAL_LIGHTS) || defined(_ADDITIONAL_LIGHTS_VERTEX)
@@ -139,7 +172,7 @@ Shader "CrystalCastle/PSX_Lit"
                 #endif
 
                 col.rgb *= lighting * _LightTint.rgb;
-                col.rgb  = MixFog(col.rgb, IN.fogFactor);
+                col.rgb = MixFog(col.rgb, IN.fogFactor);
                 return col;
             }
             ENDHLSL
@@ -154,7 +187,7 @@ Shader "CrystalCastle/PSX_Lit"
             Cull [_Cull]
 
             HLSLPROGRAM
-            #pragma vertex   ShadowVert
+            #pragma vertex ShadowVert
             #pragma fragment ShadowFrag
             #pragma shader_feature_local _ALPHATEST_ON
             #pragma multi_compile_vertex _ _CASTING_PUNCTUAL_LIGHT_SHADOW
@@ -162,7 +195,7 @@ Shader "CrystalCastle/PSX_Lit"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/CommonMaterial.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Shadows.hlsl"
-            #include "PSX_Common.hlsl" 
+            #include "PSX_Common.hlsl"
 
             CBUFFER_START(UnityPerMaterial)
                 float4 _BaseMap_ST;
@@ -172,6 +205,9 @@ Shader "CrystalCastle/PSX_Lit"
                 float  _AffineAmount;
                 float  _AmbientBoost;
                 float  _Cutoff;
+                float  _WorldTiling;
+                float  _TriplanarSharpness;
+                float  _WorldSnap;
             CBUFFER_END
 
             TEXTURE2D(_BaseMap);
@@ -180,8 +216,12 @@ Shader "CrystalCastle/PSX_Lit"
             float3 _LightDirection;
             float3 _LightPosition;
 
-            struct ShadowAttributes { float4 positionOS:POSITION; float3 normalOS:NORMAL; float2 uv:TEXCOORD0; };
-            struct ShadowVaryings   { float4 positionCS:SV_POSITION; float2 uv:TEXCOORD0; };
+            struct ShadowAttributes { float4 positionOS:POSITION; float3 normalOS:NORMAL; };
+            struct ShadowVaryings   { 
+                float4 positionCS:SV_POSITION; 
+                float3 positionWS:TEXCOORD0;
+                float3 normalWS:TEXCOORD1;
+            };
 
             ShadowVaryings ShadowVert (ShadowAttributes IN)
             {
@@ -197,20 +237,30 @@ Shader "CrystalCastle/PSX_Lit"
 
                 float4 clip = TransformWorldToHClip(ApplyShadowBias(positionWS, normalWS, lightDir));
                 #if UNITY_REVERSED_Z
-                    clip.z = min(clip.z, UNITY_NEAR_CLIP_VALUE);
+                     clip.z = min(clip.z, UNITY_NEAR_CLIP_VALUE);
                 #else
                     clip.z = max(clip.z, UNITY_NEAR_CLIP_VALUE);
                 #endif
 
                 OUT.positionCS = PSX_SnapVertex(clip, _SnapResolution);
-                OUT.uv = TRANSFORM_TEX(IN.uv, _BaseMap);
+                OUT.positionWS = positionWS;
+                OUT.normalWS = normalWS;
                 return OUT;
             }
 
             float4 ShadowFrag (ShadowVaryings IN) : SV_Target
             {
                 #ifdef _ALPHATEST_ON
-                    float a = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, IN.uv).a * _BaseColor.a;
+                    float3 blendWeights = abs(IN.normalWS);
+                    blendWeights = pow(blendWeights, _TriplanarSharpness);
+                    blendWeights /= (blendWeights.x + blendWeights.y + blendWeights.z);
+
+                    float3 worldUV = IN.positionWS * _WorldTiling;
+                    float aX = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, worldUV.zy).a;
+                    float aY = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, worldUV.xz).a;
+                    float aZ = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, worldUV.xy).a;
+
+                    float a = (aX * blendWeights.x + aY * blendWeights.y + aZ * blendWeights.z) * _BaseColor.a;
                     clip(a - _Cutoff);
                 #endif
                 return 0;
@@ -227,7 +277,7 @@ Shader "CrystalCastle/PSX_Lit"
             Cull [_Cull]
 
             HLSLPROGRAM
-            #pragma vertex   DepthVert
+            #pragma vertex DepthVert
             #pragma fragment DepthFrag
             #pragma shader_feature_local _ALPHATEST_ON
 
@@ -242,27 +292,44 @@ Shader "CrystalCastle/PSX_Lit"
                 float  _AffineAmount;
                 float  _AmbientBoost;
                 float  _Cutoff;
+                float  _WorldTiling;
+                float  _TriplanarSharpness;
+                float  _WorldSnap;
             CBUFFER_END
 
             TEXTURE2D(_BaseMap);
             SAMPLER(sampler_BaseMap);
 
-            struct DepthAttributes { float4 positionOS:POSITION; float2 uv:TEXCOORD0; };
-            struct DepthVaryings   { float4 positionCS:SV_POSITION; float2 uv:TEXCOORD0; };
+            struct DepthAttributes { float4 positionOS:POSITION; float3 normalOS:NORMAL; };
+            struct DepthVaryings   { 
+                float4 positionCS:SV_POSITION; 
+                float3 positionWS:TEXCOORD0;
+                float3 normalWS:TEXCOORD1;
+            };
 
             DepthVaryings DepthVert (DepthAttributes IN)
             {
                 DepthVaryings OUT;
                 float4 clip = TransformObjectToHClip(IN.positionOS.xyz);
                 OUT.positionCS = PSX_SnapVertex(clip, _SnapResolution); 
-                OUT.uv = TRANSFORM_TEX(IN.uv, _BaseMap);
+                OUT.positionWS = TransformObjectToWorld(IN.positionOS.xyz);
+                OUT.normalWS = TransformObjectToWorldNormal(IN.normalOS);
                 return OUT;
             }
 
             float4 DepthFrag (DepthVaryings IN) : SV_Target
             {
                 #ifdef _ALPHATEST_ON
-                    float a = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, IN.uv).a * _BaseColor.a;
+                    float3 blendWeights = abs(IN.normalWS);
+                    blendWeights = pow(blendWeights, _TriplanarSharpness);
+                    blendWeights /= (blendWeights.x + blendWeights.y + blendWeights.z);
+
+                    float3 worldUV = IN.positionWS * _WorldTiling;
+                    float aX = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, worldUV.zy).a;
+                    float aY = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, worldUV.xz).a;
+                    float aZ = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, worldUV.xy).a;
+
+                    float a = (aX * blendWeights.x + aY * blendWeights.y + aZ * blendWeights.z) * _BaseColor.a;
                     clip(a - _Cutoff);
                 #endif
                 return 0;

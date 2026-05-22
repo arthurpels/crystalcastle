@@ -1,4 +1,4 @@
-// Полноэкранный PS1-эффект: понижение цветности + ordered dithering (матрица Байера 4x4).
+// Полноэкранный PS1-эффект: пикселизация (низкое разрешение) + дизеринг.
 // Запускается через PSXPostProcessFeature (ScriptableRendererFeature).
 Shader "CrystalCastle/PSX_PostProcess"
 {
@@ -18,8 +18,6 @@ Shader "CrystalCastle/PSX_PostProcess"
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
-            // Blit.hlsl exists only in URP 14+ (Unity 2022.2+); define the
-            // necessary blit infrastructure manually for wider compatibility.
             TEXTURE2D_X(_BlitTexture);
             SAMPLER(sampler_PointClamp);
 
@@ -37,7 +35,8 @@ Shader "CrystalCastle/PSX_PostProcess"
             }
 
             float _ColorLevels;     // число градаций на канал (PS1 ≈ 32)
-            float _DitherStrength;  // 0 — жёсткая постеризация, 1 — полный дизеринг
+            float _DitherStrength;  // сила дизеринга
+            float _PixelSize;       // размер пикселя (1.0 = оригинал, 2.0 = в 2 раза крупнее)
 
             // Матрица Байера 4x4 для упорядоченного дизеринга
             static const float BAYER[16] =
@@ -50,7 +49,16 @@ Shader "CrystalCastle/PSX_PostProcess"
 
             float4 frag (Varyings IN) : SV_Target
             {
-                float3 col = SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_PointClamp, IN.texcoord).rgb;
+                // --- ПИКСЕЛИЗАЦИЯ (низкое разрешение) ---
+                // Получаем размер экрана в пикселях
+                float2 screenRes = _ScreenParams.xy;
+                // Уменьшаем разрешение: делим на размер пикселя
+                float2 pixelatedRes = screenRes / max(_PixelSize, 1.0);
+                // Квантуем UV-координаты до "крупных пикселей"
+                float2 pixelatedUV = floor(IN.texcoord * pixelatedRes) / pixelatedRes;
+                
+                // Сэмплируем уже пикселизированную текстуру
+                float3 col = SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_PointClamp, pixelatedUV).rgb;
 
                 // Индекс в матрице Байера по экранным пикселям
                 int2 px = int2(IN.positionCS.xy) & 3;          // % 4
