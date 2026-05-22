@@ -163,7 +163,8 @@ public class SaveManager : MonoBehaviour
             $"{file.destroyedIds.Count} уничтожено.");
 
         // Сброс архива документов перед восстановлением
-        DocumentManager.Instance?.ResetForLoad();
+        if (DocumentManager.Instance != null)
+            DocumentManager.Instance.ResetForLoad();
 
         // Строим словарь id → (identity, saveable) для быстрого поиска.
         var map = new Dictionary<string, (SaveableIdentity id, ISaveable s)>();
@@ -205,7 +206,8 @@ public class SaveManager : MonoBehaviour
         yield return null;
 
         // 4. Пересчитываем сеть питания.
-        PowerNetwork.Instance?.Evaluate();
+        if (PowerNetwork.Instance != null)
+            PowerNetwork.Instance.Evaluate();
 
         OnAfterLoad?.Invoke();
         Log("[SaveManager] Загрузка завершена.");
