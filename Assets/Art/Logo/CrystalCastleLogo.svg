@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  CRYSTAL CASTLE — Game Logo  (Silent Hill / PS1 Horror style)
+  1200 × 600 px · Soviet Decay · Chukotka 1987
+
+  Экспорт в Unity:
+    Откройте в браузере → правая кнопка → «Сохранить как изображение»,
+    или в Inkscape / Illustrator: File → Export PNG, 1200×600.
+    Texture Type → Sprite (2D and UI), Pixels Per Unit → 100.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="1200" height="600">
+  <defs>
+
+    <!-- ─── Фон: сырая, чёрно-коричневая тьма ─────────────────────────── -->
+    <radialGradient id="bgGrad" cx="50%" cy="40%" r="72%">
+      <stop offset="0%"   stop-color="#1c1410"/>
+      <stop offset="55%"  stop-color="#0d0908"/>
+      <stop offset="100%" stop-color="#040302"/>
+    </radialGradient>
+
+    <!-- ─── Туман: шумовая текстура ───────────────────────────────────── -->
+    <filter id="fogFilter" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.007" numOctaves="5" seed="19" result="noise"/>
+      <feColorMatrix type="matrix"
+        values="0 0 0 0 0.10
+                0 0 0 0 0.07
+                0 0 0 0 0.05
+                0 0 0 1.8 -0.55"
+        in="noise" result="coloredFog"/>
+      <feBlend in="SourceGraphic" in2="coloredFog" mode="screen" result="blend"/>
+    </filter>
+
+    <!-- ─── Ржавчина на тексте: смещение + размытие ───────────────────── -->
+    <filter id="rustDecay" x="-8%" y="-30%" width="116%" height="160%" color-interpolation-filters="sRGB">
+      <feTurbulence type="turbulence" baseFrequency="0.035 0.055" numOctaves="3" seed="8" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="3.5"
+                         xChannelSelector="R" yChannelSelector="G" result="displaced"/>
+      <feGaussianBlur in="displaced" stdDeviation="0.7" result="soft"/>
+      <feMerge>
+        <feMergeNode in="soft"/>
+        <feMergeNode in="displaced"/>
+      </feMerge>
+    </filter>
+
+    <!-- ─── Свечение: кровь / раскалённое железо ─────────────────────── -->
+    <filter id="embers" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="9" result="blur"/>
+      <feColorMatrix type="matrix"
+        values="1.4 0 0 0 0
+                0 0.2 0 0 0
+                0 0   0 0 0
+                0 0   0 1 0"
+        in="blur" result="redBlur"/>
+      <feMerge>
+        <feMergeNode in="redBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- ─── Кристалл: искажение граней ───────────────────────────────── -->
+    <filter id="shardFilter" x="-25%" y="-25%" width="150%" height="150%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" seed="4" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="5"
+                         xChannelSelector="R" yChannelSelector="G" result="disp"/>
+      <feGaussianBlur in="disp" stdDeviation="1.2"/>
+    </filter>
+
+    <!-- ─── Виньетка ─────────────────────────────────────────────────── -->
+    <radialGradient id="vignette" cx="50%" cy="50%" r="65%">
+      <stop offset="25%" stop-color="#000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0.92"/>
+    </radialGradient>
+
+    <!-- ─── Горизонтальный ржавый градиент ───────────────────────────── -->
+    <linearGradient id="rustLine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#5c1a0a" stop-opacity="0"/>
+      <stop offset="25%"  stop-color="#7a2810" stop-opacity="0.8"/>
+      <stop offset="50%"  stop-color="#6a2010" stop-opacity="0.55"/>
+      <stop offset="75%"  stop-color="#7a2810" stop-opacity="0.75"/>
+      <stop offset="100%" stop-color="#5c1a0a" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- ─── Кристалл: градиент грани ──────────────────────────────────── -->
+    <linearGradient id="shardCenter" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%"   stop-color="#2e2018"/>
+      <stop offset="100%" stop-color="#18100c"/>
+    </linearGradient>
+
+  </defs>
+
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+  <!-- ФОН                                                                  -->
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+  <rect width="1200" height="600" fill="url(#bgGrad)"/>
+
+  <!-- Туман поверх фона -->
+  <rect width="1200" height="600" fill="#0d0908" filter="url(#fogFilter)" opacity="0.55"/>
+
+  <!-- Горизонтальные полосы: советские промышленные «риски» -->
+  <g stroke="#1a0e09" stroke-width="1" opacity="0.6">
+    <line x1="0" y1="100" x2="1200" y2="100"/>
+    <line x1="0" y1="200" x2="1200" y2="200"/>
+    <line x1="0" y1="400" x2="1200" y2="400"/>
+    <line x1="0" y1="500" x2="1200" y2="500"/>
+  </g>
+
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+  <!-- РЖАВЫЕ ПОТЁКИ  (вертикальные капли как на стенах в Silent Hill)      -->
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+
+  <!-- Широкая ржавая полоса под заголовком -->
+  <rect x="0" y="358" width="1200" height="22" fill="url(#rustLine)" opacity="0.45"/>
+  <rect x="0" y="380" width="1200" height="6"  fill="url(#rustLine)" opacity="0.22"/>
+
+  <!-- Вертикальные потёки -->
+  <g fill="#4a1208" opacity="0.5">
+    <rect x="310" y="358" width="2"  height="72"/>
+    <rect x="311" y="430" width="1"  height="24" opacity="0.6"/>
+    <rect x="503" y="358" width="1"  height="50"/>
+    <rect x="600" y="358" width="3"  height="68"/>
+    <rect x="601" y="426" width="2"  height="20" opacity="0.5"/>
+    <rect x="718" y="358" width="2"  height="44"/>
+    <rect x="905" y="358" width="1"  height="60"/>
+    <rect x="906" y="418" width="2"  height="16" opacity="0.55"/>
+  </g>
+
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+  <!-- КРИСТАЛЛ — тёмный обсидиановый осколок, трещины и ржавчина         -->
+  <!-- центр: translate(600, 168)                                           -->
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+
+  <!-- Тень под кристаллом -->
+  <ellipse cx="600" cy="310" rx="115" ry="18" fill="#000" opacity="0.65"/>
+
+  <g transform="translate(600,168)" filter="url(#shardFilter)">
+
+    <!-- Верх-левый фасет: почти чёрный с коричневым -->
+    <polygon points="0,-128  -108,4  -52,4"
+             fill="#1e1510" opacity="0.97"/>
+
+    <!-- Верх-центр: немного светлее (единственный «живой» отблеск) -->
+    <polygon points="0,-128  -52,4  52,4"
+             fill="url(#shardCenter)" opacity="0.95"/>
+
+    <!-- Верх-правый фасет -->
+    <polygon points="0,-128  52,4  108,4"
+             fill="#1a1108" opacity="0.95"/>
+
+    <!-- Низ-левый: самый тёмный -->
+    <polygon points="-108,4  0,128  -46,4"
+             fill="#110b07" opacity="0.97"/>
+
+    <!-- Низ-центр -->
+    <polygon points="-46,4  0,128  46,4"
+             fill="#1c1510" opacity="0.92"/>
+
+    <!-- Низ-правый -->
+    <polygon points="46,4  108,4  0,128"
+             fill="#17100a" opacity="0.95"/>
+
+    <!-- Ржавые прожилки граней -->
+    <g stroke="#5c2010" stroke-width="1.1" fill="none" opacity="0.75">
+      <line x1="-52"  y1="4"    x2="52"  y2="4"/>
+      <line x1="0"    y1="-128" x2="-52" y2="4"/>
+      <line x1="0"    y1="-128" x2="52"  y2="4"/>
+      <line x1="-108" y1="4"    x2="-46" y2="4"/>
+      <line x1="46"   y1="4"    x2="108" y2="4"/>
+    </g>
+
+    <!-- Внешний контур -->
+    <polygon points="0,-128  108,4  0,128  -108,4"
+             fill="none" stroke="#3e1e10" stroke-width="2.2" opacity="0.9"/>
+
+    <!-- Трещины на поверхности -->
+    <g stroke="#080503" stroke-width="1.6" fill="none" opacity="0.85">
+      <polyline points="-15,-88  4,-42  -8,22"/>
+      <polyline points="28,-68  14,8"/>
+      <line x1="-55" y1="40" x2="-30" y2="75"/>
+    </g>
+
+    <!-- Красная «кровавая» прожилка внутри трещины -->
+    <g stroke="#5a1008" stroke-width="0.8" fill="none" opacity="0.55">
+      <polyline points="-15,-88  4,-42  -8,22"/>
+    </g>
+
+    <!-- Тусклый блик — почти невидимый -->
+    <polygon points="0,-128  -16,-55  16,-55"
+             fill="#6a5038" opacity="0.14"/>
+
+    <!-- Скол слева -->
+    <polygon points="-108,4  -150,-20  -138,44  -116,20"
+             fill="#1c1008" opacity="0.85"/>
+    <polygon points="-108,4  -150,-20  -126,4"
+             fill="#2a1a10" opacity="0.3"/>
+
+    <!-- Скол справа -->
+    <polygon points="108,4  150,-20  138,44  116,20"
+             fill="#1c1008" opacity="0.85"/>
+    <polygon points="108,4  150,-20  126,4"
+             fill="#2a1a10" opacity="0.3"/>
+
+    <!-- Верхний фрагмент -->
+    <polygon points="0,-128  -16,-152  16,-148"
+             fill="#1e1510" opacity="0.7"/>
+
+    <!-- Тлеющие угли: красный ореол снизу осколка (жар из трещин) -->
+    <polygon points="-30,60  30,60  40,128  -40,128"
+             fill="#6b1a08" opacity="0.18" filter="url(#embers)"/>
+
+  </g>
+
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+  <!-- ЗАГОЛОВОК                                                            -->
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+
+  <!-- Раскалённый ореол за текстом -->
+  <rect x="180" y="336" width="840" height="74" rx="0"
+        fill="#4a0e04" opacity="0.28" filter="url(#embers)"/>
+
+  <!-- Разделительные линии (ржавые, с зазубринами) -->
+  <g opacity="0.88">
+    <line x1="88"  y1="362" x2="448" y2="362" stroke="#3a1408" stroke-width="2"/>
+    <line x1="88"  y1="363" x2="448" y2="363" stroke="#6a2810" stroke-width="0.6" opacity="0.6"/>
+    <line x1="752" y1="362" x2="1112" y2="362" stroke="#3a1408" stroke-width="2"/>
+    <line x1="752" y1="363" x2="1112" y2="363" stroke="#6a2810" stroke-width="0.6" opacity="0.6"/>
+  </g>
+
+  <!-- Ромбы у концов линий -->
+  <polygon points="448,362  461,355  474,362  461,369" fill="#5c2010" opacity="0.9"/>
+  <polygon points="752,362  739,355  726,362  739,369" fill="#5c2010" opacity="0.9"/>
+  <!-- Центральный ромб: как треугольник предупреждения Silent Hill -->
+  <polygon points="600,353  612,362  600,371  588,362" fill="#7a2a14" opacity="0.95"/>
+  <polygon points="600,354  610,362  600,370  590,362" fill="none" stroke="#3a1008" stroke-width="0.8"/>
+
+  <!-- CRYSTAL CASTLE — задняя тень (тёмно-красная) -->
+  <text x="604" y="408"
+        font-family="'Courier New', Courier, monospace"
+        font-size="66"
+        font-weight="bold"
+        letter-spacing="13"
+        text-anchor="middle"
+        fill="#3a0a04"
+        opacity="0.9">CRYSTAL CASTLE</text>
+
+  <!-- CRYSTAL CASTLE — основной текст: старое золото с ржавчиной -->
+  <text x="600" y="405"
+        font-family="'Courier New', Courier, monospace"
+        font-size="66"
+        font-weight="bold"
+        letter-spacing="13"
+        text-anchor="middle"
+        fill="#a07840"
+        filter="url(#rustDecay)"
+        opacity="0.97">CRYSTAL CASTLE</text>
+
+  <!-- Тонкая линия под заголовком: ржавый разрез -->
+  <line x1="220" y1="422" x2="980" y2="422"
+        stroke="#280c06" stroke-width="1" opacity="0.75"/>
+
+  <!-- Подзаголовок — советский штамп, выцветший -->
+  <text x="600" y="458"
+        font-family="'Courier New', Courier, monospace"
+        font-size="14"
+        letter-spacing="17"
+        text-anchor="middle"
+        fill="#4a2e18"
+        opacity="0.88">ЧУКОТКА · 1987</text>
+
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+  <!-- НИЖНИЙ ОРНАМЕНТ: треугольники-предупреждения (Silent Hill signature) -->
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+  <g fill="none" stroke="#2e0e06" stroke-width="1.2" opacity="0.6">
+    <polygon points="573,516  580,530  566,530"/>
+    <polygon points="596,516  603,530  589,530"/>
+    <polygon points="619,516  626,530  612,530"/>
+  </g>
+  <!-- Залитые треугольники (чуть меньше) -->
+  <g fill="#2e0e06" opacity="0.45">
+    <polygon points="574,518  580,528  568,528"/>
+    <polygon points="597,518  603,528  591,528"/>
+    <polygon points="620,518  626,528  614,528"/>
+  </g>
+
+  <!-- Версия — едва различима -->
+  <text x="600" y="572"
+        font-family="'Courier New', Courier, monospace"
+        font-size="11"
+        letter-spacing="5"
+        text-anchor="middle"
+        fill="#1e0e08"
+        opacity="0.5">v 0 . 1 a</text>
+
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+  <!-- ВИНЬЕТКА + PS1-SCANLINE                                              -->
+  <!-- ════════════════════════════════════════════════════════════════════ -->
+  <rect width="1200" height="600" fill="url(#vignette)"/>
+
+  <!-- PS1-эффект: еле заметные горизонтальные полосы -->
+  <g fill="#fff">
+    <rect x="0" y="149" width="1200" height="1" opacity="0.008"/>
+    <rect x="0" y="299" width="1200" height="1" opacity="0.010"/>
+    <rect x="0" y="449" width="1200" height="1" opacity="0.008"/>
+  </g>
+
+</svg>
