@@ -1482,6 +1482,7 @@ GameObject:
   - component: {fileID: 4489731377749193011}
   - component: {fileID: 8140649753986304814}
   - component: {fileID: 3489030933080198130}
+  - component: {fileID: -97086305631930873}
   m_Layer: 10
   m_Name: Enemy_1
   m_TagString: Untagged
@@ -1804,6 +1805,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _id: 
+--- !u!114 &-97086305631930873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3025156484680283543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17afc5ab50e359d41a8bdc1bf5c394b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  idleBreathClips: []
+  idleBreathInterval: 4
+  idleBreathVariation: 1.5
+  chaseBreathClips: []
+  chaseBreathInterval: 1.8
+  chaseBreathVariation: 0.4
+  alertClip: {fileID: 0}
+  attackClips: []
+  ambientHumClip: {fileID: 0}
+  humVolume: 0.25
+  breathVolume: 0.6
+  attackVolume: 0.9
+  pitchVariation: 0.08
 --- !u!1 &3025737776460293238
 GameObject:
   m_ObjectHideFlags: 0

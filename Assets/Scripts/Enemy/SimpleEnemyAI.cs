@@ -83,6 +83,10 @@ public class SimpleEnemyAI : MonoBehaviour {
 
         if (agent == null || animator == null) return;
 
+        float currentSpeed = agent.velocity.magnitude;
+        float maxSpeed = agent.speed > 0 ? agent.speed : 5f;
+        animator.SetFloat(speedHash, currentSpeed);
+
         // 1. Скорость для Blend Tree (нормализуем по максимальной скорости агента)
         if (agent.isOnOffMeshLink) {
             // Только что вошли на ссылку — запускаем анимацию прыжка
@@ -102,7 +106,7 @@ public class SimpleEnemyAI : MonoBehaviour {
         }
 
         // === 3. Grounded: обновляем только когда не в прыжке ===
-        bool isGrounded = !agent.isOnOffMeshLink && agent.speed < 0.5f;
+        bool isGrounded = !agent.isOnOffMeshLink && currentSpeed < 0.5f;
         animator.SetBool(groundedHash, isGrounded);
 
         if (_isDirectChasing) {

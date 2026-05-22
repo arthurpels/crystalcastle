@@ -7,8 +7,7 @@ using UnityEngine;
 /// </summary>
 [RequireComponent(typeof(AudioSource))]
 [RequireComponent(typeof(SimpleEnemyAI))]
-public class EnemyAudioController : MonoBehaviour
-{
+public class EnemyAudioController : MonoBehaviour {
     [Header("Idle / Patrol")]
     [Tooltip("Редкое, очень медленное дыхание (12-20 уд/мин)")]
     [SerializeField] private AudioClip[] idleBreathClips;
@@ -39,6 +38,13 @@ public class EnemyAudioController : MonoBehaviour
     [SerializeField][Range(0f, 1f)] private float attackVolume = 0.9f;
     [SerializeField][Range(0.05f, 0.3f)] private float pitchVariation = 0.08f;
 
+    [SerializeField] private AudioClip[] footstepSounds;
+
+    [SerializeField] private AudioClip landSound;
+    [SerializeField] private float footstepVolume = 0.4f;
+
+    
+
     private AudioSource _breathSource;  // дыхание — меняется по состоянию
     private AudioSource _humSource;     // постоянный гул
     private AudioSource _oneShotSource; // удары, alert
@@ -49,41 +55,36 @@ public class EnemyAudioController : MonoBehaviour
     private float _breathTimer;
     private Coroutine _breathRoutine;
 
-    private void Awake()
-    {
+    private void Awake() {
         _ai = GetComponent<SimpleEnemyAI>();
 
-        _breathSource  = GetComponent<AudioSource>();
+        _breathSource = GetComponent<AudioSource>();
         _oneShotSource = CreateSource("EnemyOneShot", attackVolume, false);
-        _humSource     = CreateSource("EnemyHum",     humVolume,    true);
+        _humSource = CreateSource("EnemyHum", humVolume, true);
 
         _breathSource.spatialBlend = 1f;
-        _breathSource.rolloffMode  = AudioRolloffMode.Linear;
-        _breathSource.minDistance  = 1f;
-        _breathSource.maxDistance  = 12f;
-        _breathSource.playOnAwake  = false;
-        _breathSource.volume       = breathVolume;
+        _breathSource.rolloffMode = AudioRolloffMode.Linear;
+        _breathSource.minDistance = 1f;
+        _breathSource.maxDistance = 12f;
+        _breathSource.playOnAwake = false;
+        _breathSource.volume = breathVolume;
 
-        if (ambientHumClip != null)
-        {
+        if (ambientHumClip != null) {
             _humSource.clip = ambientHumClip;
             _humSource.Play();
         }
     }
 
-    private void OnEnable()
-    {
+    private void OnEnable() {
         _prevState = _ai.CurrentState;
         _breathRoutine = StartCoroutine(BreathLoop());
     }
 
-    private void OnDisable()
-    {
+    private void OnDisable() {
         if (_breathRoutine != null) StopCoroutine(_breathRoutine);
     }
 
-    private void Update()
-    {
+    private void Update() {
         var state = _ai.CurrentState;
         if (state == _prevState) return;
 
@@ -95,27 +96,23 @@ public class EnemyAudioController : MonoBehaviour
     }
 
     // Вызывай из SimpleEnemyAI при атаке: GetComponent<EnemyAudioController>()?.OnAttack();
-    public void OnAttack()
-    {
+    public void OnAttack() {
         if (attackClips == null || attackClips.Length == 0) return;
         PlayOneShot(attackClips[Random.Range(0, attackClips.Length)], attackVolume);
     }
 
     // ── Дыхательный цикл ────────────────────────────────────────────────────
 
-    private IEnumerator BreathLoop()
-    {
-        while (true)
-        {
+    private IEnumerator BreathLoop() {
+        while (true) {
             var state = _ai.CurrentState;
 
-            AudioClip[] pool     = state == SimpleEnemyAI.State.Chase ? chaseBreathClips : idleBreathClips;
-            float       interval = state == SimpleEnemyAI.State.Chase ? chaseBreathInterval : idleBreathInterval;
-            float       variation= state == SimpleEnemyAI.State.Chase ? chaseBreathVariation : idleBreathVariation;
+            AudioClip[] pool = state == SimpleEnemyAI.State.Chase ? chaseBreathClips : idleBreathClips;
+            float interval = state == SimpleEnemyAI.State.Chase ? chaseBreathInterval : idleBreathInterval;
+            float variation = state == SimpleEnemyAI.State.Chase ? chaseBreathVariation : idleBreathVariation;
 
-            if (pool != null && pool.Length > 0)
-            {
-                _breathSource.pitch  = Random.Range(1f - pitchVariation, 1f + pitchVariation);
+            if (pool != null && pool.Length > 0) {
+                _breathSource.pitch = Random.Range(1f - pitchVariation, 1f + pitchVariation);
                 _breathSource.volume = Random.Range(breathVolume * 0.75f, breathVolume);
                 _breathSource.PlayOneShot(pool[Random.Range(0, pool.Length)]);
             }
@@ -124,28 +121,46 @@ public class EnemyAudioController : MonoBehaviour
         }
     }
 
+    // ⚠️ Должно быть public и без параметров (или с одним string)
+    public void OnFootstep()  // или public void OnFootstep(string eventName)
+    {
+        if (footstepSounds == null || footstepSounds.Length == 0) return;
+        PlayOneShot(
+            footstepSounds[Random.Range(0, footstepSounds.Length)],
+            footstepVolume
+        );
+    }
+
+    public void OnLand()  // или public void OnFootstep(string eventName)
+    {
+        if (landSound == null) return;
+
+        PlayOneShot(
+            landSound,
+            footstepVolume
+        );
+    }
+
     // ── Утилиты ──────────────────────────────────────────────────────────────
 
-    private void PlayOneShot(AudioClip clip, float volume)
-    {
+    private void PlayOneShot(AudioClip clip, float volume) {
         if (clip == null) return;
         _oneShotSource.pitch = Random.Range(1f - pitchVariation, 1f + pitchVariation);
         _oneShotSource.PlayOneShot(clip, volume);
     }
 
-    private AudioSource CreateSource(string label, float volume, bool loop)
-    {
-        var go  = new GameObject(label);
+    private AudioSource CreateSource(string label, float volume, bool loop) {
+        var go = new GameObject(label);
         go.transform.SetParent(transform);
         go.transform.localPosition = Vector3.up * 1.4f; // высота головы
         var src = go.AddComponent<AudioSource>();
         src.volume = volume;
-        src.loop   = loop;
-        src.playOnAwake  = false;
+        src.loop = loop;
+        src.playOnAwake = false;
         src.spatialBlend = 1f;
-        src.rolloffMode  = AudioRolloffMode.Linear;
-        src.minDistance  = 1f;
-        src.maxDistance  = 14f;
+        src.rolloffMode = AudioRolloffMode.Linear;
+        src.minDistance = 1f;
+        src.maxDistance = 14f;
         return src;
     }
 }
