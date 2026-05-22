@@ -2041,7 +2041,7 @@ MonoBehaviour:
   newGameButton: {fileID: 1713085733}
   loadGameButton: {fileID: 717367065}
   quitButton: {fileID: 1817642902}
-  gameScene: SampleScene
+  gameScene: test_tpp
   titleText: {fileID: 0}
   menuGroup: {fileID: 0}
   saveSlotUI: {fileID: 1581391367}
