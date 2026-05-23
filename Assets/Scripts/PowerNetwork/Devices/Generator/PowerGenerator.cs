@@ -23,7 +23,10 @@ public class PowerGenerator : MonoBehaviour, IInteractable, ISaveable {
   public void Interact() {
     if (IsActive)
       return;
-    puzzleUI?.StartPuzzle(OnPuzzleSolved);
+    if (puzzleUI != null)
+      puzzleUI.StartPuzzle(OnPuzzleSolved);
+    else
+      Debug.Log("puzzleUI == null");
   }
 
   void OnPuzzleSolved() {
@@ -43,10 +46,9 @@ public class PowerGenerator : MonoBehaviour, IInteractable, ISaveable {
   public string CaptureState() =>
       JsonUtility.ToJson(new GeneratorSaveData { isActive = IsActive });
 
-  public void RestoreState(string json)
-  {
-      var d   = JsonUtility.FromJson<GeneratorSaveData>(json);
-      IsActive = d.isActive;
-      // PowerNetwork.Evaluate() вызовет SaveManager один раз в конце загрузки.
+  public void RestoreState(string json) {
+    var d = JsonUtility.FromJson<GeneratorSaveData>(json);
+    IsActive = d.isActive;
+    // PowerNetwork.Evaluate() вызовет SaveManager один раз в конце загрузки.
   }
 }
