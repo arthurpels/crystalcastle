@@ -64,24 +64,24 @@ public class SurfaceColliderMapper : MonoBehaviour
     }
 
     #if UNITY_EDITOR
-    private void OnDrawGizmos()
-    {
-        if (surfaceData == null) return;
+    // private void OnDrawGizmos()
+    // {
+    //     if (surfaceData == null) return;
         
-        // Цвет по типу поверхности
-        Color color = surfaceData.gripFactor < 0.5f ? Color.cyan :  // лёд
-                     surfaceData.gripFactor < 0.8f ? Color.blue :   // снег
-                     surfaceData.speedMultiplier != 1f ? Color.yellow : Color.green;
+    //     // Цвет по типу поверхности
+    //     Color color = surfaceData.gripFactor < 0.5f ? Color.cyan :  // лёд
+    //                  surfaceData.gripFactor < 0.8f ? Color.blue :   // снег
+    //                  surfaceData.speedMultiplier != 1f ? Color.yellow : Color.green;
         
-        Gizmos.color = new Color(color.r, color.g, color.b, 0.3f);
-        var bounds = GetComponent<Collider>()?.bounds;
-        if (bounds.HasValue)
-            Gizmos.DrawCube(bounds.Value.center, bounds.Value.size);
+    //     Gizmos.color = new Color(color.r, color.g, color.b, 0.3f);
+    //     var bounds = GetComponent<Collider>()?.bounds;
+    //     if (bounds.HasValue)
+    //         Gizmos.DrawCube(bounds.Value.center, bounds.Value.size);
         
-        Gizmos.color = color;
-        Gizmos.DrawWireCube(transform.position, GetComponent<Collider>()?.bounds.size ?? Vector3.one);
-        Handles.Label(transform.position, 
-            $"{surfaceData.name}\n×{surfaceData.speedMultiplier} speed, grip:{surfaceData.gripFactor}");
-    }
+    //     Gizmos.color = color;
+    //     Gizmos.DrawWireCube(transform.position, GetComponent<Collider>()?.bounds.size ?? Vector3.one);
+    //     Handles.Label(transform.position, 
+    //         $"{surfaceData.name}\n×{surfaceData.speedMultiplier} speed, grip:{surfaceData.gripFactor}");
+    // }
     #endif
 }

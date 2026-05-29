@@ -16,8 +16,8 @@ MonoBehaviour:
   shader: {fileID: 4800000, guid: 81e54d923ceb9df2aa6e4b550032a883, type: 3}
   settings:
     renderPassEvent: 550
-    colorLevels: 32
-    ditherStrength: 0.8
+    colorLevels: 16
+    ditherStrength: 0.786
     pixelSize: 1.2
 --- !u!114 &-1878332245247344467
 MonoBehaviour:

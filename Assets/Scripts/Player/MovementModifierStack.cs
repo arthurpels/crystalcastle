@@ -138,20 +138,20 @@ public class MovementModifierStack : MonoBehaviour {
     }
 
 
-    private void OnDrawGizmos() {
-        if (!Application.isPlaying) return;
+    // private void OnDrawGizmos() {
+    //     if (!Application.isPlaying) return;
 
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawLine(transform.position, transform.position + Vector3.up * 2.5f);
-        Handles.Label(transform.position + Vector3.up * 2.5f,
-            $"Speed: {_currentSpeedMult:F2}\nGrip: {_currentGripMult:F2}\nSurfaces: {_activeSurfaces.Count}");
+    //     Gizmos.color = Color.cyan;
+    //     Gizmos.DrawLine(transform.position, transform.position + Vector3.up * 2.5f);
+    //     Handles.Label(transform.position + Vector3.up * 2.5f,
+    //         $"Speed: {_currentSpeedMult:F2}\nGrip: {_currentGripMult:F2}\nSurfaces: {_activeSurfaces.Count}");
 
-        // Рисуем активные поверхности списком
-        if (_activeSurfaces.Count > 0) {
-            string labels = "";
-            foreach (var s in _activeSurfaces.OrderByDescending(x => x.priority))
-                labels += $"{s.name} (×{s.speedMultiplier}, grip:{s.gripFactor})\n";
-            Handles.Label(transform.position + Vector3.up * 1.5f, labels);
-        }
-    }
+    //     // Рисуем активные поверхности списком
+    //     if (_activeSurfaces.Count > 0) {
+    //         string labels = "";
+    //         foreach (var s in _activeSurfaces.OrderByDescending(x => x.priority))
+    //             labels += $"{s.name} (×{s.speedMultiplier}, grip:{s.gripFactor})\n";
+    //         Handles.Label(transform.position + Vector3.up * 1.5f, labels);
+    //     }
+    // }
 }

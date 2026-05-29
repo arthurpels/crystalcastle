@@ -93,14 +93,14 @@ public class HeaterThawZone : MonoBehaviour
             _enemies.Remove(enemy);
     }
 
-    void OnDrawGizmos()
-    {
-        if (_col == null) _col = GetComponent<Collider>();
-        if (_col is BoxCollider box)
-        {
-            Gizmos.color = new Color(1f, 0.4f, 0f, 0.25f);
-            Gizmos.matrix = transform.localToWorldMatrix;
-            Gizmos.DrawCube(box.center, box.size);
-        }
-    }
+    // void OnDrawGizmos()
+    // {
+    //     if (_col == null) _col = GetComponent<Collider>();
+    //     if (_col is BoxCollider box)
+    //     {
+    //         Gizmos.color = new Color(1f, 0.4f, 0f, 0.25f);
+    //         Gizmos.matrix = transform.localToWorldMatrix;
+    //         Gizmos.DrawCube(box.center, box.size);
+    //     }
+    // }
 }

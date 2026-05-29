@@ -104,23 +104,23 @@ public class OffMeshLinkGenerator : MonoBehaviour
         link.area = 0; // Walkable
     }
 
-    void OnDrawGizmosSelected()
-    {
-        if (!showGizmos) return;
+    // void OnDrawGizmosSelected()
+    // {
+    //     if (!showGizmos) return;
 
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, scanRadius);
+    //     Gizmos.color = Color.green;
+    //     Gizmos.DrawWireSphere(transform.position, scanRadius);
 
-        // Рисуем существующие ссылки
-        var links = GetComponentsInChildren<OffMeshLink>();
-        foreach (var link in links)
-        {
-            if (link.startTransform == null || link.endTransform == null) continue;
+    //     // Рисуем существующие ссылки
+    //     var links = GetComponentsInChildren<OffMeshLink>();
+    //     foreach (var link in links)
+    //     {
+    //         if (link.startTransform == null || link.endTransform == null) continue;
 
-            Gizmos.color = link.activated ? Color.cyan : Color.gray;
-            Gizmos.DrawLine(link.startTransform.position, link.endTransform.position);
-            Gizmos.DrawSphere(link.startTransform.position, 0.1f);
-            Gizmos.DrawSphere(link.endTransform.position, 0.1f);
-        }
-    }
+    //         Gizmos.color = link.activated ? Color.cyan : Color.gray;
+    //         Gizmos.DrawLine(link.startTransform.position, link.endTransform.position);
+    //         Gizmos.DrawSphere(link.startTransform.position, 0.1f);
+    //         Gizmos.DrawSphere(link.endTransform.position, 0.1f);
+    //     }
+    // }
 }

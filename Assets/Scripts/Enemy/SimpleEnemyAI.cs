@@ -74,7 +74,7 @@ public class SimpleEnemyAI : MonoBehaviour {
 
     void Awake() {
         agent = GetComponent<NavMeshAgent>();
-        player = GameObject.FindGameObjectWithTag("Player")?.transform;
+        player = GameObject.FindGameObjectWithTag("Player").transform;
         _audio = GetComponent<EnemyAudioController>();
     }
 
@@ -364,24 +364,24 @@ public class SimpleEnemyAI : MonoBehaviour {
     }
     // TODO: анимация получения урона, звук
 
-    private void OnDrawGizmosSelected() {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, detectionRange);
-        Vector3 left = Quaternion.Euler(0, -viewAngle / 2f, 0) * transform.forward;
-        Vector3 right = Quaternion.Euler(0, viewAngle / 2f, 0) * transform.forward;
-        Gizmos.DrawLine(transform.position, transform.position + left * detectionRange);
-        Gizmos.DrawLine(transform.position, transform.position + right * detectionRange);
+    // private void OnDrawGizmosSelected() {
+    //     Gizmos.color = Color.yellow;
+    //     Gizmos.DrawWireSphere(transform.position, detectionRange);
+    //     Vector3 left = Quaternion.Euler(0, -viewAngle / 2f, 0) * transform.forward;
+    //     Vector3 right = Quaternion.Euler(0, viewAngle / 2f, 0) * transform.forward;
+    //     Gizmos.DrawLine(transform.position, transform.position + left * detectionRange);
+    //     Gizmos.DrawLine(transform.position, transform.position + right * detectionRange);
 
-        if (currentState == State.Search || currentState == State.Chase) {
-            Gizmos.color = Color.red;
-            Gizmos.DrawSphere(lastKnownPosition, 0.3f);
-        }
+    //     if (currentState == State.Search || currentState == State.Chase) {
+    //         Gizmos.color = Color.red;
+    //         Gizmos.DrawSphere(lastKnownPosition, 0.3f);
+    //     }
 
-        // === НОВОЕ: рисуем точку края, куда идём ===
-        if (_approachingEdge) {
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawSphere(agent.destination, 0.2f);
-            Gizmos.DrawLine(transform.position, agent.destination);
-        }
-    }
+    //     // === НОВОЕ: рисуем точку края, куда идём ===
+    //     if (_approachingEdge) {
+    //         Gizmos.color = Color.cyan;
+    //         Gizmos.DrawSphere(agent.destination, 0.2f);
+    //         Gizmos.DrawLine(transform.position, agent.destination);
+    //     }
+    // }
 }

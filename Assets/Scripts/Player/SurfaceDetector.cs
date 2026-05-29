@@ -70,10 +70,10 @@ public class SurfaceDetector : MonoBehaviour {
 
     // Отладка
 #if UNITY_EDITOR
-    private void OnDrawGizmos() {
-        Gizmos.color = new Color(0f, 1f, 0f, 0.1f);
-        Vector3 spherePosition = transform.position + Vector3.up * scanOffset;
-        Gizmos.DrawSphere(spherePosition, scanRadius);
-    }
+    // private void OnDrawGizmos() {
+    //     Gizmos.color = new Color(0f, 1f, 0f, 0.1f);
+    //     Vector3 spherePosition = transform.position + Vector3.up * scanOffset;
+    //     Gizmos.DrawSphere(spherePosition, scanRadius);
+    // }
 #endif
 }

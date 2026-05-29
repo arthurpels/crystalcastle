@@ -108,9 +108,9 @@ public class PlayerAudioController : MonoBehaviour {
 
     // Отладка: видим радиус проверки в сцене
 #if UNITY_EDITOR
-    private void OnDrawGizmosSelected() {
-        Gizmos.color = new Color(1f, 0.8f, 0f, 0.3f);
-        Gizmos.DrawWireSphere(transform.position + Vector3.up * 0.1f, 0.3f);
-    }
+    // private void OnDrawGizmosSelected() {
+    //     Gizmos.color = new Color(1f, 0.8f, 0f, 0.3f);
+    //     Gizmos.DrawWireSphere(transform.position + Vector3.up * 0.1f, 0.3f);
+    // }
 #endif
 }

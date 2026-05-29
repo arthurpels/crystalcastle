@@ -280,16 +280,16 @@ public class MovementController : MonoBehaviour {
 
     #region === Отладка ===
 
-    private void OnDrawGizmos() {
-        // Визуализация сферы заземления в редакторе
-        Color gizmoColor = grounded ? new Color(0f, 1f, 0f, 0.35f) : new Color(1f, 0f, 0f, 0.35f);
-        Gizmos.color = gizmoColor;
-        float sphereRadius = Mathf.Lerp(minGroundedRadius, maxGroundedRadius, GripMultiplier);
-        Gizmos.DrawSphere(transform.position + Vector3.up * groundedOffset, sphereRadius);
+    // private void OnDrawGizmos() {
+    //     // Визуализация сферы заземления в редакторе
+    //     Color gizmoColor = grounded ? new Color(0f, 1f, 0f, 0.35f) : new Color(1f, 0f, 0f, 0.35f);
+    //     Gizmos.color = gizmoColor;
+    //     float sphereRadius = Mathf.Lerp(minGroundedRadius, maxGroundedRadius, GripMultiplier);
+    //     Gizmos.DrawSphere(transform.position + Vector3.up * groundedOffset, sphereRadius);
 
 
-        // Gizmos.DrawSphere(transform.position + Vector3.up * slopeOffset, slopeRadius);
-    }
+    //     // Gizmos.DrawSphere(transform.position + Vector3.up * slopeOffset, slopeRadius);
+    // }
 
     #endregion
 }
