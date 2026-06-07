@@ -4205,7 +4205,7 @@ PrefabInstance:
     - target: {fileID: 3872008272420094384, guid: ddef8b8f4c0691dbba30f390d0774171,
         type: 3}
       propertyPath: startFrozen
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8485,7 +8485,7 @@ PrefabInstance:
     - target: {fileID: 3872008272420094384, guid: ddef8b8f4c0691dbba30f390d0774171,
         type: 3}
       propertyPath: startFrozen
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
