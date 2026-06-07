@@ -26,6 +26,11 @@ public class CrowbarHandItem : HandItem {
     [Header("Debug")]
     [SerializeField] private bool showDebug = false;
 
+    private void Awake()
+    {
+        rigConfig.triggerParam = "Bite";
+    }
+
     public override void OnEquip() { }
     public override void OnUnequip() { }
 
@@ -33,6 +38,8 @@ public class CrowbarHandItem : HandItem {
     {
         if (_cooldownTimer > 0f) return;
         _cooldownTimer = attackCooldown;
+
+        PlayAnimationTrigger();
 
         Camera cam = Camera.main;
         Vector3 origin    = cam.transform.position;

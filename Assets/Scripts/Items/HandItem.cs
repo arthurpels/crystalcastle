@@ -17,5 +17,13 @@ public abstract class HandItem : MonoBehaviour
     public abstract void OnEquip();
     public abstract void OnUse();
     public abstract void OnUnequip();
-     public virtual void OnTick(float dt) {} // Для батарейки, кулдаунов
+     public virtual void OnTick(float dt) {}
+
+    protected void PlayAnimationTrigger()
+    {
+        if (string.IsNullOrEmpty(rigConfig.triggerParam)) return;
+        Animator animator = GetComponentInParent<Animator>();
+        if (animator != null)
+            animator.SetTrigger(rigConfig.triggerParam);
+    }
 }
