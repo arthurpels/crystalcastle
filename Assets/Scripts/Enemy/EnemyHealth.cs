@@ -47,7 +47,8 @@ public class EnemyHealth : MonoBehaviour, IHealth, ISaveable
         var agent = GetComponent<NavMeshAgent>();
         if (agent != null) agent.enabled = false;
 
-        // TODO: ragdoll, частицы смерти, звук
+        var audio = GetComponent<EnemyAudioController>();
+        if (audio != null) audio.OnDeath();
 
         yield return new WaitForSeconds(disappearDelay);
         Destroy(gameObject);

@@ -28,6 +28,12 @@ public class EnemyAudioController : MonoBehaviour {
     [Tooltip("Резкий звук удара/броска")]
     [SerializeField] private AudioClip[] attackClips;
 
+    [Header("Damaged / Death")]
+    [Tooltip("Звук когда враг получает урон")]
+    [SerializeField] private AudioClip[] damagedClips;
+    [Tooltip("Звук смерти врага")]
+    [SerializeField] private AudioClip deathClip;
+
     [Header("Ambient Hum")]
     [Tooltip("Низкочастотный протяжный гул (почти инфразвук) — зацикленный")]
     [SerializeField] private AudioClip ambientHumClip;
@@ -95,10 +101,22 @@ public class EnemyAudioController : MonoBehaviour {
         _prevState = state;
     }
 
-    // Вызывай из SimpleEnemyAI при атаке: GetComponent<EnemyAudioController>()?.OnAttack();
+    // Вызывай из SimpleEnemyAI при атаке
     public void OnAttack() {
         if (attackClips == null || attackClips.Length == 0) return;
         PlayOneShot(attackClips[Random.Range(0, attackClips.Length)], attackVolume);
+    }
+
+    // Вызывай из SimpleEnemyAI.OnDamaged
+    public void OnDamaged() {
+        if (damagedClips == null || damagedClips.Length == 0) return;
+        PlayOneShot(damagedClips[Random.Range(0, damagedClips.Length)], attackVolume);
+    }
+
+    // Вызывай из EnemyHealth.DieSequence
+    public void OnDeath() {
+        if (deathClip == null) return;
+        PlayOneShot(deathClip, attackVolume);
     }
 
     // ── Дыхательный цикл ────────────────────────────────────────────────────

@@ -2,6 +2,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// Полноэкранный оверлей для чтения документов (Paper / MultiPart).
@@ -72,7 +73,7 @@ public class DocumentReaderUI : MonoBehaviour
     {
         if (_current == null) return;
 
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Keyboard.current.eKey.wasPressedThisFrame)
         {
             if (!_typingDone)
                 SkipTyping();
@@ -97,8 +98,10 @@ public class DocumentReaderUI : MonoBehaviour
 
         if (panel != null) panel.SetActive(true);
 
-        // Заблокировать ввод игрока
+        // Заблокировать ввод игрока + показать курсор
         if (inputHandler != null) inputHandler.InputEnabled = false;
+        var cursor = FindObjectOfType<CursorController>();
+        if (cursor != null) cursor.ForceMode(CursorController.CursorMode.Free);
 
         // Фоновый звук
         if (doc.ambientOnRead != null && ambientSource != null)
@@ -143,8 +146,10 @@ public class DocumentReaderUI : MonoBehaviour
         if (_fadeRoutine != null) StopCoroutine(_fadeRoutine);
         _fadeRoutine = StartCoroutine(FadeOutAndHide());
 
-        // Вернуть управление
+        // Вернуть управление + вернуть курсор
         if (inputHandler != null) inputHandler.InputEnabled = true;
+        var cursor = FindObjectOfType<CursorController>();
+        if (cursor != null) cursor.ReleaseForce();
     }
 
     // ── Internals ──────────────────────────────────────────────────────────

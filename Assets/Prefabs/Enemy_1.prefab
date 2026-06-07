@@ -1817,14 +1817,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   idleBreathClips:
-  - {fileID: 8300000, guid: baa103200f0a22db78cec27ac57224c4, type: 3}
+  - {fileID: 8300000, guid: 8c5a7e619278b789484c030b7e30cbaf, type: 3}
   idleBreathInterval: 4
   idleBreathVariation: 1.5
-  chaseBreathClips: []
+  chaseBreathClips:
+  - {fileID: 8300000, guid: 904ecb76f0a424c919bb9b5e2b78bf69, type: 3}
   chaseBreathInterval: 1.8
   chaseBreathVariation: 0.4
-  alertClip: {fileID: 8300000, guid: 7a26e9a32c488236d815958cf6e64aba, type: 3}
-  attackClips: []
+  alertClip: {fileID: 8300000, guid: e068fed2fcbc1368cab512e43e8e65a5, type: 3}
+  attackClips:
+  - {fileID: 8300000, guid: 15ac8db06571fb306b0d70745493bfaa, type: 3}
+  damagedClips:
+  - {fileID: 8300000, guid: c1a9d1dcdaa236704aae2c3b487df71b, type: 3}
+  - {fileID: 8300000, guid: 7a26e9a32c488236d815958cf6e64aba, type: 3}
+  deathClip: {fileID: 8300000, guid: baa103200f0a22db78cec27ac57224c4, type: 3}
   ambientHumClip: {fileID: 0}
   humVolume: 0.25
   breathVolume: 0.6

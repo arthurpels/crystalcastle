@@ -10,12 +10,30 @@ public class PowerGenerator : MonoBehaviour, IInteractable, ISaveable {
   [SerializeField]
   private SineWavePuzzleUI puzzleUI;
 
+  [Header("Звуки")]
+  [SerializeField] private AudioClip startSound;
+  [SerializeField] private AudioClip loopSound;
+  [SerializeField] [Range(0f,1f)] private float volume = 0.8f;
+
+  private AudioSource _loopSource;
+
   public bool IsActive { get; private set; }
+
+  void Awake() {
+    _loopSource = gameObject.AddComponent<AudioSource>();
+    _loopSource.spatialBlend = 1f;
+    _loopSource.loop        = true;
+    _loopSource.playOnAwake = false;
+    _loopSource.volume      = volume;
+    if (loopSound != null) _loopSource.clip = loopSound;
+  }
 
   void Start() {
     PowerNetwork.Instance?.RegisterGenerator(this);
-    if (IsActive)
+    if (IsActive) {
       PowerNetwork.Instance?.Evaluate();
+      if (_loopSource != null && loopSound != null) _loopSource.Play();
+    }
   }
 
   void OnDestroy() { PowerNetwork.Instance?.UnregisterGenerator(this); }
@@ -32,7 +50,15 @@ public class PowerGenerator : MonoBehaviour, IInteractable, ISaveable {
   void OnPuzzleSolved() {
     IsActive = true;
     PowerNetwork.Instance?.Evaluate();
-    // TODO: эффекты запуска (звук, искры, встряска)
+
+    if (startSound != null)
+      AudioSource.PlayClipAtPoint(startSound, transform.position, volume);
+
+    if (_loopSource != null && loopSound != null)
+      _loopSource.Play();
+
+    if (CameraShake.Instance != null)
+      CameraShake.Instance.Shake(0.18f, 0.6f);
   }
 
   public string PromptText =>

@@ -4,6 +4,7 @@ public class DestructibleObject : MonoBehaviour, IHealth, ISaveable {
     [SerializeField] private float maxHP = 30f;
     [SerializeField] private GameObject destroyedPrefab; // обломки (опционально)
     [SerializeField] private AudioClip destroySound;
+    [SerializeField] private AudioClip[] hitSounds;      // звуки удара (рандомный)
 
     public float CurrentHP { get; private set; }
     public float MaxHP => maxHP;
@@ -33,7 +34,12 @@ public class DestructibleObject : MonoBehaviour, IHealth, ISaveable {
     }
 
     private void PlayHitEffect() {
-        // TODO: частицы, звук удара по дереву/металлу
+        if (hitSounds != null && hitSounds.Length > 0)
+        {
+            var clip = hitSounds[Random.Range(0, hitSounds.Length)];
+            if (clip != null)
+                AudioSource.PlayClipAtPoint(clip, transform.position, 0.7f);
+        }
     }
 
     private void DestroyObject()

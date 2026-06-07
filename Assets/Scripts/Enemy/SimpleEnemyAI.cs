@@ -361,8 +361,8 @@ public class SimpleEnemyAI : MonoBehaviour {
             _memoryTimer = memoryDuration;
             EnterChase();
         }
+        if (_audio != null) _audio.OnDamaged();
     }
-    // TODO: анимация получения урона, звук
 
     // private void OnDrawGizmosSelected() {
     //     Gizmos.color = Color.yellow;

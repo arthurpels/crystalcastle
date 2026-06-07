@@ -40,7 +40,8 @@ public class DocumentWorldObject : MonoBehaviour, IInteractable, ISaveable
     private void MarkRead()
     {
         _hasBeenRead = true;
-        if (_col != null) _col.enabled = false;
+        // Кассеты деактивируем — их подбираешь один раз.
+        // Записки/журналы оставляем интерактивными — можно перечитать.
         if (data.type == DocumentData.DocumentType.Audio)
             gameObject.SetActive(false);
     }
