@@ -47,6 +47,9 @@ public class EnemyHealth : MonoBehaviour, IHealth, ISaveable
         var agent = GetComponent<NavMeshAgent>();
         if (agent != null) agent.enabled = false;
 
+        var ragdoll = GetComponent<EnemyRagdoll>();
+        if (ragdoll != null) ragdoll.Activate();
+
         var audio = GetComponent<EnemyAudioController>();
         if (audio != null) audio.OnDeath();
 

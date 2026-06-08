@@ -4,7 +4,8 @@
       "Bash(Get-ChildItem -Path \"Assets/Scenes\" -Filter \"*.unity\" -Recurse)",
       "Bash(Select-Object Name, FullName)",
       "Bash(ConvertTo-Json)",
-      "Bash(grep -v \"//.*\\\\?\\\\.\")"
+      "Bash(grep -v \"//.*\\\\?\\\\.\")",
+      "Bash(xargs ls -1)"
     ]
   }
 }
