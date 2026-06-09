@@ -1,56 +1,8 @@
 fileFormatVersion: 2
-guid: 305202c0ba184614f8ed372b12fd7cb7
-timeCreated: 1535113614
-licenseType: Store
+guid: fe9bc7bfde0ebcbc9b6762667a3810a6
 ModelImporter:
-  serializedVersion: 22
-  fileIDToRecycleName:
-    100000: BitZabor01
-    100002: BlokBitonOpora01
-    100004: doskiOpora01
-    100006: doskiOpora02
-    100008: //RootNode
-    100010: polySurface1
-    100012: polySurface2
-    100014: polySurface3
-    100016: polySurface4
-    100018: zabor01
-    400000: BitZabor01
-    400002: BlokBitonOpora01
-    400004: doskiOpora01
-    400006: doskiOpora02
-    400008: //RootNode
-    400010: polySurface1
-    400012: polySurface2
-    400014: polySurface3
-    400016: polySurface4
-    400018: zabor01
-    2100000: bitonZaborRazv01
-    2300000: BlokBitonOpora01
-    2300002: polySurface1
-    2300004: polySurface2
-    2300006: polySurface3
-    2300008: polySurface4
-    2300010: zabor01
-    3300000: BlokBitonOpora01
-    3300002: polySurface1
-    3300004: polySurface2
-    3300006: polySurface3
-    3300008: polySurface4
-    3300010: zabor01
-    4300000: zabor01
-    4300002: polySurface3
-    4300004: polySurface4
-    4300006: BlokBitonOpora01
-    4300008: polySurface1
-    4300010: polySurface2
-    6400000: BlokBitonOpora01
-    6400002: polySurface1
-    6400004: polySurface2
-    6400006: polySurface3
-    6400008: polySurface4
-    6400010: zabor01
-    9500000: //RootNode
+  serializedVersion: 22200
+  internalIDToNameTable: []
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -58,15 +10,16 @@ ModelImporter:
       name: bitonZaborRazv01
     second: {fileID: 2100000, guid: eacf7f0fdcbddd143a3563c76a3ccf4f, type: 2}
   materials:
-    importMaterials: 1
+    materialImportMode: 2
     materialName: 0
     materialSearch: 1
-    materialLocation: 0
+    materialLocation: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
     resampleCurves: 1
     optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
     motionNodeName: 
     rigImportErrors: 
     rigImportWarnings: 
@@ -75,6 +28,7 @@ ModelImporter:
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
+    importConstraints: 0
     animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
@@ -83,38 +37,55 @@ ModelImporter:
     extraExposedTransformPaths: []
     extraUserProperties: []
     clipAnimations: []
-    isReadable: 1
+    isReadable: 0
   meshes:
     lODScreenPercentages: []
     globalScale: 1
     meshCompression: 0
-    addColliders: 1
-    importVisibility: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importPhysicalCameras: 1
+    importVisibility: 1
     importBlendShapes: 1
-    importCameras: 0
-    importLights: 0
+    importCameras: 1
+    importLights: 1
+    nodeNameCollisionStrategy: 1
+    fileIdsGeneration: 2
     swapUVChannels: 0
-    generateSecondaryUV: 1
+    generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
+    bakeAxisConversion: 0
     preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
     secondaryUVPackMargin: 4
     useFileScale: 1
+    strictVertexDataChecks: 0
   tangentSpace:
     normalSmoothAngle: 60
-    normalImportMode: 1
+    normalImportMode: 0
     tangentImportMode: 3
     normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
   importAnimation: 0
-  copyAvatar: 0
   humanDescription:
-    serializedVersion: 2
+    serializedVersion: 3
     human: []
     skeleton: []
     armTwist: 0.5
@@ -124,14 +95,19 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
+    globalScale: 1
     rootMotionBoneName: 
-    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 0
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
   humanoidOversampling: 1
+  avatarSetup: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  importBlendShapeDeformPercent: 1
+  remapMaterialsIfMaterialImportModeIsNone: 0
   additionalBone: 0
   userData: 
   assetBundleName: 
