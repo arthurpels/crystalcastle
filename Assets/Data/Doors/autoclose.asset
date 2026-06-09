@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddec9976c55e2532ea5f34af9392054a, type: 3}
   m_Name: autoclose
   m_EditorClassIdentifier: 
-  autoClose: 0
+  autoClose: 1
   closeDelay: 3
   requiresKey: 0
   keyItem: {fileID: 0}
