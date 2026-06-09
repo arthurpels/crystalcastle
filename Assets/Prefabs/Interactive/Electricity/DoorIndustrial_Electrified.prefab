@@ -246,7 +246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isOpen: 0
-  isLocked: 0
+  isLocked: 1
   config: {fileID: 11400000, guid: 682b298e16cadf2fc94e1f9f884dd855, type: 2}
   mover: {fileID: 0}
   openOffset: {x: 1, y: 0, z: 0}
@@ -521,7 +521,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isOpen: 0
-  isLocked: 0
+  isLocked: 1
   config: {fileID: 11400000, guid: 682b298e16cadf2fc94e1f9f884dd855, type: 2}
   mover: {fileID: 0}
   openOffset: {x: -1, y: 0, z: 0}

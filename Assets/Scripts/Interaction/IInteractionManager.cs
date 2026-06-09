@@ -27,7 +27,10 @@ public class InteractionManager : MonoBehaviour {
         //    Если первым попалось препятствие — объект за ним недоступен.
         if (Physics.Raycast(ray, out RaycastHit hit, maxRange, combinedMask)) {
             sphereDistance = hit.distance;
-            newTarget = hit.collider.GetComponentInParent<IInteractable>();
+            // IInteractable ищем только если хит попал именно в interactableLayer.
+            // Объект на obstacle/другом слое — блокирует луч, но не интерактивен.
+            if (IsInLayerMask(hit.collider.gameObject.layer, interactableLayer))
+                newTarget = hit.collider.GetComponentInParent<IInteractable>();
         }
 
         // 2. Если луч промахнулся → проверяем сферу у точки попадания / конца луча.
@@ -48,4 +51,7 @@ public class InteractionManager : MonoBehaviour {
     }
 
     public IInteractable CurrentTarget => _currentTarget;
+
+    private static bool IsInLayerMask(int layer, LayerMask mask) =>
+        (mask.value & (1 << layer)) != 0;
 }

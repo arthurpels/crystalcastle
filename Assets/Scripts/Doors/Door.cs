@@ -35,13 +35,16 @@ public abstract class Door : MonoBehaviour, IInteractable, ISaveable {
             PlaySound(config?.lockedSound);
             return false;
         }
-        if (isLocked && config?.requiresKey == true) {
-            var inventory = FindObjectOfType<PlayerInventory>();
-            if (inventory == null || !inventory.HasItem(config.keyItem)) {
-                PlaySound(config?.lockedSound);
-                return false;
+        if (isLocked) {
+            if (config?.requiresKey == true) {
+                var inventory = FindObjectOfType<PlayerInventory>();
+                if (inventory != null && inventory.HasItem(config.keyItem)) {
+                    isLocked = false; // ключ есть — разблокируем
+                    return true;
+                }
             }
-            isLocked = false;
+            PlaySound(config?.lockedSound);
+            return false;
         }
         return true;
     }
