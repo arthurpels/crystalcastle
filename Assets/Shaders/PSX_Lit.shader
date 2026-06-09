@@ -27,6 +27,7 @@ Shader "CrystalCastle/PSX_Lit"
         {
             Name "ForwardLit"
             Tags { "LightMode"="UniversalForward" }
+            ZWrite On
             Cull [_Cull]
 
             HLSLPROGRAM
@@ -266,6 +267,61 @@ Shader "CrystalCastle/PSX_Lit"
                     clip(a - _Cutoff);
                 #endif
                 return 0;
+            }
+            ENDHLSL
+        }
+
+        // ---------------------------------------------------------------
+        Pass
+        {
+            Name "DepthNormals"
+            Tags { "LightMode"="DepthNormals" }
+            ZWrite On
+            Cull [_Cull]
+
+            HLSLPROGRAM
+            #pragma vertex   DepthNormalsVert
+            #pragma fragment DepthNormalsFrag
+            #pragma shader_feature_local _ALPHATEST_ON
+
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "PSX_Common.hlsl"
+
+            CBUFFER_START(UnityPerMaterial)
+                float4 _BaseMap_ST;
+                float4 _BaseColor;
+                float4 _LightTint;
+                float  _SnapResolution;
+                float  _AffineAmount;
+                float  _AmbientBoost;
+                float  _Cutoff;
+            CBUFFER_END
+
+            TEXTURE2D(_BaseMap);
+            SAMPLER(sampler_BaseMap);
+
+            struct DNAttributes { float4 positionOS:POSITION; float3 normalOS:NORMAL; float2 uv:TEXCOORD0; };
+            struct DNVaryings   { float4 positionCS:SV_POSITION; float3 normalWS:TEXCOORD0; float2 uv:TEXCOORD1; };
+
+            DNVaryings DepthNormalsVert(DNAttributes IN)
+            {
+                DNVaryings OUT;
+                float3 positionWS = TransformObjectToWorld(IN.positionOS.xyz);
+                float4 clip = TransformWorldToHClip(positionWS);
+                OUT.positionCS = PSX_SnapVertex(clip, _SnapResolution);
+                OUT.normalWS   = TransformObjectToWorldNormal(IN.normalOS);
+                OUT.uv         = TRANSFORM_TEX(IN.uv, _BaseMap);
+                return OUT;
+            }
+
+            float4 DepthNormalsFrag(DNVaryings IN) : SV_Target
+            {
+                #ifdef _ALPHATEST_ON
+                    float a = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, IN.uv).a * _BaseColor.a;
+                    clip(a - _Cutoff);
+                #endif
+                float3 n = normalize(IN.normalWS);
+                return float4(n * 0.5 + 0.5, 0);
             }
             ENDHLSL
         }

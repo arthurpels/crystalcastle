@@ -32,6 +32,7 @@ Shader "CrystalCastle/PSX_Lit_Triplanar"
         {
             Name "ForwardLit"
             Tags { "LightMode"="UniversalForward" }
+            ZWrite On
             Cull [_Cull]
 
             HLSLPROGRAM
@@ -74,14 +75,15 @@ Shader "CrystalCastle/PSX_Lit_Triplanar"
 
             struct Varyings
             {
-                float4 positionCS : SV_POSITION;
-                float3 positionWS : TEXCOORD0;               
-                noperspective float3 uvAffineX : TEXCOORD1;  
-                noperspective float3 uvAffineY : TEXCOORD2;  
-                noperspective float3 uvAffineZ : TEXCOORD3;  
-                float3 normalWS   : TEXCOORD4;
-                float  fogFactor  : TEXCOORD5;
-                float4 color      : COLOR;
+                float4 positionCS  : SV_POSITION;
+                float3 positionWS  : TEXCOORD0;
+                // Аффинные UV: xyz = перспективные UV * w, w = clip.w (для деления)
+                noperspective float3 affineX : TEXCOORD1;
+                noperspective float3 affineY : TEXCOORD2;
+                noperspective float3 affineZ : TEXCOORD3;
+                float3 normalWS    : TEXCOORD4;
+                float  fogFactor   : TEXCOORD5;
+                float4 color       : COLOR;
             };
 
             Varyings vert (Attributes IN)
@@ -91,21 +93,20 @@ Shader "CrystalCastle/PSX_Lit_Triplanar"
                 float3 positionWS = TransformObjectToWorld(IN.positionOS.xyz);
                 float3 normalWS   = normalize(TransformObjectToWorldNormal(IN.normalOS));
                 float4 clipPos    = TransformWorldToHClip(positionWS);
- 
-                // PS1 вершинный джиттер
-                OUT.positionCS = PSX_SnapVertex(clipPos, _SnapResolution);
 
-                // Передаем данные во фрагментный шейдер для попиксельного света
+                OUT.positionCS = PSX_SnapVertex(clipPos, _SnapResolution);
                 OUT.positionWS = positionWS;
-                OUT.normalWS = normalWS;
-                OUT.color     = IN.color;
-                OUT.fogFactor = ComputeFogFactor(OUT.positionCS.z);
-                
-                // Предрасчет базовых мировых UV
+                OUT.normalWS   = normalWS;
+                OUT.color      = IN.color;
+                OUT.fogFactor  = ComputeFogFactor(OUT.positionCS.z);
+
+                // Аффинное искажение PS1: UV * w → при noperspective-интерполяции
+                // делении обратно на w получаем линейные (не perspective-correct) координаты
                 float3 worldUV = positionWS * _WorldTiling;
-                OUT.uvAffineX = float3(worldUV.zy, 1.0); 
-                OUT.uvAffineY = float3(worldUV.xz, 1.0); 
-                OUT.uvAffineZ = float3(worldUV.xy, 1.0); 
+                float  w = clipPos.w;
+                OUT.affineX = float3(worldUV.zy * w, w);
+                OUT.affineY = float3(worldUV.xz * w, w);
+                OUT.affineZ = float3(worldUV.xy * w, w);
 
                 return OUT;
             }
@@ -115,9 +116,7 @@ Shader "CrystalCastle/PSX_Lit_Triplanar"
                 // --- Квантование мировых координат ---
                 float3 snappedPosWS = IN.positionWS;
                 if (_WorldSnap > 0.1)
-                {
                     snappedPosWS = floor(IN.positionWS * _WorldSnap) / _WorldSnap;
-                }
 
                 float3 worldUV = snappedPosWS * _WorldTiling;
 
@@ -126,10 +125,19 @@ Shader "CrystalCastle/PSX_Lit_Triplanar"
                 blendWeights = pow(blendWeights, _TriplanarSharpness);
                 blendWeights /= (blendWeights.x + blendWeights.y + blendWeights.z);
 
-                // Аффинное искажение
-                float2 uvX = worldUV.zy / IN.uvAffineX.z;
-                float2 uvY = worldUV.xz / IN.uvAffineY.z;
-                float2 uvZ = worldUV.xy / IN.uvAffineZ.z;
+                // Perspective-correct UV
+                float2 uvX_persp = worldUV.zy;
+                float2 uvY_persp = worldUV.xz;
+                float2 uvZ_persp = worldUV.xy;
+
+                // Affine UV (деление на w восстанавливает линейные координаты)
+                float2 uvX_affine = IN.affineX.xy / IN.affineX.z;
+                float2 uvY_affine = IN.affineY.xy / IN.affineY.z;
+                float2 uvZ_affine = IN.affineZ.xy / IN.affineZ.z;
+
+                float2 uvX = lerp(uvX_persp, uvX_affine, _AffineAmount);
+                float2 uvY = lerp(uvY_persp, uvY_affine, _AffineAmount);
+                float2 uvZ = lerp(uvZ_persp, uvZ_affine, _AffineAmount);
                 
                 float4 colX = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, uvX);
                 float4 colY = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, uvY);
@@ -333,6 +341,55 @@ Shader "CrystalCastle/PSX_Lit_Triplanar"
                     clip(a - _Cutoff);
                 #endif
                 return 0;
+            }
+            ENDHLSL
+        }
+
+        // ---------------------------------------------------------------
+        Pass
+        {
+            Name "DepthNormals"
+            Tags { "LightMode"="DepthNormals" }
+            ZWrite On
+            Cull [_Cull]
+
+            HLSLPROGRAM
+            #pragma vertex   DepthNormalsVert
+            #pragma fragment DepthNormalsFrag
+
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "PSX_Common.hlsl"
+
+            CBUFFER_START(UnityPerMaterial)
+                float4 _BaseMap_ST;
+                float4 _BaseColor;
+                float4 _LightTint;
+                float  _SnapResolution;
+                float  _AffineAmount;
+                float  _AmbientBoost;
+                float  _Cutoff;
+                float  _WorldTiling;
+                float  _TriplanarSharpness;
+                float  _WorldSnap;
+            CBUFFER_END
+
+            struct DNAttributes { float4 positionOS:POSITION; float3 normalOS:NORMAL; };
+            struct DNVaryings   { float4 positionCS:SV_POSITION; float3 normalWS:TEXCOORD0; };
+
+            DNVaryings DepthNormalsVert(DNAttributes IN)
+            {
+                DNVaryings OUT;
+                float3 positionWS = TransformObjectToWorld(IN.positionOS.xyz);
+                float4 clip = TransformWorldToHClip(positionWS);
+                OUT.positionCS = PSX_SnapVertex(clip, _SnapResolution);
+                OUT.normalWS   = TransformObjectToWorldNormal(IN.normalOS);
+                return OUT;
+            }
+
+            float4 DepthNormalsFrag(DNVaryings IN) : SV_Target
+            {
+                float3 n = normalize(IN.normalWS);
+                return float4(n * 0.5 + 0.5, 0);
             }
             ENDHLSL
         }
