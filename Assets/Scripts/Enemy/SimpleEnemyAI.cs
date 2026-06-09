@@ -304,13 +304,17 @@ public class SimpleEnemyAI : MonoBehaviour {
         Vector3 dirToPlayer = (player.position - transform.position).normalized;
         if (Vector3.Angle(transform.forward, dirToPlayer) > viewAngle * 0.5f) return false;
 
-        Vector3 eyePos = transform.position + Vector3.up * 1.6f;
+        Vector3 eyePos    = transform.position + Vector3.up * 1.6f;
         Vector3 targetPos = player.position + Vector3.up * 1.0f;
-        Vector3 rayDir = targetPos - eyePos;
+        Vector3 rayDir    = targetPos - eyePos;
 
-        if (Physics.Raycast(eyePos, rayDir.normalized, out RaycastHit hit, detectionRange,
+        // Если visionBlockMask не выставлен — считаем что видим (нет преград)
+        if (visionBlockMask == 0) return true;
+
+        if (Physics.Raycast(eyePos, rayDir.normalized, out RaycastHit hit, dist,
                             visionBlockMask, QueryTriggerInteraction.Ignore)) {
-            if (!hit.transform.CompareTag("Player")) return false;
+            // Используем GetComponentInParent — hit может быть в child-коллайдере игрока
+            if (hit.collider.GetComponentInParent<PlayerAttributes>() == null) return false;
         }
         return true;
     }
