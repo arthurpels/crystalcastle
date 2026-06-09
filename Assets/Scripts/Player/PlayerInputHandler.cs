@@ -65,9 +65,12 @@ public class PlayerInputHandler : MonoBehaviour {
 
     private void Update() {
         if (Keyboard.current.escapeKey.wasPressedThisFrame) {
-            pauseMenu.Toggle();
+            // ESC дёргает паузу только если мы уже на паузе (чтобы её закрыть)
+            // или если никакой другой UI не захватил ввод (квест/документ ставят InputEnabled=false).
+            if (pauseMenu != null && (pauseMenu.IsPaused || InputEnabled))
+                pauseMenu.Toggle();
         }
-        
+
         if (!InputEnabled) return;
 
         if (Keyboard.current.tabKey.wasPressedThisFrame) { // или iKey
