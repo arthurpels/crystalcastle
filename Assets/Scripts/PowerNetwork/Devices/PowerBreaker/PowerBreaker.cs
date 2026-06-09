@@ -8,6 +8,8 @@ public class PowerBreaker : MonoBehaviour, IInteractable, ISaveable {
     [Header("Visual")]
     [SerializeField] private Animator animator;
     [SerializeField] private string boolParam = "IsOn";
+    [SerializeField] private GameObject enabledGO;
+    [SerializeField] private GameObject disabledGO;
 
     public bool IsOn { get; private set; }
 
@@ -47,6 +49,8 @@ public class PowerBreaker : MonoBehaviour, IInteractable, ISaveable {
     void UpdateVisual() {
         if (animator != null)
             animator.SetBool(boolParam, IsOn);
+        if (enabledGO  != null) enabledGO.SetActive(IsOn);
+        if (disabledGO != null) disabledGO.SetActive(!IsOn);
     }
 
     public string PromptText => IsOn ? "Обесточить" : "Подать питание";

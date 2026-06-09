@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[ExecuteAlways]
 public class PowerCable : MonoBehaviour, IInteractable
 {
     public PowerNode nodeA;
@@ -13,19 +14,17 @@ public class PowerCable : MonoBehaviour, IInteractable
 
     void Start()
     {
+        if (!Application.isPlaying) return;
         RegisterInNodes();
         UpdateVisual();
     }
 
     void Update()
     {
-        // Автоотрисовка провода между нодами
-        if (lineRenderer != null && nodeA != null && nodeB != null)
-        {
-            lineRenderer.positionCount = 2;
-            lineRenderer.SetPosition(0, nodeA.transform.position);
-            lineRenderer.SetPosition(1, nodeB.transform.position);
-        }
+        if (lineRenderer == null || nodeA == null || nodeB == null) return;
+        lineRenderer.positionCount = 2;
+        lineRenderer.SetPosition(0, nodeA.transform.position);
+        lineRenderer.SetPosition(1, nodeB.transform.position);
     }
 
     void OnDestroy()

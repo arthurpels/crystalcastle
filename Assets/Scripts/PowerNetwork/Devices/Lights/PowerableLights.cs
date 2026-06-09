@@ -4,7 +4,7 @@ public class PowerableLight : MonoBehaviour, IPowerable
 {
     public bool IsPowered { get; private set; }
 
-    [SerializeField] private Light targetLight;
+    [SerializeField] private GameObject targetLightGO;
     [SerializeField] private AudioSource humSource;
     [SerializeField] private ParticleSystem steamParticles;
 
@@ -13,7 +13,8 @@ public class PowerableLight : MonoBehaviour, IPowerable
         if (IsPowered == powered) return;
         IsPowered = powered;
 
-        if (targetLight != null) targetLight.enabled = powered;
+        if (targetLightGO != null) 
+            targetLightGO.SetActive(powered);
 
         if (humSource != null)
         {

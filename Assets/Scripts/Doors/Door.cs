@@ -10,9 +10,13 @@ public abstract class Door : MonoBehaviour, IInteractable, ISaveable {
 
     public event System.Action<bool> OnDoorStateChanged;
 
+    // Выставляется DoorPowerAdapter: true = питания нет, дверь заблокирована
+    public bool IsPowerLocked { get; set; }
+
     // === IInteractable ===
     public virtual string PromptText {
         get {
+            if (IsPowerLocked) return "Нет питания";
             if (!isOpen && isLocked)
                 return config.requiresKey ? "Нужен ключ" : "Открыть";
             return isOpen ? "Закрыть" : "Открыть";
@@ -27,6 +31,10 @@ public abstract class Door : MonoBehaviour, IInteractable, ISaveable {
     }
 
     protected virtual bool CanOpen() {
+        if (IsPowerLocked) {
+            PlaySound(config?.lockedSound);
+            return false;
+        }
         if (isLocked && config?.requiresKey == true) {
             var inventory = FindObjectOfType<PlayerInventory>();
             if (inventory == null || !inventory.HasItem(config.keyItem)) {

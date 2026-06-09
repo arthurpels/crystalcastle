@@ -4,9 +4,9 @@ using UnityEngine;
 public class DoorPowerAdapter : MonoBehaviour, IPowerable
 {
     public bool IsPowered { get; private set; }
+    public bool IsDoorOpen => _door != null && _door.IsOpen;
 
     private Door _door;
-    private bool _wasLockedBeforePowerLoss;
 
     void Awake() => _door = GetComponent<Door>();
 
@@ -15,17 +15,17 @@ public class DoorPowerAdapter : MonoBehaviour, IPowerable
         if (IsPowered == powered) return;
         IsPowered = powered;
 
-        if (!powered)
-        {
-            _wasLockedBeforePowerLoss = _door.IsLocked;
-            _door.Lock();
-        }
-        else
-        {
-            // Восстанавливаем только если дверь НЕ требовала ключа изначально,
-            // или если она уже была разблокирована до пропажи питания.
-            if (!_wasLockedBeforePowerLoss)
-                _door.Unlock();
-        }
+        _door.IsPowerLocked = !powered;
+
+        // Питание пропало — дверь закрывается
+        if (!powered && _door.IsOpen)
+            _door.ForceClose();
+    }
+
+    // Вызывается кнопками
+    public void TryToggle()
+    {
+        if (!IsPowered) return;
+        _door.Interact();
     }
 }
