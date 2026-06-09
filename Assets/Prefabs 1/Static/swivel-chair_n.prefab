@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &117280
+--- !u!1 &3847207369940520445
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,48 +8,48 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 475950}
-  - component: {fileID: 3356888}
-  - component: {fileID: 2363230}
-  - component: {fileID: 6464076}
-  - component: {fileID: 1723398492137504359}
+  - component: {fileID: 2292155629753078078}
+  - component: {fileID: 3791065976961388320}
+  - component: {fileID: 7569149860935055436}
+  - component: {fileID: 6369493925938924441}
+  - component: {fileID: 4003322306597658504}
   m_Layer: 7
-  m_Name: Barrel01d
+  m_Name: swivel-chair_n
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &475950
+--- !u!4 &2292155629753078078
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 117280}
+  m_GameObject: {fileID: 3847207369940520445}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0.20262961, y: 0.6774521, z: 0.6774519, w: 0.20262963}
+  m_LocalPosition: {x: 522.4, y: 1.52, z: 498.63}
+  m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &3356888
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 146.696}
+--- !u!33 &3791065976961388320
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 117280}
-  m_Mesh: {fileID: 4300000, guid: af811cc8ee082e544a3823537a0bb0e2, type: 3}
---- !u!23 &2363230
+  m_GameObject: {fileID: 3847207369940520445}
+  m_Mesh: {fileID: 4300000, guid: 11712cacaa7a29a4da7070bf78c815cd, type: 3}
+--- !u!23 &7569149860935055436
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 117280}
+  m_GameObject: {fileID: 3847207369940520445}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: cd2eda523da25364eb54eabd3ad754fe, type: 2}
+  - {fileID: 2100000, guid: bf5b4a6376bb4da449573b1f9ac08720, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -85,14 +85,14 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &6464076
-MeshCollider:
+--- !u!65 &6369493925938924441
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 117280}
-  m_Material: {fileID: 13400000, guid: 7195dc6f20d5fc64496aff5eeff1f732, type: 2}
+  m_GameObject: {fileID: 3847207369940520445}
+  m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -103,22 +103,21 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: af811cc8ee082e544a3823537a0bb0e2, type: 3}
---- !u!114 &1723398492137504359
+  serializedVersion: 3
+  m_Size: {x: 0.03627643, y: 0.033012614, z: 0.030171609}
+  m_Center: {x: -0.0014585294, y: -0.0000020215878, z: 0.00492999}
+--- !u!114 &4003322306597658504
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 117280}
+  m_GameObject: {fileID: 3847207369940520445}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f108668b723e2f18d99d8108835bb3c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  surfaceData: {fileID: 0}
+  surfaceData: {fileID: 11400000, guid: d8cbe4223dbfa4ffca78258e992d4ec7, type: 2}
   autoFindStack: 1
   modifierStack: {fileID: 0}
