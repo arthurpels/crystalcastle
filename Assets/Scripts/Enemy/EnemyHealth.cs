@@ -10,16 +10,23 @@ public class EnemyHealth : MonoBehaviour, IHealth, ISaveable
     public float CurrentHP { get; private set; }
     public float MaxHP => maxHP;
     public bool IsAlive => CurrentHP > 0;
-    
+
     public event System.Action<float> OnHPChanged;
     public event System.Action OnDeath;
-    public event System.Action<float> OnDamaged; 
+    public event System.Action<float> OnDamaged;
 
-    void Awake() => CurrentHP = maxHP;
+    private FrozenEnemy _frozenEnemy;
+
+    void Awake()
+    {
+        CurrentHP = maxHP;
+        _frozenEnemy = GetComponent<FrozenEnemy>();
+    }
 
     public void TakeDamage(float amount)
     {
         if (!IsAlive) return;
+        if (_frozenEnemy != null && _frozenEnemy.IsFrozen) return;
         
         CurrentHP = Mathf.Max(0, CurrentHP - amount);
         OnHPChanged?.Invoke(CurrentHP);

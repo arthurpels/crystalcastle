@@ -336,6 +336,31 @@ PrefabInstance:
       propertyPath: m_Name
       value: DoorRotating
       objectReference: {fileID: 0}
+    - target: {fileID: 4082857436924061686, guid: e431d1f0a5de560f0a360e93b31b759f,
+        type: 3}
+      propertyPath: m_Carve
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4082857436924061686, guid: e431d1f0a5de560f0a360e93b31b759f,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 1.108244
+      objectReference: {fileID: 0}
+    - target: {fileID: 4082857436924061686, guid: e431d1f0a5de560f0a360e93b31b759f,
+        type: 3}
+      propertyPath: m_Center.z
+      value: 0.6065946
+      objectReference: {fileID: 0}
+    - target: {fileID: 4082857436924061686, guid: e431d1f0a5de560f0a360e93b31b759f,
+        type: 3}
+      propertyPath: m_Extents.y
+      value: 1.0708475
+      objectReference: {fileID: 0}
+    - target: {fileID: 4082857436924061686, guid: e431d1f0a5de560f0a360e93b31b759f,
+        type: 3}
+      propertyPath: m_Extents.z
+      value: 0.6065945
+      objectReference: {fileID: 0}
     - target: {fileID: 8384164839181807930, guid: e431d1f0a5de560f0a360e93b31b759f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -455,6 +480,31 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: DoorRotating (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4082857436924061686, guid: e431d1f0a5de560f0a360e93b31b759f,
+        type: 3}
+      propertyPath: m_Carve
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4082857436924061686, guid: e431d1f0a5de560f0a360e93b31b759f,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 1.108244
+      objectReference: {fileID: 0}
+    - target: {fileID: 4082857436924061686, guid: e431d1f0a5de560f0a360e93b31b759f,
+        type: 3}
+      propertyPath: m_Center.z
+      value: 0.6065946
+      objectReference: {fileID: 0}
+    - target: {fileID: 4082857436924061686, guid: e431d1f0a5de560f0a360e93b31b759f,
+        type: 3}
+      propertyPath: m_Extents.y
+      value: 1.0708475
+      objectReference: {fileID: 0}
+    - target: {fileID: 4082857436924061686, guid: e431d1f0a5de560f0a360e93b31b759f,
+        type: 3}
+      propertyPath: m_Extents.z
+      value: 0.6065945
       objectReference: {fileID: 0}
     - target: {fileID: 8384164839181807930, guid: e431d1f0a5de560f0a360e93b31b759f,
         type: 3}
