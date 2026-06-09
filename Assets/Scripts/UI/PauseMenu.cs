@@ -43,6 +43,9 @@ public class PauseMenu : MonoBehaviour {
     private bool  _isPaused;
     private float _statusTimer;
 
+    /// <summary>Открыто ли сейчас меню паузы.</summary>
+    public bool IsPaused => _isPaused;
+
     // ── Lifecycle ──────────────────────────────────────────────────────────
 
     private void Awake() {
