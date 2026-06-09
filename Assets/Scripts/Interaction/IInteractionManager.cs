@@ -21,18 +21,18 @@ public class InteractionManager : MonoBehaviour {
         float sphereDistance = maxRange;
 
         Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f));
+        LayerMask combinedMask = interactableLayer | obstacleLayers;
 
-        // 1. Точный рейкаст
-        if (Physics.Raycast(ray, out RaycastHit hit, maxRange, interactableLayer)) {
+        // 1. Точный рейкаст по интерактивным И препятствиям вместе.
+        //    Если первым попалось препятствие — объект за ним недоступен.
+        if (Physics.Raycast(ray, out RaycastHit hit, maxRange, combinedMask)) {
+            sphereDistance = hit.distance;
             newTarget = hit.collider.GetComponentInParent<IInteractable>();
         }
 
-        // 2. Если луч промахнулся → проверяем сферу на конце
+        // 2. Если луч промахнулся → проверяем сферу у точки попадания / конца луча.
+        //    sphereDistance уже ограничен первым хитом, стена не пропустит сферу дальше.
         if (newTarget == null && aimAssistRadius > 0f) {
-            if (Physics.Raycast(ray, out RaycastHit obstacleHit, maxRange, obstacleLayers)) {
-                sphereDistance = obstacleHit.distance;
-            }
-
             Vector3 sphereCenter = ray.GetPoint(sphereDistance);
             Collider[] hits = Physics.OverlapSphere(sphereCenter, aimAssistRadius, interactableLayer);
 

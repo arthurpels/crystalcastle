@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4939956570894427559}
   - component: {fileID: 7525534896811103440}
   - component: {fileID: 6168237678661186371}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: pivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -85,7 +85,7 @@ GameObject:
   - component: {fileID: 2097253709642295189}
   - component: {fileID: 615245446921917285}
   - component: {fileID: 1958282869433650205}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: DoorSliding
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -360,7 +360,7 @@ GameObject:
   - component: {fileID: 4632635209041862213}
   - component: {fileID: 1824070279781066413}
   - component: {fileID: 28779289370626181}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: DoorSlifing (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -549,7 +549,7 @@ GameObject:
   - component: {fileID: 1864169577331940471}
   - component: {fileID: 3828215896775224576}
   - component: {fileID: 633150963979815571}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: pivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
