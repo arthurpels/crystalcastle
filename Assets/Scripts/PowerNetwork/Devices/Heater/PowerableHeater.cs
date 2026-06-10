@@ -12,9 +12,9 @@ public class PowerableHeater : MonoBehaviour, IPowerable
 
     public event System.Action<bool> OnHeaterStateChanged;
 
-    public void OnPowerChanged(bool powered)
+    public void OnPowerChanged(bool powered, bool force = false)
     {
-        if (IsPowered == powered) return;
+        if (IsPowered == powered && !force) return;
         IsPowered = powered;
 
         if (humSource != null) {

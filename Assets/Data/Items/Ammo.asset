@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Ammo
   m_EditorClassIdentifier: 
   displayName: Ammo
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: fced964ac6889839b8e9ffd79747a7bc, type: 3}
   handPrefab: {fileID: 6026534224738529072, guid: de455d800a7f42fc19f2e64308f8716f,
     type: 3}
   worldPrefab: {fileID: 3269335242080888702, guid: 503784bd0b3532227806fcf1cbd8373a,

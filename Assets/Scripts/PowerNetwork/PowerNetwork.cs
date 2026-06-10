@@ -16,6 +16,16 @@ public class PowerNetwork : MonoBehaviour {
         CollectNodes();
     }
 
+    System.Collections.IEnumerator Start() {
+        // Холодный старт: ждём, пока все breaker/generator отработают Start()
+        // и сеть устаканится, затем форс-синхронизируем консьюмеров.
+        // Иначе обесточенные с самого начала двери/лампы остаются в дефолте
+        // (не залочены / выключены не применены), т.к. нода не меняла значение.
+        yield return null;
+        Evaluate();
+        ForceNotifyAll();
+    }
+
     void CollectNodes() {
         _allNodes.Clear();
         _allNodes.AddRange(FindObjectsByType<PowerNode>(FindObjectsSortMode.None));
@@ -67,6 +77,18 @@ public class PowerNetwork : MonoBehaviour {
         // Применяем результат ко всем нодам
         foreach (var node in _allNodes) {
             if (node != null) node.SetPowered(powered.Contains(node), true);
+        }
+    }
+
+    /// <summary>
+    /// Безусловно толкает текущее состояние питания во ВСЕ ноды → консьюмеров.
+    /// Вызывать после Evaluate() при загрузке/холодном старте, чтобы пере-синхронизировать
+    /// рантайм-состояние консьюмеров (Door.IsPowerLocked, лампы, обогрев), которое
+    /// сбрасывается при перезагрузке сцены и не обновляется, если нода не меняла значение.
+    /// </summary>
+    public void ForceNotifyAll() {
+        foreach (var node in _allNodes) {
+            if (node != null) node.SetPowered(node.IsPowered, true, force: true);
         }
     }
 

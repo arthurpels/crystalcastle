@@ -10,9 +10,9 @@ public class DoorPowerAdapter : MonoBehaviour, IPowerable
 
     void Awake() => _door = GetComponent<Door>();
 
-    public void OnPowerChanged(bool powered)
+    public void OnPowerChanged(bool powered, bool force = false)
     {
-        if (IsPowered == powered) return;
+        if (IsPowered == powered && !force) return;
         IsPowered = powered;
 
         _door.IsPowerLocked = !powered;

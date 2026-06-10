@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: keyRED
   m_EditorClassIdentifier: 
   displayName: key RED
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: f3bc7a38e7609a88aba3b9be3fe125f8, type: 3}
   handPrefab: {fileID: 6026534224738529072, guid: 5900b88bb9e08e2509e117a1bff5f034,
     type: 3}
   worldPrefab: {fileID: 4672162209256596315, guid: d32633a76481ae568b73ae5cb0dc85c3,

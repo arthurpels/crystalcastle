@@ -249,9 +249,14 @@ public class SaveManager : MonoBehaviour
         // Ещё один кадр перед пересчётом сети (чтобы Start() объектов отработал).
         yield return null;
 
-        // 5. Пересчитываем сеть питания.
+        // 5. Пересчитываем сеть питания и форс-синхронизируем консьюмеров.
+        // ForceNotifyAll обязателен: рантайм-состояние консьюмеров (Door.IsPowerLocked,
+        // лампы, обогрев) сброшено перезагрузкой сцены, а Evaluate нотифаит только дельты.
         if (PowerNetwork.Instance != null)
+        {
             PowerNetwork.Instance.Evaluate();
+            PowerNetwork.Instance.ForceNotifyAll();
+        }
 
         OnAfterLoad?.Invoke();
         Log("[SaveManager] Загрузка завершена.");

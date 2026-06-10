@@ -13,15 +13,15 @@ public class PowerNode : MonoBehaviour
         _consumers = GetComponentsInChildren<IPowerable>(true);
     }
 
-    public void SetPowered(bool powered, bool notify)
+    public void SetPowered(bool powered, bool notify, bool force = false)
     {
-        if (IsPowered == powered) return;
+        if (IsPowered == powered && !force) return;
         IsPowered = powered;
 
         if (notify && _consumers != null)
         {
             foreach (var c in _consumers)
-                if (c != null) c.OnPowerChanged(powered);
+                if (c != null) c.OnPowerChanged(powered, force);
         }
     }
 }

@@ -307,6 +307,7 @@ GameObject:
   - component: {fileID: 3949880504455829984}
   - component: {fileID: 8971545731314031533}
   - component: {fileID: 5073088663928381967}
+  - component: {fileID: 124470102334254343}
   m_Layer: 9
   m_Name: breaker_switch
   m_TagString: Untagged
@@ -390,6 +391,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 9.216038, y: 14.090312, z: 1.5479264}
   m_Center: {x: 0.106002755, y: 0.10600296, z: 0.31800947}
+--- !u!114 &124470102334254343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7742654771128580444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e54a06f7b30e1a6daba01589c2fb9183, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: 
 --- !u!1001 &569889653687214184
 PrefabInstance:
   m_ObjectHideFlags: 0

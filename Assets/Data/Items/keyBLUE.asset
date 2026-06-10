@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: keyBLUE
   m_EditorClassIdentifier: 
   displayName: key BLUE
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 002281818a61c462e8e6fc6bb0e2ce18, type: 3}
   handPrefab: {fileID: 6026534224738529072, guid: 6a41322399d4a1ee392b2c5d87fcb9b5,
     type: 3}
   worldPrefab: {fileID: 4672162209256596315, guid: 1e2e11dfa29b4d9d4a2974ebf3c1e048,

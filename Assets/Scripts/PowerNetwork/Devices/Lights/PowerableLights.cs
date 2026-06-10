@@ -8,9 +8,9 @@ public class PowerableLight : MonoBehaviour, IPowerable
     [SerializeField] private AudioSource humSource;
     [SerializeField] private ParticleSystem steamParticles;
 
-    public void OnPowerChanged(bool powered)
+    public void OnPowerChanged(bool powered, bool force = false)
     {
-        if (IsPowered == powered) return;
+        if (IsPowered == powered && !force) return;
         IsPowered = powered;
 
         if (targetLightGO != null) 

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Pistol
   m_EditorClassIdentifier: 
   displayName: Pistol
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: a14c4ac36fde501108f6d6bfe52b6820, type: 3}
   handPrefab: {fileID: 8158011478452477299, guid: 3363a5c22283f0b4d82f2c629ec07f0d,
     type: 3}
   worldPrefab: {fileID: 6008842778235311096, guid: 7c68da9cd1f72e25aac5a6e4dedbbf84,

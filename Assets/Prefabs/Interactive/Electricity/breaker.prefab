@@ -307,6 +307,7 @@ GameObject:
   - component: {fileID: 3319872291245189453}
   - component: {fileID: 7908040762383382238}
   - component: {fileID: 8076162294897779301}
+  - component: {fileID: 7268597654630925016}
   m_Layer: 9
   m_Name: breaker
   m_TagString: Untagged
@@ -390,6 +391,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.63150644, y: 0.598812, z: 0.06614441}
   m_Center: {x: -0.000000029802322, y: 0.19902919, z: 0.03307192}
+--- !u!114 &7268597654630925016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8796497962637674541}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e54a06f7b30e1a6daba01589c2fb9183, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _id: 
 --- !u!1001 &1166874716800657323
 PrefabInstance:
   m_ObjectHideFlags: 0
