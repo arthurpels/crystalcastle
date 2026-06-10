@@ -52,8 +52,8 @@ MonoBehaviour:
     behavior: 1
     blendInSpeed: 5
     blendOutSpeed: 3
-    AimWeight: 0.9
-    maxAngle: 60
+    AimWeight: 1
+    maxAngle: 180
     triggerParam: 
     boolParam: 
     animationBlendSpeed: 4
