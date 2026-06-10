@@ -52,6 +52,7 @@ public class DocumentReaderUI : MonoBehaviour
     private Coroutine _fadeRoutine;
     private DocumentData _current;
     private bool _typingDone;
+    private int _openedFrame = -1;
 
     // ── Lifecycle ──────────────────────────────────────────────────────────
 
@@ -73,6 +74,9 @@ public class DocumentReaderUI : MonoBehaviour
     {
         if (_current == null) return;
 
+        // Игнорируем то же нажатие E, которое открыло окно (тот же кадр).
+        if (Time.frameCount == _openedFrame) return;
+
         if (Keyboard.current.eKey.wasPressedThisFrame)
         {
             if (!_typingDone)
@@ -92,6 +96,7 @@ public class DocumentReaderUI : MonoBehaviour
     {
         if (doc == null) return;
         _current = doc;
+        _openedFrame = Time.frameCount;
 
         if (titleText != null) titleText.text = doc.title;
         if (bodyText  != null) bodyText.text  = string.Empty;

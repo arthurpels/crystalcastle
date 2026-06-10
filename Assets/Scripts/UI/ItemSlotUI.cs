@@ -25,10 +25,10 @@ public class ItemSlotUI : MonoBehaviour {
         if (item.isEquiped) {
             var inventory = FindObjectOfType<PlayerInventory>();
             if (item.itemSlot == inventory.leftHandSlot)
-                disableButton(equipLeftButton);
+                HighlightActive(equipLeftButton);
 
             if (item.itemSlot == inventory.rightHandSlot)
-                disableButton(equipRightButton);
+                HighlightActive(equipRightButton);
         } else {
             disableButton(unequipButton);
         }
@@ -52,5 +52,21 @@ public class ItemSlotUI : MonoBehaviour {
         var colors = button.colors;
         colors.disabledColor = new Color(0.4f, 0.4f, 0.4f, 0.6f);
         button.colors = colors;
+    }
+
+    /// <summary>Подсветить кнопку руки, в которую предмет уже экипирован:
+    /// яркая янтарная рамка, белый текст, лёгкое увеличение.</summary>
+    private void HighlightActive(Button button) {
+        if (button == null) return;
+        button.interactable = false;
+
+        var colors = button.colors;
+        colors.disabledColor = UITheme.Phosphor; // непрозрачный янтарь → рамка горит
+        button.colors = colors;
+
+        button.transform.localScale = Vector3.one * 1.08f;
+
+        var txt = button.GetComponentInChildren<TMP_Text>();
+        if (txt != null) txt.color = Color.white;
     }
 }
