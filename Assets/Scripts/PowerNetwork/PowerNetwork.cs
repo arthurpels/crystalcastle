@@ -8,6 +8,8 @@ public class PowerNetwork : MonoBehaviour {
     [SerializeField] private List<PowerNode>      _allNodes  = new();
     [SerializeField] private List<PowerAndGate>   _andGates  = new();
 
+    private readonly List<IPowerSource> _runtimeSources = new();
+
     void Awake() {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
@@ -33,6 +35,10 @@ public class PowerNetwork : MonoBehaviour {
         foreach (var gen in generators) {
             if (gen == null || !gen.IsActive || gen.OutputNode == null) continue;
             queue.Enqueue(gen.OutputNode);
+        }
+        foreach (var src in _runtimeSources) {
+            if (src == null || !src.IsActive || src.OutputNode == null) continue;
+            queue.Enqueue(src.OutputNode);
         }
         RunBFS(queue, powered);
 
@@ -89,4 +95,10 @@ public class PowerNetwork : MonoBehaviour {
     }
 
     public void UnregisterGenerator(PowerGenerator gen) => generators.Remove(gen);
+
+    public void RegisterSource(IPowerSource src) {
+        if (src != null && !_runtimeSources.Contains(src)) _runtimeSources.Add(src);
+    }
+
+    public void UnregisterSource(IPowerSource src) => _runtimeSources.Remove(src);
 }

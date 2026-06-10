@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: autoclose
   m_EditorClassIdentifier: 
   autoClose: 1
-  closeDelay: 3
+  closeDelay: 2
   requiresKey: 0
   keyItem: {fileID: 0}
   openSound: {fileID: 8300000, guid: 767272612c8e8320b96ab33ae45d030a, type: 3}

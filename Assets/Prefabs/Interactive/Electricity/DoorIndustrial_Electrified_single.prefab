@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3476766992245348907}
+  - component: {fileID: 2074646603821634849}
   m_Layer: 0
   m_Name: DoorIndustrial_Electrified_single
   m_TagString: Untagged
@@ -33,6 +34,19 @@ Transform:
   - {fileID: 1261549730538767035}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2074646603821634849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 385407464885619734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ad59c269eea61c2d951060f223b7b58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  connections: []
 --- !u!1 &2248794989921780122
 GameObject:
   m_ObjectHideFlags: 0
@@ -46,8 +60,9 @@ GameObject:
   - component: {fileID: 8591479576218113943}
   - component: {fileID: 1766586759212611751}
   - component: {fileID: 9214708724504513105}
+  - component: {fileID: 6300445929142580013}
   m_Layer: 0
-  m_Name: DoorRotating
+  m_Name: DoorSliding
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -177,7 +192,7 @@ NavMeshObstacle:
   m_Shape: 1
   m_Extents: {x: 0.5, y: 0.5, z: 0.5}
   m_MoveThreshold: 0.1
-  m_Carve: 0
+  m_Carve: 1
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0, z: 0}
   m_TimeToStationary: 0.5
@@ -207,11 +222,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isOpen: 0
-  isLocked: 1
+  isLocked: 0
   config: {fileID: 11400000, guid: 682b298e16cadf2fc94e1f9f884dd855, type: 2}
   mover: {fileID: 0}
   openOffset: {x: -1, y: 0, z: 0}
   speed: 1
+--- !u!114 &6300445929142580013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2248794989921780122}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00f1f8c2e1c252476bc7a04f81744231, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5499907389063940050
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PowerGenerator : MonoBehaviour, IInteractable, ISaveable {
+public class PowerGenerator : MonoBehaviour, IInteractable, ISaveable, IPowerSource {
   [Header("Grid")]
   [SerializeField]
   private PowerNode outputNode;

@@ -250,7 +250,7 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: 682b298e16cadf2fc94e1f9f884dd855, type: 2}
   mover: {fileID: 0}
   openOffset: {x: 1, y: 0, z: 0}
-  speed: 1
+  speed: 3
 --- !u!114 &1958282869433650205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -525,7 +525,7 @@ MonoBehaviour:
   config: {fileID: 11400000, guid: 682b298e16cadf2fc94e1f9f884dd855, type: 2}
   mover: {fileID: 0}
   openOffset: {x: -1, y: 0, z: 0}
-  speed: 1
+  speed: 3
 --- !u!114 &28779289370626181
 MonoBehaviour:
   m_ObjectHideFlags: 0
