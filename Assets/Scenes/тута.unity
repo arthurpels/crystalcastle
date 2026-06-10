@@ -173008,6 +173008,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6654294784227425715, guid: a71c753d0a89c712abe6dec7363c2925,
+        type: 3}
+      propertyPath: toggleKey
+      value: 122
+      objectReference: {fileID: 0}
+    - target: {fileID: 6654294784227425715, guid: a71c753d0a89c712abe6dec7363c2925,
+        type: 3}
+      propertyPath: startActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7048453169072549320, guid: a71c753d0a89c712abe6dec7363c2925,
         type: 3}
       propertyPath: connections.Array.size
