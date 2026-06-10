@@ -82,12 +82,13 @@ public class FrozenEnemy : MonoBehaviour {
             _agent.updateRotation = false;
         }
 
-        // if (damageCollider != null)
-        //     damageCollider.enabled = false;
+        // Коллайдер остаётся включённым — нужен чтобы ThawZone его обнаружила.
+        // Неуязвимость обеспечивается через IsFrozen в EnemyHealth.TakeDamage().
+        if (damageCollider != null)
+            damageCollider.enabled = true;
 
         if (animator != null)
             animator.SetBool("Frozen", true);
-        
 
         if (meshRenderer != null && frozenMaterial != null)
             meshRenderer.material = frozenMaterial;
