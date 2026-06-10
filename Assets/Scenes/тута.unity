@@ -3457,6 +3457,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 82525153}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &84801199 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2367929976422142341, guid: c3c7684c8a6bf8425942edf687f73571,
+    type: 3}
+  m_PrefabInstance: {fileID: 1541364878}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50f34219c64948ac382fc5860041ca9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &89263156
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18639,6 +18651,11 @@ PrefabInstance:
       propertyPath: _id
       value: 9bbfe0f6-cab0-4a8e-a2e4-ebe329590cc3
       objectReference: {fileID: 0}
+    - target: {fileID: 1973985028113869995, guid: 7c68da9cd1f72e25aac5a6e4dedbbf84,
+        type: 3}
+      propertyPath: MinDistance
+      value: 1.0614853
+      objectReference: {fileID: 0}
     - target: {fileID: 4146408203331896838, guid: 7c68da9cd1f72e25aac5a6e4dedbbf84,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -18647,7 +18664,7 @@ PrefabInstance:
     - target: {fileID: 4146408203331896838, guid: 7c68da9cd1f72e25aac5a6e4dedbbf84,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 50.15
+      value: 50.516
       objectReference: {fileID: 0}
     - target: {fileID: 4146408203331896838, guid: 7c68da9cd1f72e25aac5a6e4dedbbf84,
         type: 3}
@@ -101550,6 +101567,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Generator_BOXED
       objectReference: {fileID: 0}
+    - target: {fileID: 8076876981589173730, guid: 636f73bb388a734d7887465cb6d74185,
+        type: 3}
+      propertyPath: puzzleUI
+      value: 
+      objectReference: {fileID: 84801199}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
