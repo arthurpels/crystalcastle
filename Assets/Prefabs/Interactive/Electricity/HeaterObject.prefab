@@ -280,7 +280,7 @@ GameObject:
   - component: {fileID: 2254473990999320684}
   - component: {fileID: 7707028666217180996}
   - component: {fileID: 5814009019127890754}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Thraw
   m_TagString: Untagged
   m_Icon: {fileID: 0}
