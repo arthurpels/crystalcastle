@@ -51,6 +51,10 @@ public class PowerGenerator : MonoBehaviour, IInteractable, ISaveable, IPowerSou
     IsActive = true;
     PowerNetwork.Instance?.Evaluate();
 
+    // Нарративная метка — пример. NarrativeTrigger с eventId="generator_started"
+    // поймает это и покажет подсказку через HintUI.
+    GameEventLog.Instance?.Raise("generator_started");
+
     if (startSound != null)
       AudioSource.PlayClipAtPoint(startSound, transform.position, volume);
 

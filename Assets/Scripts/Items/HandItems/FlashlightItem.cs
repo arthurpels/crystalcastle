@@ -40,7 +40,7 @@ public class FlashlightHandItem : HandItem {
         _flickerTimer -= dt;
         if (_flickerTimer <= 0f) {
             _flickerTimer = Random.Range(0.05f, 0.2f);
-            lightComp.intensity = Random.Range(5f - flickerIntensity, 5f + flickerIntensity * 0.5f);
+            lightComp.intensity = Random.Range(20f - flickerIntensity, 20f + flickerIntensity * 0.5f);
         }
     }
 
