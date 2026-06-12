@@ -10,6 +10,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8789048571640965575, guid: 235fc73664ce173448d71aab5d9e2b92,
         type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -8789048571640965575, guid: 235fc73664ce173448d71aab5d9e2b92,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
@@ -80,8 +85,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8240986724087000046, guid: 235fc73664ce173448d71aab5d9e2b92,
         type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -8240986724087000046, guid: 235fc73664ce173448d71aab5d9e2b92,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: -6180269234034448492, guid: 235fc73664ce173448d71aab5d9e2b92,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: -6180269234034448492, guid: 235fc73664ce173448d71aab5d9e2b92,
         type: 3}
@@ -90,8 +105,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -1109429552083793250, guid: 235fc73664ce173448d71aab5d9e2b92,
         type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -1109429552083793250, guid: 235fc73664ce173448d71aab5d9e2b92,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: -445946839587299576, guid: 235fc73664ce173448d71aab5d9e2b92,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: -445946839587299576, guid: 235fc73664ce173448d71aab5d9e2b92,
         type: 3}
@@ -105,13 +130,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 235fc73664ce173448d71aab5d9e2b92,
         type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 235fc73664ce173448d71aab5d9e2b92,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 3345152206232507753, guid: 235fc73664ce173448d71aab5d9e2b92,
         type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3345152206232507753, guid: 235fc73664ce173448d71aab5d9e2b92,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 3532134592383798930, guid: 235fc73664ce173448d71aab5d9e2b92,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3532134592383798930, guid: 235fc73664ce173448d71aab5d9e2b92,
         type: 3}
@@ -125,8 +165,18 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 59472218d2a3ed14482c2f9f51c7db1b, type: 2}
     - target: {fileID: 9159091368678453430, guid: 235fc73664ce173448d71aab5d9e2b92,
         type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 9159091368678453430, guid: 235fc73664ce173448d71aab5d9e2b92,
+        type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 9167527544441587018, guid: 235fc73664ce173448d71aab5d9e2b92,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 9167527544441587018, guid: 235fc73664ce173448d71aab5d9e2b92,
         type: 3}
@@ -171,8 +221,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.44089806, y: 0.9080797, z: 0.46253875}
-  m_Center: {x: -0.017722564, y: 0.56222016, z: -0.007979449}
+  m_Size: {x: 0.3023933, y: 0.5181301, z: 0.31003165}
+  m_Center: {x: -0.001148897, y: 0.2785245, z: 0.0045058215}
 --- !u!114 &7023768776104202659
 MonoBehaviour:
   m_ObjectHideFlags: 0

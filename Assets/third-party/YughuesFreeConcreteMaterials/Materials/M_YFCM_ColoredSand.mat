@@ -98,7 +98,7 @@ Material:
     - _AffineAmount: 0
     - _AlphaClip: 0
     - _AlphaToMask: 0
-    - _AmbientBoost: 1
+    - _AmbientBoost: 0.5
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
@@ -130,8 +130,8 @@ Material:
     - _TriplanarSharpness: 2
     - _UVSec: 0
     - _WorkflowMode: 1
-    - _WorldSnap: 20
-    - _WorldTiling: 0.3
+    - _WorldSnap: 50
+    - _WorldTiling: 1
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
