@@ -3364,7 +3364,7 @@ GameObject:
   m_Name: FWall3 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &60374355
@@ -3485,7 +3485,7 @@ GameObject:
   m_Name: LWall (11)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &62033753
@@ -4111,7 +4111,7 @@ GameObject:
   m_Name: LWall (55)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &66642172
@@ -6161,7 +6161,7 @@ GameObject:
   m_Name: LWall (54)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &76853324
@@ -7965,7 +7965,7 @@ GameObject:
   m_Name: BWall3 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &98915897
@@ -8361,7 +8361,7 @@ GameObject:
   m_Name: RWall (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &101023589
@@ -8695,7 +8695,7 @@ GameObject:
   m_Name: LWall (14)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &112552965
@@ -8816,7 +8816,7 @@ GameObject:
   m_Name: BWall3 (24)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &112966299
@@ -10055,7 +10055,7 @@ GameObject:
   m_Name: BWall3 (13)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &134553620
@@ -11442,7 +11442,7 @@ GameObject:
   m_Name: RWall (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &174415165
@@ -11807,7 +11807,7 @@ GameObject:
   m_Name: BWall2 (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &178264124
@@ -12355,7 +12355,7 @@ PrefabInstance:
     - target: {fileID: 6815469323564557255, guid: 1005d684c7da221068b293b284e2c2c7,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 700.2
+      value: 702.06024
       objectReference: {fileID: 0}
     - target: {fileID: 6815469323564557255, guid: 1005d684c7da221068b293b284e2c2c7,
         type: 3}
@@ -12365,12 +12365,12 @@ PrefabInstance:
     - target: {fileID: 6815469323564557255, guid: 1005d684c7da221068b293b284e2c2c7,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 354.70004
+      value: 355.60925
       objectReference: {fileID: 0}
     - target: {fileID: 6815469323564557255, guid: 1005d684c7da221068b293b284e2c2c7,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.48506108
+      value: 0.42670262
       objectReference: {fileID: 0}
     - target: {fileID: 6815469323564557255, guid: 1005d684c7da221068b293b284e2c2c7,
         type: 3}
@@ -12380,7 +12380,7 @@ PrefabInstance:
     - target: {fileID: 6815469323564557255, guid: 1005d684c7da221068b293b284e2c2c7,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.8744803
+      value: 0.904392
       objectReference: {fileID: 0}
     - target: {fileID: 6815469323564557255, guid: 1005d684c7da221068b293b284e2c2c7,
         type: 3}
@@ -12395,7 +12395,7 @@ PrefabInstance:
     - target: {fileID: 6815469323564557255, guid: 1005d684c7da221068b293b284e2c2c7,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 121.967
+      value: 129.483
       objectReference: {fileID: 0}
     - target: {fileID: 6815469323564557255, guid: 1005d684c7da221068b293b284e2c2c7,
         type: 3}
@@ -12938,7 +12938,7 @@ GameObject:
   m_Name: LWall (53)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &187017060
@@ -13225,7 +13225,7 @@ GameObject:
   m_Name: LWall (40)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &197291138
@@ -13425,7 +13425,7 @@ GameObject:
   m_Name: BWall3 (25)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &199661045
@@ -14136,7 +14136,7 @@ GameObject:
   m_Name: LWall (43)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &211458840
@@ -14425,7 +14425,7 @@ GameObject:
   m_Name: LWall (45)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &213102557
@@ -15110,7 +15110,7 @@ GameObject:
   m_Name: LWall (20)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &223256486
@@ -15231,7 +15231,7 @@ GameObject:
   m_Name: LWall (32)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &227493878
@@ -16076,7 +16076,7 @@ GameObject:
   m_Name: FWall3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &240074494
@@ -16197,7 +16197,7 @@ GameObject:
   m_Name: LWall (35)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &246652284
@@ -17298,7 +17298,7 @@ GameObject:
   m_Name: BWall3 (26)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &271766645
@@ -17691,7 +17691,7 @@ GameObject:
   m_Name: LWall (39)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &277393007
@@ -17900,7 +17900,7 @@ GameObject:
   m_Name: LWall (70)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &279345356
@@ -18374,17 +18374,17 @@ PrefabInstance:
     - target: {fileID: 6100374304425446605, guid: 0dc8aed268135f4508865b5ba22e44da,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 149.4543
+      value: 205.10431
       objectReference: {fileID: 0}
     - target: {fileID: 6100374304425446605, guid: 0dc8aed268135f4508865b5ba22e44da,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 58.66
+      value: 40.38
       objectReference: {fileID: 0}
     - target: {fileID: 6100374304425446605, guid: 0dc8aed268135f4508865b5ba22e44da,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 174.5
+      value: 126.19401
       objectReference: {fileID: 0}
     - target: {fileID: 6100374304425446605, guid: 0dc8aed268135f4508865b5ba22e44da,
         type: 3}
@@ -18448,7 +18448,7 @@ GameObject:
   m_Name: BWall2 (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &289047826
@@ -18762,7 +18762,7 @@ GameObject:
   m_Name: BWall3 (20)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &290842583
@@ -19949,7 +19949,7 @@ GameObject:
   m_Name: BWall3 (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &303017825
@@ -21117,7 +21117,7 @@ GameObject:
   m_Name: BWall1 (16)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &314506637
@@ -21852,7 +21852,7 @@ GameObject:
   m_Name: BWall3 (29)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &321184033
@@ -22099,7 +22099,7 @@ GameObject:
   m_Name: BWall2 (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &328674429
@@ -23851,6 +23851,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1030100647}
+  - {fileID: 496778637}
   m_Father: {fileID: 267159994}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &366092049
@@ -25205,7 +25206,7 @@ GameObject:
   m_Name: BWall1 (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &386566022
@@ -25415,7 +25416,7 @@ GameObject:
   m_Name: BWall2 (12)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &388156072
@@ -25536,7 +25537,7 @@ GameObject:
   m_Name: LWall (68)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &389299206
@@ -26341,7 +26342,7 @@ GameObject:
   m_Name: BWall1 (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &401002883
@@ -26893,7 +26894,7 @@ GameObject:
   m_Name: LWall (27)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &417553811
@@ -27098,7 +27099,7 @@ GameObject:
   m_Name: BWall3 (17)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &419256625
@@ -27893,7 +27894,7 @@ GameObject:
   m_Name: LWall (42)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &438234450
@@ -29425,7 +29426,7 @@ GameObject:
   m_Name: LWall (16)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &476838042
@@ -29827,7 +29828,7 @@ GameObject:
   m_Name: FWall1 (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &483951517
@@ -30864,6 +30865,124 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 496387993}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &496778636
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 496778637}
+  - component: {fileID: 496778639}
+  - component: {fileID: 496778638}
+  m_Layer: 9
+  m_Name: Point Light (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &496778637
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 496778636}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.75, y: 1.73, z: 0.85}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 364199520}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &496778638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 496778636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+--- !u!108 &496778639
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 496778636}
+  m_Enabled: 1
+  serializedVersion: 10
+  m_Type: 2
+  m_Shape: 0
+  m_Color: {r: 1, g: 0, b: 0.90713406, a: 1}
+  m_Intensity: 100
+  m_Range: 35.6
+  m_SpotAngle: 30
+  m_InnerSpotAngle: 21.80208
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
 --- !u!4 &497156134 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6810594503409681184, guid: 4dfed32925b69834c93925e4ea38eb6a,
@@ -31273,7 +31392,7 @@ GameObject:
   m_Name: BWall2 (11)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &513286671
@@ -31932,7 +32051,7 @@ GameObject:
   m_Name: BWall1 (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &531524847
@@ -33317,7 +33436,7 @@ GameObject:
   m_Name: RWall (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &554212483
@@ -33814,7 +33933,7 @@ GameObject:
   m_Name: LWall (63)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &563969710
@@ -34254,7 +34373,7 @@ GameObject:
   m_Name: LWall (19)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &569261754
@@ -34556,7 +34675,7 @@ GameObject:
   m_Name: BWall3 (23)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &581386071
@@ -34677,7 +34796,7 @@ GameObject:
   m_Name: LWall (18)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &581442086
@@ -35171,7 +35290,7 @@ GameObject:
   m_Name: BWall3 (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &596853162
@@ -36263,7 +36382,7 @@ GameObject:
   m_Name: LWall (46)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &614379381
@@ -36478,7 +36597,7 @@ GameObject:
   m_Name: BWall1 (23)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &624371826
@@ -37191,7 +37310,7 @@ GameObject:
   m_Name: BWall1 (14)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &642531991
@@ -39975,7 +40094,7 @@ GameObject:
   m_Name: BWall1 (11)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &672993431
@@ -40324,7 +40443,7 @@ GameObject:
   m_Name: LWall (37)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &674657453
@@ -40451,7 +40570,7 @@ GameObject:
   m_Name: RWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!65 &678882060
@@ -41347,7 +41466,7 @@ GameObject:
   m_Name: RWall (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &687470176
@@ -42104,7 +42223,7 @@ GameObject:
   m_Name: BWall3 (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &706270992
@@ -43304,7 +43423,7 @@ GameObject:
   m_Name: FrontWallGenerator (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &724007230
@@ -44323,7 +44442,7 @@ GameObject:
   m_Name: BWall3 (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &743712569
@@ -44527,7 +44646,7 @@ GameObject:
   m_Name: LWall (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &747525208
@@ -45226,7 +45345,7 @@ GameObject:
   m_Name: LWall (69)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &754956382
@@ -45667,7 +45786,7 @@ GameObject:
   m_Name: LWall (28)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &760213291
@@ -45788,7 +45907,7 @@ GameObject:
   m_Name: FWall2 (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &761441167
@@ -45927,7 +46046,7 @@ GameObject:
   m_Name: RWall (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &762411821
@@ -46156,7 +46275,7 @@ GameObject:
   m_Name: BWall3 (14)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &767379008
@@ -46457,7 +46576,7 @@ GameObject:
   m_Name: LWall (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &768976780
@@ -46653,7 +46772,7 @@ GameObject:
   m_Name: BWall3 (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &771156959
@@ -46774,7 +46893,7 @@ GameObject:
   m_Name: FWall3 (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &771466357
@@ -47845,7 +47964,7 @@ GameObject:
   m_Name: BWall3 (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &790532424
@@ -48136,7 +48255,7 @@ GameObject:
   m_Name: BWall1 (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &793071374
@@ -48326,7 +48445,7 @@ GameObject:
   m_Name: BWall1 (13)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &794576890
@@ -48758,7 +48877,7 @@ GameObject:
   m_Name: LWall (29)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &801257614
@@ -49478,7 +49597,7 @@ GameObject:
   m_Name: LWall (48)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &814261072
@@ -50558,7 +50677,7 @@ GameObject:
   m_Name: LWall (65)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &834803803
@@ -51051,7 +51170,7 @@ GameObject:
   m_Name: FWall2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &842522383
@@ -51322,7 +51441,7 @@ GameObject:
   m_Name: LWall (36)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &845302189
@@ -51562,7 +51681,7 @@ GameObject:
   m_Name: LWall (31)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &848290353
@@ -51683,7 +51802,7 @@ GameObject:
   m_Name: LWall (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &848297011
@@ -52720,7 +52839,7 @@ GameObject:
   m_Name: BWall2 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &862737378
@@ -53622,7 +53741,7 @@ GameObject:
   m_Name: BWall3 (12)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &873312482
@@ -54572,7 +54691,7 @@ GameObject:
   m_Name: BWall3 (28)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &891658463
@@ -55106,7 +55225,7 @@ GameObject:
   m_Name: BWall1 (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &897055335
@@ -56092,7 +56211,7 @@ GameObject:
   m_Name: LWall (67)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &915797618
@@ -56557,7 +56676,7 @@ GameObject:
   m_Name: BWall1 (21)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &924443943
@@ -57697,7 +57816,7 @@ GameObject:
   m_Name: BWall2 (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &949446572
@@ -57984,7 +58103,7 @@ GameObject:
   m_Name: LWall (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &952964116
@@ -61022,7 +61141,7 @@ GameObject:
   m_Name: BWall2 (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &996267257
@@ -61397,7 +61516,7 @@ GameObject:
   m_Name: LWall (52)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &999690619
@@ -62003,7 +62122,7 @@ GameObject:
   m_Name: LWall (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1010927781
@@ -62218,7 +62337,7 @@ GameObject:
   m_Name: LWall (22)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1012068834
@@ -63485,7 +63604,7 @@ Transform:
   m_GameObject: {fileID: 1030100646}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.73, z: 0}
+  m_LocalPosition: {x: 1.61, y: 1.73, z: 1.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -63526,7 +63645,7 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 0, b: 0.90713406, a: 1}
-  m_Intensity: 21.57
+  m_Intensity: 100
   m_Range: 35.6
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -63593,7 +63712,7 @@ GameObject:
   m_Name: LWall (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1030202288
@@ -64146,7 +64265,7 @@ GameObject:
   m_Name: BWall3 (11)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1043140934
@@ -64494,7 +64613,7 @@ GameObject:
   m_Name: LWall (58)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1047490095
@@ -65121,7 +65240,7 @@ GameObject:
   m_Name: LWall (13)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1059648629
@@ -65737,7 +65856,7 @@ GameObject:
   m_Name: LWall (57)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1071360103
@@ -67548,7 +67667,7 @@ GameObject:
   m_Name: BWall3 (18)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1105973689
@@ -68043,7 +68162,7 @@ GameObject:
   m_Name: LWall (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1107815733
@@ -68422,7 +68541,7 @@ GameObject:
   m_Name: BWall3 (31)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1114883606
@@ -68896,7 +69015,7 @@ GameObject:
   m_Name: LWall (59)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1119319749
@@ -69082,6 +69201,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a384a68e5353eb641a3f8189815e4601,
+        type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a384a68e5353eb641a3f8189815e4601,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -69340,7 +69469,7 @@ GameObject:
   m_Name: FWall2 (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1123092446
@@ -70143,7 +70272,7 @@ GameObject:
   m_Name: LWall (24)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1138180121
@@ -71252,7 +71381,7 @@ GameObject:
   m_Name: FWall2 (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1154324555
@@ -72254,7 +72383,7 @@ GameObject:
   m_Name: LWall (44)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1169124654
@@ -72375,7 +72504,7 @@ GameObject:
   m_Name: FWall1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1170379126
@@ -72997,7 +73126,7 @@ GameObject:
   m_Name: BWall3 (19)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1186654301
@@ -73399,7 +73528,7 @@ GameObject:
   m_Name: BWall2 (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1196098437
@@ -74223,7 +74352,7 @@ GameObject:
   m_Name: RWall (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1207386356
@@ -75638,7 +75767,7 @@ GameObject:
   m_Name: LWall (33)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1234433188
@@ -77996,7 +78125,7 @@ GameObject:
   m_Name: LWall (50)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1267425362
@@ -78352,7 +78481,7 @@ GameObject:
   m_Name: LWall (41)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1269436000
@@ -79168,7 +79297,7 @@ GameObject:
   m_Name: LWall (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1285109241
@@ -79378,7 +79507,7 @@ GameObject:
   m_Name: BWall3 (32)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1287101267
@@ -80628,7 +80757,7 @@ GameObject:
   m_Name: LWall (64)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1317384564
@@ -83154,7 +83283,7 @@ GameObject:
   m_Name: BWall2 (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1356917836
@@ -84408,7 +84537,7 @@ GameObject:
   m_Name: RWall (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1368672458
@@ -85194,7 +85323,7 @@ GameObject:
   m_Name: BWall3 (16)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1372877265
@@ -85798,7 +85927,7 @@ GameObject:
   m_Name: LWall (34)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1378656727
@@ -86065,7 +86194,7 @@ GameObject:
   m_Name: BWall3 (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1386895567
@@ -86186,7 +86315,7 @@ GameObject:
   m_Name: LWall (61)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1387138345
@@ -87561,7 +87690,7 @@ GameObject:
   m_Name: BWall1 (15)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1424254514
@@ -88240,7 +88369,7 @@ GameObject:
   m_Name: LWall (23)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1435786680
@@ -88444,7 +88573,7 @@ GameObject:
   m_Name: LWall (26)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1437643485
@@ -88728,7 +88857,7 @@ GameObject:
   m_Name: BWall1 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1441030953
@@ -88936,7 +89065,7 @@ GameObject:
   m_Name: LWall (62)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1442367482
@@ -89231,7 +89360,7 @@ GameObject:
   m_Name: LWall (30)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1449948633
@@ -89468,7 +89597,7 @@ GameObject:
   m_Name: BWall1 (19)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1455367005
@@ -89589,7 +89718,7 @@ GameObject:
   m_Name: RWall (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1457369142
@@ -89817,7 +89946,7 @@ GameObject:
   m_Name: BWall3 (15)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1462671272
@@ -90297,7 +90426,7 @@ GameObject:
   m_Name: FWall2 (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1469217010
@@ -91963,7 +92092,7 @@ GameObject:
   m_Name: FWall2 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1489583493
@@ -92941,7 +93070,7 @@ GameObject:
   m_Name: LWall (17)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1499952375
@@ -93170,7 +93299,7 @@ GameObject:
   m_Name: LWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1501809954
@@ -93467,7 +93596,7 @@ GameObject:
   m_Name: LWall (60)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1505282725
@@ -100207,7 +100336,7 @@ GameObject:
   m_Name: FWall2 (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1528392183
@@ -100684,7 +100813,7 @@ GameObject:
   m_Name: BWall1 (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1539915271
@@ -101732,7 +101861,7 @@ GameObject:
   m_Name: BWall3 (22)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1541580825
@@ -101853,7 +101982,7 @@ GameObject:
   m_Name: BWall1 (22)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1542270950
@@ -103041,7 +103170,7 @@ GameObject:
   m_Name: FWall1 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1562810666
@@ -103814,7 +103943,7 @@ GameObject:
   m_Name: LWall (21)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1583892806
@@ -103935,7 +104064,7 @@ GameObject:
   m_Name: LWall (38)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1584154698
@@ -104781,7 +104910,7 @@ GameObject:
   m_Name: BWall1 (18)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1606666983
@@ -108717,7 +108846,7 @@ GameObject:
   m_Name: BWall1 (12)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1681704583
@@ -111784,7 +111913,7 @@ GameObject:
   m_Name: FWall2 (11)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1720449099
@@ -113306,7 +113435,7 @@ GameObject:
   m_Name: BWall1 (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1745008024
@@ -114737,6 +114866,16 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a384a68e5353eb641a3f8189815e4601,
+        type: 3}
+      propertyPath: m_NavMeshLayer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a384a68e5353eb641a3f8189815e4601,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -115316,7 +115455,7 @@ GameObject:
   m_Name: FrontWallGenerator (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1770906657
@@ -115947,7 +116086,7 @@ GameObject:
   m_Name: BWall3 (30)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1782457164
@@ -116985,7 +117124,7 @@ GameObject:
   m_Name: LWall (51)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1798038171
@@ -117214,7 +117353,7 @@ GameObject:
   m_Name: LWall (47)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1801847804
@@ -118232,17 +118371,17 @@ PrefabInstance:
     - target: {fileID: 8289427160707352643, guid: 50ea949c36baf1ba9ab9e2937eac96c1,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 149.4543
+      value: 205.10431
       objectReference: {fileID: 0}
     - target: {fileID: 8289427160707352643, guid: 50ea949c36baf1ba9ab9e2937eac96c1,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 58.66
+      value: 40.38
       objectReference: {fileID: 0}
     - target: {fileID: 8289427160707352643, guid: 50ea949c36baf1ba9ab9e2937eac96c1,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 174.5
+      value: 126.19401
       objectReference: {fileID: 0}
     - target: {fileID: 8289427160707352643, guid: 50ea949c36baf1ba9ab9e2937eac96c1,
         type: 3}
@@ -118496,7 +118635,7 @@ GameObject:
   m_Name: LWall (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1829538568
@@ -119101,7 +119240,7 @@ GameObject:
   m_Name: RWall (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1840552073
@@ -119380,7 +119519,7 @@ GameObject:
   m_Name: LWall (12)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1847042585
@@ -119580,7 +119719,7 @@ GameObject:
   m_Name: BWall2 (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1850597177
@@ -120740,7 +120879,7 @@ GameObject:
   m_Name: FWall2 (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1864087263
@@ -120954,7 +121093,7 @@ GameObject:
   m_Name: FrontWallGenerator (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1865353502
@@ -122583,7 +122722,7 @@ GameObject:
   m_Name: FWall2 (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1894704156
@@ -124224,7 +124363,7 @@ GameObject:
   m_Name: FWall2 (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1915550542
@@ -124414,7 +124553,7 @@ GameObject:
   m_Name: leftWallGenerator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1916557433
@@ -125540,7 +125679,7 @@ GameObject:
   m_Name: FWall2 (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1936462855
@@ -127047,7 +127186,7 @@ GameObject:
   m_Name: BWall1 (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1944215740
@@ -127604,17 +127743,17 @@ PrefabInstance:
     - target: {fileID: 411095343478193052, guid: 69a98814fbf44980583454a42b67c55e,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 149.2
+      value: 204.85
       objectReference: {fileID: 0}
     - target: {fileID: 411095343478193052, guid: 69a98814fbf44980583454a42b67c55e,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 56.71
+      value: 38.43
       objectReference: {fileID: 0}
     - target: {fileID: 411095343478193052, guid: 69a98814fbf44980583454a42b67c55e,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 177.5
+      value: 128.23
       objectReference: {fileID: 0}
     - target: {fileID: 411095343478193052, guid: 69a98814fbf44980583454a42b67c55e,
         type: 3}
@@ -129656,7 +129795,7 @@ GameObject:
   m_Name: BWall1 (20)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1971429987
@@ -130193,7 +130332,7 @@ GameObject:
   m_Name: BWall3 (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1976181807
@@ -130374,7 +130513,7 @@ GameObject:
   m_Name: LWall (56)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1979306279
@@ -132145,7 +132284,7 @@ GameObject:
   m_Name: BWall1 (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &2009784266
@@ -132266,7 +132405,7 @@ GameObject:
   m_Name: LWall (25)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &2010026529
@@ -133142,7 +133281,7 @@ GameObject:
   m_Name: BWall2 (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &2014397257
@@ -134494,7 +134633,7 @@ GameObject:
   m_Name: BWall3 (21)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &2042552214
@@ -135024,7 +135163,7 @@ GameObject:
   m_Name: LWall (66)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &2046867223
@@ -135434,7 +135573,7 @@ GameObject:
   m_Name: BWall3 (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &2056879419
@@ -135904,7 +136043,7 @@ GameObject:
   m_Name: BWall3 (27)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &2062759963
@@ -137874,7 +138013,7 @@ GameObject:
   m_Name: BWall1 (17)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &2106267435
@@ -138354,7 +138493,7 @@ GameObject:
   m_Name: LWall (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &2112046581
@@ -139380,7 +139519,7 @@ GameObject:
   m_Name: LWall (15)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &2124862785
@@ -139673,7 +139812,7 @@ GameObject:
   m_Name: RightWallGenerator (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &2127605418
@@ -140147,7 +140286,7 @@ GameObject:
   m_Name: LWall (49)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
+  m_NavMeshLayer: 1
   m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &2139124873

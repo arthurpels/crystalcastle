@@ -2079,12 +2079,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   detectionRange: 17
-  viewAngle: 200
-  memoryDuration: 5
+  viewAngle: 250
+  memoryDuration: 6
   visionBlockMask:
     serializedVersion: 2
     m_Bits: 2945
-  attackRange: 1.6
+  attackRange: 3
   attackCooldown: 1
   attackDamage: 15
   patrolPoints: []
@@ -2094,7 +2094,7 @@ MonoBehaviour:
   searchGiveUpTime: 8
   approachStopDistance: 0.3
   directChaseDistance: 3
-  directChaseSpeed: 3
+  directChaseSpeed: 5
   audioSource: {fileID: 8140649753986304814}
   attackSound: {fileID: 8300000, guid: 7f02ca0794f3c9838899d69051a481a4, type: 3}
   animator: {fileID: 6549873744719016428}
@@ -2112,7 +2112,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jumpSpeed: 4
   jumpArc: 1.2
-  minJumpDuration: 0.25
+  minJumpDuration: 0.1
   jumpTrigger: Jump
 --- !u!114 &6829071889727874011
 MonoBehaviour:
@@ -2265,7 +2265,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   idleBreathClips:
   - {fileID: 8300000, guid: 8c5a7e619278b789484c030b7e30cbaf, type: 3}
-  idleBreathInterval: 4
+  idleBreathInterval: 5
   idleBreathVariation: 1.5
   chaseBreathClips:
   - {fileID: 8300000, guid: 904ecb76f0a424c919bb9b5e2b78bf69, type: 3}
@@ -2280,7 +2280,7 @@ MonoBehaviour:
   deathClip: {fileID: 8300000, guid: baa103200f0a22db78cec27ac57224c4, type: 3}
   ambientHumClip: {fileID: 0}
   humVolume: 0.25
-  breathVolume: 0.6
+  breathVolume: 0.3
   attackVolume: 0.9
   pitchVariation: 0.08
   footstepSounds:
@@ -4781,8 +4781,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AgentTypeID: 0
   m_StartPoint: {x: 0, y: 0, z: 0}
-  m_EndPoint: {x: 0, y: 1, z: 1}
-  m_Width: 0.5
+  m_EndPoint: {x: 0, y: 1, z: 1.5}
+  m_Width: 0.1
   m_CostModifier: 10
   m_Bidirectional: 0
   m_AutoUpdatePosition: 1
