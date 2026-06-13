@@ -81,10 +81,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AffineAmount: 1
+    - _AffineAmount: 0
     - _AlphaClip: 0
     - _AlphaToMask: 0
-    - _AmbientBoost: 1
+    - _AmbientBoost: 0.36
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
