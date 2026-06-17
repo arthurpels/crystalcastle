@@ -71,13 +71,13 @@ public class PlayerInputHandler : MonoBehaviour {
                 pauseMenu.Toggle();
         }
 
-        if (!InputEnabled) return;
+        if (!InputEnabled) { StopMovement(); return; }
 
         if (Keyboard.current.tabKey.wasPressedThisFrame) { // или iKey
             inventoryUI.Toggle();
         }
-        
-        if (!InputEnabledSoft) return;
+
+        if (!InputEnabledSoft) { StopMovement(); return; }
 
         if (_jumpBufferTimer > 0f) _jumpBufferTimer -= Time.deltaTime;
 
@@ -119,4 +119,16 @@ public class PlayerInputHandler : MonoBehaviour {
     public void RequestJump() => TriggerJumpBuffer();
     /// <summary>Сбросить состояние ввода (для пауз, катсцен)</summary>
     public void ResetInput() => _jumpBufferTimer = 0f;
+
+    /// <summary>
+    /// Обнулить ввод движения, чтобы кнопки не "залипали" при отключении
+    /// управления (вход в инвентарь, генератор и т.п.). Вызывается каждый кадр,
+    /// пока управление отключено, — поэтому персонаж тормозит, а не катится
+    /// дальше на последнем прочитанном вводе.
+    /// </summary>
+    private void StopMovement() {
+        MoveInput = Vector2.zero;
+        _jumpBufferTimer = 0f;
+        _movementController.SetInput(Vector2.zero, false, false);
+    }
 }

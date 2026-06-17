@@ -10,6 +10,9 @@ public class PowerNetwork : MonoBehaviour {
 
     private readonly List<IPowerSource> _runtimeSources = new();
 
+    // Счётчик порядка обхода BFS — для направления потока в проводах.
+    private int _reachCounter;
+
     void Awake() {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
@@ -37,6 +40,11 @@ public class PowerNetwork : MonoBehaviour {
     [ContextMenu("Evaluate Grid")]
     public void Evaluate() {
         CollectNodes();
+
+        // Сбрасываем порядок обхода (направление потока) перед новым расчётом.
+        _reachCounter = 0;
+        foreach (var node in _allNodes)
+            if (node != null) node.ReachOrder = int.MaxValue;
 
         HashSet<PowerNode> powered = new();
         Queue<PowerNode>   queue   = new();
@@ -101,6 +109,9 @@ public class PowerNetwork : MonoBehaviour {
             if (breaker != null && !breaker.IsOn) continue;
 
             if (!powered.Add(current)) continue;
+
+            // Фиксируем порядок достижения ноды (направление течения тока).
+            current.ReachOrder = _reachCounter++;
 
             if (current.connections == null) continue;
 

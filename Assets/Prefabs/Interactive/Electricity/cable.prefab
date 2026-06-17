@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4226044111027510644}
   - component: {fileID: 4526840529430176488}
   m_Layer: 0
-  m_Name: cabel
+  m_Name: cable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -50,6 +50,7 @@ MonoBehaviour:
   isBroken: 0
   lineRenderer: {fileID: 4526840529430176488}
   normalMat: {fileID: 2100000, guid: 5b3788ae1c40dd1f09f69a9ce2f626ef, type: 2}
+  liveMat: {fileID: 2100000, guid: 87132366376cd577abb43616a7026d38, type: 2}
   brokenMat: {fileID: 2100000, guid: 5b3788ae1c40dd1f09f69a9ce2f626ef, type: 2}
 --- !u!120 &4526840529430176488
 LineRenderer:
