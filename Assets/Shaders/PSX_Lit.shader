@@ -12,7 +12,7 @@ Shader "CrystalCastle/PSX_Lit"
         [Enum(UnityEngine.Rendering.CullMode)] _Cull ("Cull", Float) = 2
 
         _SnapResolution ("Снэп вершин (px)",     Float)           = 160
-        _AffineAmount   ("Аффинная деформация",  Range(0,1))      = 1
+        _AffineAmount   ("Аффинная деформация",  Range(0,1))      = 0
 
         _LightTint     ("Оттенок света",         Color)           = (1,1,1,1)
         _AmbientBoost  ("Усиление ambient",      Range(0,2))      = 1
