@@ -25,7 +25,7 @@ public class WorldItem : MonoBehaviour, IInteractable, ISaveable
         if (TryGetComponent(out Collider col))
         {
             col.isTrigger = false;
-            col.gameObject.layer = LayerMask.NameToLayer("Interactable");
+            col.gameObject.layer = LayerMask.NameToLayer("InteractableItems");
         }
     }
 

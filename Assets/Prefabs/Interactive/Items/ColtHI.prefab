@@ -5015,7 +5015,7 @@ GameObject:
   - component: {fileID: 6123967700329396292}
   - component: {fileID: 6307572896290266191}
   m_Layer: 0
-  m_Name: ColtHandItem
+  m_Name: ColtHI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

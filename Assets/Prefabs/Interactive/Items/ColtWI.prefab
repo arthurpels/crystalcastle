@@ -15,8 +15,8 @@ GameObject:
   - component: {fileID: 6983989761842005196}
   - component: {fileID: -1545771012053903786}
   - component: {fileID: 3646942828826746461}
-  m_Layer: 9
-  m_Name: ColtWorldItem
+  m_Layer: 13
+  m_Name: ColtWI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -235,7 +235,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4872245247457033692}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: ShootTransform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -268,7 +268,7 @@ GameObject:
   - component: {fileID: 7587460219489686431}
   - component: {fileID: 8646701795204778153}
   - component: {fileID: 8951746658691158491}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: default
   m_TagString: Untagged
   m_Icon: {fileID: 0}

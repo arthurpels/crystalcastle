@@ -6,7 +6,8 @@
       "Bash(ConvertTo-Json)",
       "Bash(grep -v \"//.*\\\\?\\\\.\")",
       "Bash(xargs ls -1)",
-      "Bash(grep *)"
+      "Bash(grep *)",
+      "Bash(awk '/layers:/{f=1} f&&/^ +- /{print NR\": \"$0} /m_SortingLayers/{f=0}' ProjectSettings/TagManager.asset)"
     ]
   }
 }

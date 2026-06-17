@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2806751211849414161}
   - component: {fileID: 318806111549475192}
   m_Layer: 0
-  m_Name: CrowbarHandItem
+  m_Name: CrowbarHI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

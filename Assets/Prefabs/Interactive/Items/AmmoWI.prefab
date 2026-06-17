@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 623494040749608935}
   - component: {fileID: 6884883151893972861}
   - component: {fileID: -1195718371485808866}
-  m_Layer: 9
-  m_Name: AmmoWorldItem
+  m_Layer: 13
+  m_Name: AmmoWI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -139,7 +139,7 @@ GameObject:
   - component: {fileID: 3393173097693561286}
   - component: {fileID: 6664560302632189269}
   - component: {fileID: 8558573395074398151}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Pistol Ammo Pickup
   m_TagString: Untagged
   m_Icon: {fileID: 0}

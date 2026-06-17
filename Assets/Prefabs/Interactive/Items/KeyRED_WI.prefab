@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7556010137876617091}
   - component: {fileID: 378512336774389573}
   - component: {fileID: -3477580099054049229}
-  m_Layer: 9
+  m_Layer: 13
   m_Name: KeyRED_WI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -142,6 +142,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: KeyRED
+      objectReference: {fileID: 0}
+    - target: {fileID: 1639918147744273708, guid: fd3d3ea5665c63cc1b48e59ea71a7330,
+        type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 2128505465199644566, guid: fd3d3ea5665c63cc1b48e59ea71a7330,
         type: 3}
