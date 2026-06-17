@@ -7,7 +7,9 @@
       "Bash(grep -v \"//.*\\\\?\\\\.\")",
       "Bash(xargs ls -1)",
       "Bash(grep *)",
-      "Bash(awk '/layers:/{f=1} f&&/^ +- /{print NR\": \"$0} /m_SortingLayers/{f=0}' ProjectSettings/TagManager.asset)"
+      "Bash(awk '/layers:/{f=1} f&&/^ +- /{print NR\": \"$0} /m_SortingLayers/{f=0}' ProjectSettings/TagManager.asset)",
+      "Bash(grep -rn \"_FORWARD_PLUS\\\\|ClusteredRendering\\\\|USE_FORWARD_PLUS\" TerrainLit*.shader TerrainLitPasses.hlsl)",
+      "Bash(grep -rn \"_FORWARD_PLUS\" ../Lit.shader)"
     ]
   }
 }

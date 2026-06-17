@@ -38,6 +38,7 @@ Shader "CrystalCastle/PSX_Lit"
 
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
             #pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
+            #pragma multi_compile _ _FORWARD_PLUS
             #pragma multi_compile _ _SHADOWS_SOFT
             #pragma multi_compile_fog
 
@@ -127,16 +128,32 @@ Shader "CrystalCastle/PSX_Lit"
                 lighting += mainLight.color * ndotl
                           * mainLight.shadowAttenuation * mainLight.distanceAttenuation;
 
-                // Additional Lights
+                // Additional Lights — совместимо с Forward и Forward+ (кластерный цикл)
                 #if defined(_ADDITIONAL_LIGHTS) || defined(_ADDITIONAL_LIGHTS_VERTEX)
                     uint lightCount = GetAdditionalLightsCount();
-                    for (uint i = 0u; i < lightCount; ++i)
+
+                    #if USE_FORWARD_PLUS
+                    // Forward+ кластеру нужен screen-space UV пикселя.
+                    InputData inputData = (InputData)0;
+                    inputData.positionWS = IN.positionWS;
+                    inputData.normalizedScreenSpaceUV = GetNormalizedScreenSpaceUV(IN.positionCS);
+
+                    // Доп. директ-лайты в Forward+ лежат отдельным блоком в начале списка.
+                    for (uint di = 0u; di < min(URP_FP_DIRECTIONAL_LIGHTS_COUNT, MAX_VISIBLE_LIGHTS); di++)
                     {
-                        Light light = GetAdditionalLight(i, IN.positionWS);
+                        Light light = GetAdditionalLight(di, IN.positionWS);
                         float nl = saturate(dot(normalWS, light.direction));
                         lighting += light.color * nl
                                   * light.distanceAttenuation * light.shadowAttenuation;
                     }
+                    #endif
+
+                    LIGHT_LOOP_BEGIN(lightCount)
+                        Light light = GetAdditionalLight(lightIndex, IN.positionWS);
+                        float nl = saturate(dot(normalWS, light.direction));
+                        lighting += light.color * nl
+                                  * light.distanceAttenuation * light.shadowAttenuation;
+                    LIGHT_LOOP_END
                 #endif
 
                 col.rgb *= lighting * _LightTint.rgb;

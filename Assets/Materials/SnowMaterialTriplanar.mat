@@ -11,7 +11,8 @@ Material:
   m_Shader: {fileID: 4800000, guid: e1e399eb6a826061db284ad12749ab24, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _ALPHATEST_ON
   m_InvalidKeywords: []
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
@@ -46,19 +47,19 @@ Material:
     m_Ints: []
     m_Floats:
     - _AffineAmount: 0
-    - _AlphaClip: 0
-    - _AmbientBoost: 1
+    - _AlphaClip: 1
+    - _AmbientBoost: 2
     - _Cull: 2
     - _Cutoff: 0.5
     - _QueueControl: 0
     - _QueueOffset: 0
     - _SnapResolution: 160
     - _TriplanarSharpness: 2
-    - _WorldSnap: 8
+    - _WorldSnap: 50
     - _WorldTiling: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _LightTint: {r: 1, g: 1, b: 1, a: 1}
+    - _LightTint: {r: 1, g: 1, b: 1, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &7846744866608443219
 MonoBehaviour:
