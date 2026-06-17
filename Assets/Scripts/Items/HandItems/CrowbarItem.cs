@@ -58,9 +58,19 @@ public class CrowbarHandItem : HandItem {
 
         if (target != null && target.IsAlive)
         {
-            target.TakeDamage(damage);
-            SpawnFX(hitBloodPrefab,  hit.point, hit.normal);
-            PlayRandomSound(hitFleshSounds);
+            if (target is DestructibleObject destr)
+            {
+                // Разрушаемым отдаём точку удара — щепки/punch спавнит сам объект
+                // (DestructibleHitFeedback). Кровь тут не нужна.
+                destr.TakeDamage(damage, hit.point, hit.normal);
+            }
+            else
+            {
+                target.TakeDamage(damage);
+                SpawnFX(hitBloodPrefab, hit.point, hit.normal);
+                PlayRandomSound(hitFleshSounds);
+            }
+            TriggerShake();              // попадание по живому/разрушаемому — полная тряска
             if (showDebug)
                 Debug.Log($"[Crowbar] Удар по {hit.collider.name}: -{damage} HP");
         }
@@ -68,9 +78,8 @@ public class CrowbarHandItem : HandItem {
         {
             SpawnFX(hitSparksPrefab, hit.point, hit.normal);
             PlayRandomSound(hitHardSounds);
+            TriggerShake(0.5f);          // тычок по твёрдой поверхности — слабее
         }
-
-        TriggerShake();
     }
 
     public override void OnTick(float dt)
@@ -102,10 +111,11 @@ public class CrowbarHandItem : HandItem {
         PlaySound(clips[Random.Range(0, clips.Length)]);
     }
 
-    private void TriggerShake()
+    private void TriggerShake(float mul = 1f)
     {
-        // Если есть CameraShake-компонент — вызываем его
-        var shake = Camera.main?.GetComponent<CameraShake>();
-        shake?.Shake(shakeIntensity, shakeDuration);
+        // Через Cinemachine-синглтон. mul: 1 — полный удар (враг/разрушаемое),
+        // меньше — лёгкий тычок по твёрдой поверхности.
+        if (CameraShake.Instance != null)
+            CameraShake.Instance.Shake(shakeIntensity * mul, shakeDuration);
     }
 }

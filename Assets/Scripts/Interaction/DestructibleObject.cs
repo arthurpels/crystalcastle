@@ -15,6 +15,11 @@ public class DestructibleObject : MonoBehaviour, IHealth, ISaveable {
 
     public event System.Action<float> OnDamaged;
 
+    /// <summary>Удар с точкой и нормалью попадания (для импакт-фидбека).</summary>
+    public event System.Action<Vector3, Vector3> OnHit;
+
+    private bool _hasPendingHit;
+    private Vector3 _pendingHitPoint, _pendingHitNormal;
 
     void Awake() => CurrentHP = maxHP;
 
@@ -24,6 +29,12 @@ public class DestructibleObject : MonoBehaviour, IHealth, ISaveable {
         CurrentHP = Mathf.Max(0, CurrentHP - amount);
         OnDamaged?.Invoke(amount);
 
+        // Точка удара: из перегрузки ниже, иначе — центр объекта.
+        Vector3 point  = _hasPendingHit ? _pendingHitPoint  : transform.position;
+        Vector3 normal = _hasPendingHit ? _pendingHitNormal : Vector3.up;
+        _hasPendingHit = false;
+        OnHit?.Invoke(point, normal);
+
         // Эффект попадания (искры, звук)
         PlayHitEffect();
 
@@ -31,6 +42,18 @@ public class DestructibleObject : MonoBehaviour, IHealth, ISaveable {
             OnDeath?.Invoke();
             DestroyObject();
         }
+    }
+
+    /// <summary>
+    /// Опциональная перегрузка: атакующий, у которого есть RaycastHit,
+    /// передаёт точку/нормаль — фидбек спавнит партиклы именно там.
+    /// Интерфейс IHealth остаётся прежним.
+    /// </summary>
+    public void TakeDamage(float amount, Vector3 hitPoint, Vector3 hitNormal) {
+        _pendingHitPoint  = hitPoint;
+        _pendingHitNormal = hitNormal;
+        _hasPendingHit    = true;
+        TakeDamage(amount);
     }
 
     private void PlayHitEffect() {

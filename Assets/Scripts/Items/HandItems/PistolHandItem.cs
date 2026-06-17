@@ -133,9 +133,8 @@ private IEnumerator AnimateLine(LineRenderer line, Vector3 targetEnd)
     }
 
     private void TriggerShake() {
-        if (Camera.main.GetComponent<CameraShake>() != null) {
-            Camera.main.GetComponent<CameraShake>().Shake(shakeIntensity, shakeDuration);
-        }
-
+        // Отдача через Cinemachine-синглтон (Camera.main.GetComponent ненадёжен).
+        if (CameraShake.Instance != null)
+            CameraShake.Instance.Shake(shakeIntensity, shakeDuration);
     }
 }
