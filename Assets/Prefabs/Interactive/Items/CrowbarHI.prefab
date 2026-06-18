@@ -176,7 +176,7 @@ MonoBehaviour:
     type: 3}
   hitBloodPrefab: {fileID: 478480990258403889, guid: b40f07a3063901eacbcab71867734205,
     type: 3}
-  shakeIntensity: 0.08
+  shakeIntensity: 0.2
   shakeDuration: 0.1
   showDebug: 1
 --- !u!1001 &7824411190010842540

@@ -5172,5 +5172,5 @@ MonoBehaviour:
   shootSound: {fileID: 8300000, guid: 20965ce5d7e5ff333a41086a341d5bcc, type: 3}
   emptyClickSound: {fileID: 8300000, guid: dd15fcf19fae25f3ab82bab391e70db2, type: 3}
   impactSound: {fileID: 0}
-  shakeIntensity: 0.06
+  shakeIntensity: 0.3
   shakeDuration: 0.12

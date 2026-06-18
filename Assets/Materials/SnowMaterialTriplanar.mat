@@ -53,7 +53,7 @@ Material:
     - _Cutoff: 0.5
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _SnapResolution: 160
+    - _SnapResolution: 0
     - _TriplanarSharpness: 2
     - _WorldSnap: 50
     - _WorldTiling: 1
