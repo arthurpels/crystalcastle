@@ -11,28 +11,34 @@ public class PowerGenerator : MonoBehaviour, IInteractable, ISaveable, IPowerSou
   private SineWavePuzzleUI puzzleUI;
 
   [Header("Звуки")]
+  [Tooltip("3D-источник на генераторе. Назначь компонент AudioSource с этого объекта — " +
+           "дальность/затухание настраиваются прямо в нём (3D Sound Settings).")]
+  [SerializeField] private AudioSource audioSource;
   [SerializeField] private AudioClip startSound;
   [SerializeField] private AudioClip loopSound;
   [SerializeField] [Range(0f,1f)] private float volume = 0.8f;
 
-  private AudioSource _loopSource;
-
   public bool IsActive { get; private set; }
 
   void Awake() {
-    _loopSource = gameObject.AddComponent<AudioSource>();
-    _loopSource.spatialBlend = 1f;
-    _loopSource.loop        = true;
-    _loopSource.playOnAwake = false;
-    _loopSource.volume      = volume;
-    if (loopSound != null) _loopSource.clip = loopSound;
+    // Источник назначается в инспекторе (там же настраивается дальность).
+    // Фолбэк: берём/создаём на этом объекте, если поле пустое.
+    if (audioSource == null) audioSource = GetComponent<AudioSource>();
+    if (audioSource == null) {
+      audioSource = gameObject.AddComponent<AudioSource>();
+      audioSource.spatialBlend = 1f; // авто-созданному задаём 3D
+    }
+    audioSource.playOnAwake = false;
+    audioSource.loop        = true;
+    audioSource.volume      = volume;
+    if (loopSound != null) audioSource.clip = loopSound;
   }
 
   void Start() {
     PowerNetwork.Instance?.RegisterGenerator(this);
     if (IsActive) {
       PowerNetwork.Instance?.Evaluate();
-      if (_loopSource != null && loopSound != null) _loopSource.Play();
+      if (audioSource != null && loopSound != null) audioSource.Play();
     }
   }
 
@@ -55,11 +61,12 @@ public class PowerGenerator : MonoBehaviour, IInteractable, ISaveable, IPowerSou
     // поймает это и покажет подсказку через HintUI.
     GameEventLog.Instance?.Raise("generator_started");
 
-    if (startSound != null)
-      AudioSource.PlayClipAtPoint(startSound, transform.position, volume);
-
-    if (_loopSource != null && loopSound != null)
-      _loopSource.Play();
+    if (audioSource != null) {
+      // Стартовый звук — разовый поверх лупа, из того же 3D-источника
+      // (значит, тоже затухает по настроенной дальности).
+      if (startSound != null) audioSource.PlayOneShot(startSound);
+      if (loopSound != null)  audioSource.Play();
+    }
 
     if (CameraShake.Instance != null)
       CameraShake.Instance.Shake(0.18f, 0.6f);
