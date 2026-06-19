@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connections: []
+  ReachOrder: 2147483647
 --- !u!1 &2248794989921780122
 GameObject:
   m_ObjectHideFlags: 0
@@ -57,7 +58,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4729918332013282157}
   - component: {fileID: 4650293976239994749}
-  - component: {fileID: 8591479576218113943}
   - component: {fileID: 1766586759212611751}
   - component: {fileID: 9214708724504513105}
   - component: {fileID: 6300445929142580013}
@@ -180,22 +180,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!208 &8591479576218113943
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2248794989921780122}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
 --- !u!114 &1766586759212611751
 MonoBehaviour:
   m_ObjectHideFlags: 0
