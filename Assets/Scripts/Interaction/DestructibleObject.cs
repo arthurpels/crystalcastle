@@ -1,8 +1,17 @@
 using UnityEngine;
 
 public class DestructibleObject : MonoBehaviour, IHealth, ISaveable {
+
+    [System.Serializable]
+    public struct LootDrop {
+        public ItemData item;
+        [Min(1)] public int amount;
+        [Range(0f, 1f)] public float chance;
+    }
+
     [SerializeField] private float maxHP = 30f;
     [SerializeField] private GameObject destroyedPrefab; // обломки (опционально)
+    [SerializeField] private LootDrop[] loot;            // выпадающие предметы
     [SerializeField] private AudioClip destroySound;
     [SerializeField] private AudioClip[] hitSounds;      // звуки удара (рандомный)
 
@@ -73,10 +82,42 @@ public class DestructibleObject : MonoBehaviour, IHealth, ISaveable {
         if (destroyedPrefab != null)
             Instantiate(destroyedPrefab, transform.position, transform.rotation);
 
+        SpawnLoot();
+
         // Уведомляем SaveManager перед уничтожением
         if (SaveManager.Instance != null)
             SaveManager.Instance.RegisterDestroyed(this);
         Destroy(gameObject);
+    }
+
+    private void SpawnLoot()
+    {
+        if (loot == null || loot.Length == 0) return;
+
+        foreach (var drop in loot)
+        {
+            if (drop.item == null || drop.item.worldPrefab == null) continue;
+            if (Random.value > drop.chance) continue;
+
+            Vector3 spawnPos = transform.position + Vector3.up * 0.3f;
+            var go = Instantiate(drop.item.worldPrefab, spawnPos, Random.rotation);
+
+            if (go.TryGetComponent(out WorldItem wi))
+            {
+                wi.amount = drop.amount;
+                wi.isRuntimeSpawned = true;
+            }
+
+            if (go.TryGetComponent(out Rigidbody rb))
+            {
+                rb.isKinematic = false;
+                rb.useGravity  = true;
+                Vector3 scatter = new Vector3(
+                    Random.Range(-1f, 1f), Random.Range(0.5f, 1f), Random.Range(-1f, 1f)
+                ).normalized;
+                rb.AddForce(scatter * Random.Range(2f, 4f), ForceMode.Impulse);
+            }
+        }
     }
 
     // ── ISaveable ──────────────────────────────────────────────────────────
