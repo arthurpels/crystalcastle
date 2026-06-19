@@ -22,6 +22,9 @@ public class CountdownTimer : MonoBehaviour, IPowerGate
     [Header("Таймер")]
     [Tooltip("Длительность отсчёта, сек.")]
     [SerializeField] private float duration = 90f;
+    [Tooltip("Требовать питание на входе всё время: пропало — отсчёт стоп+сброс. " +
+             "Выкл — раз пошёл, идёт до нуля независимо от входа.")]
+    [SerializeField] private bool requireSustainedPower = true;
 
     [Header("Дисплей")]
     [Tooltip("TMP-текст (3D или UGUI) для цифр MM:SS. Цвет задаёшь на самом тексте.")]
@@ -34,6 +37,7 @@ public class CountdownTimer : MonoBehaviour, IPowerGate
     [Header("События (опц.)")]
     public UnityEvent onStarted;
     public UnityEvent onElapsed;
+    public UnityEvent onCancelled;   // питание пропало до нуля
 
     // ── IPowerGate ───────────────────────────────────────────────────────────
     public PowerNode Output => output;
@@ -52,6 +56,13 @@ public class CountdownTimer : MonoBehaviour, IPowerGate
             StartCountdown();
 
         if (!_running) return;
+
+        // Питание на входе пропало → стоп и сброс.
+        if (requireSustainedPower && startNode != null && !startNode.IsPowered)
+        {
+            CancelCountdown();
+            return;
+        }
 
         _timeLeft -= Time.deltaTime;
         if (_timeLeft <= 0f)
@@ -75,6 +86,19 @@ public class CountdownTimer : MonoBehaviour, IPowerGate
         SetWarningLights(true);
         UpdateDisplay();
         onStarted?.Invoke();
+    }
+
+    /// <summary>Остановить и сбросить отсчёт (питание пропало). Сигнал не выдаётся.</summary>
+    public void CancelCountdown()
+    {
+        if (!_running) return;
+        _running  = false;
+        _timeLeft = duration;
+
+        if (siren != null) siren.Stop();
+        SetWarningLights(false);
+        UpdateDisplay();          // покажет полное время (готов)
+        onCancelled?.Invoke();
     }
 
     private void Elapse()

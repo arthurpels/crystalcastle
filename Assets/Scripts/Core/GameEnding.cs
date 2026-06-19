@@ -114,6 +114,10 @@ public class GameEnding : MonoBehaviour
         StartCoroutine(PlayEnding(data, type));
     }
 
+    // Удобные обёртки для UnityEvent в инспекторе (без выбора enum-параметра).
+    public void TriggerDream()     => Trigger(EndingType.Dream);
+    public void TriggerSacrifice() => Trigger(EndingType.Sacrifice);
+
     // ── Ending sequence ───────────────────────────────────────────────────
 
     private IEnumerator PlayEnding(EndingData data, EndingType type)
