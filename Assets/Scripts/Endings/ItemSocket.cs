@@ -19,6 +19,11 @@ public abstract class ItemSocket : MonoBehaviour, IInteractable, ISaveable
     [Tooltip("Куда садится визуал поставленного предмета.")]
     [SerializeField] protected Transform socket;
 
+    [Tooltip("Заранее размещённый в сцене объект (выключённый): включается при " +
+             "установке предмета, выключается при изъятии. Удобно, когда визуал " +
+             "уже расставлен вручную (взрывчатка среди бочек и т.п.).")]
+    [SerializeField] protected GameObject placedObject;
+
     [Tooltip("Нода стенда в энергосети (для проверки реального питания).")]
     [SerializeField] protected PowerNode node;
 
@@ -50,17 +55,24 @@ public abstract class ItemSocket : MonoBehaviour, IInteractable, ISaveable
     // ── IInteractable ────────────────────────────────────────────────────────
     public virtual void Interact()
     {
-        if (locked) return;
-        if (IsFilled) Retrieve();
-        else          TryPlace();
+        if (IsFilled)
+        {
+            if (locked) return;   // заблокировано — забрать нельзя
+            Retrieve();
+        }
+        else
+        {
+            TryPlace();           // поставить можно всегда (locked не мешает)
+        }
     }
 
     public virtual string PromptText
     {
         get
         {
-            if (locked) return null;
-            return IsFilled ? $"Забрать: {ItemName}" : $"Установить: {ItemName}";
+            if (IsFilled)
+                return locked ? null : $"Забрать: {ItemName}";   // locked → подсказки нет
+            return $"Установить: {ItemName}";
         }
     }
 
@@ -102,11 +114,16 @@ public abstract class ItemSocket : MonoBehaviour, IInteractable, ISaveable
         OnChanged?.Invoke();
     }
 
-    /// <summary>Спавн/удаление визуала + установка флага. Без инвентаря/брейкера.</summary>
+    /// <summary>Визуал + флаг. Без инвентаря/брейкера. Два способа показа:
+    /// заранее размещённый объект (SetActive) и/или спавн префаба на сокете.</summary>
     private void SetVisual(bool filled)
     {
         IsFilled = filled;
 
+        // Способ 1: включить/выключить заранее подготовленный объект.
+        if (placedObject != null) placedObject.SetActive(filled);
+
+        // Способ 2: заспавнить/удалить префаб на сокете.
         if (filled)
         {
             if (_placedVisual == null && PlacedPrefab != null && socket != null)

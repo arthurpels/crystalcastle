@@ -71,9 +71,9 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AffineAmount: 1
+    - _AffineAmount: 0
     - _AlphaClip: 0
-    - _AmbientBoost: 1
+    - _AmbientBoost: 2
     - _BumpScale: 1
     - _Cull: 2
     - _Cutoff: 0.5
@@ -92,8 +92,8 @@ Material:
     - _SrcBlend: 1
     - _TriplanarSharpness: 2
     - _UVSec: 0
-    - _WorldSnap: 8
-    - _WorldTiling: 1
+    - _WorldSnap: 150
+    - _WorldTiling: 5
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 0.56, g: 0.5413333, b: 0.504, a: 1}

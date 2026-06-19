@@ -40,6 +40,7 @@ public class PowerNetwork : MonoBehaviour {
         _gates.AddRange(FindObjectsByType<PowerAndGate>(FindObjectsSortMode.None));
         _gates.AddRange(FindObjectsByType<LogicGate>(FindObjectsSortMode.None));
         _gates.AddRange(FindObjectsByType<SignalChecker>(FindObjectsSortMode.None));
+        _gates.AddRange(FindObjectsByType<CountdownTimer>(FindObjectsSortMode.None));
     }
 
     [ContextMenu("Evaluate Grid")]

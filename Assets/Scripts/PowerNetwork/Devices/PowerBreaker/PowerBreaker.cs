@@ -22,27 +22,29 @@ public class PowerBreaker : MonoBehaviour, IInteractable, ISaveable {
 
     public void Interact() => Toggle();
 
+    // ВАЖНО: брейкер НЕ питает ноду напрямую. Он лишь меняет IsOn и пересчитывает
+    // сеть — Evaluate() сам определит реальное питание ноды и уведомит потребителей.
+    // (Раньше тут был оптимистичный SetPowered(..., notify:true) — он уведомлял
+    //  потребителей «под током» ещё до пересчёта, из-за чего детонатор/двери
+    //  срабатывали на замыкание брейкера, хотя генератор ноду не питал.)
+
     public void Trip() {
         if (!IsOn) return;
         IsOn = false;
-        controlledNode?.SetPowered(false, true);
         UpdateVisual();
-        PowerNetwork.Instance?.Evaluate(); // 🔥
+        PowerNetwork.Instance?.Evaluate();
     }
 
     public void ResetBreaker() {
         if (IsOn) return;
         IsOn = true;
-        controlledNode?.SetPowered(true, true);
         UpdateVisual();
-        PowerNetwork.Instance?.Evaluate(); // 🔥
+        PowerNetwork.Instance?.Evaluate();
     }
 
     void Toggle() {
         IsOn = !IsOn;
-        controlledNode?.SetPowered(IsOn, true);
-
-        PowerNetwork.Instance?.Evaluate(); // 🔥
+        PowerNetwork.Instance?.Evaluate();
         UpdateVisual();
     }
 

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddef785595402597eab488aaa7f309f4, type: 3}
+  m_Name: Tnt
+  m_EditorClassIdentifier: 
+  displayName: TNT
+  icon: {fileID: 21300000, guid: 74e20ea6c943c3ec0b71044fb30ecf3a, type: 3}
+  handPrefab: {fileID: 7767711844916586715, guid: 8ee730d4988a5c065b6c26d9aa3b42e8,
+    type: 3}
+  worldPrefab: {fileID: 8322041934820411467, guid: b922c575c55f27af9a5eb57932e96198,
+    type: 3}
+  allowedHand: 2
+  hasRightHandAnimation: 0
+  isStackable: 0
+  maxStackSize: 1

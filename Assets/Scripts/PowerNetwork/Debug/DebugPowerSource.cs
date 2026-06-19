@@ -27,8 +27,8 @@ public class DebugPowerSource : MonoBehaviour, IPowerSource
 
     void Update()
     {
-        if (Input.GetKeyDown(toggleKey))
-            Toggle();
+        // if (Input.GetKeyDown(toggleKey))
+        //     Toggle();
     }
 
     [ContextMenu("Toggle")]
