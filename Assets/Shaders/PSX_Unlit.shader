@@ -1,0 +1,292 @@
+// PS1-стилизованный шейдер для URP — БЕЗ освещения (unlit).
+// Текстура самосветящаяся: base * emission (HDR), ловится Bloom'ом.
+// Эффекты те же, что у PSX_Lit: снэп вершин, аффинные текстуры, туман.
+Shader "CrystalCastle/PSX_Unlit"
+{
+    Properties
+    {
+        [MainTexture] _BaseMap        ("Текстура", 2D)            = "white" {}
+        [MainColor]   _BaseColor      ("Цвет",      Color)        = (1,1,1,1)
+
+        [HDR] _EmissionColor ("Цвет свечения (HDR)", Color)       = (1,1,1,1)
+        _EmissionStrength    ("Сила свечения",       Float)       = 1
+
+        [Toggle(_ALPHATEST_ON)] _AlphaClip ("Alpha Clip", Float)  = 0
+        _Cutoff        ("Порог прозрачности",    Range(0,1))      = 0.5
+        [Enum(UnityEngine.Rendering.CullMode)] _Cull ("Cull", Float) = 2
+
+        _SnapResolution ("Снэп вершин (px)",     Float)           = 160
+        _AffineAmount   ("Аффинная деформация",  Range(0,1))      = 0
+    }
+
+    SubShader
+    {
+        Tags { "RenderType"="Opaque" "RenderPipeline"="UniversalPipeline" "Queue"="Geometry" }
+
+        // ---------------------------------------------------------------
+        Pass
+        {
+            Name "Unlit"
+            Tags { "LightMode"="UniversalForward" }
+            ZWrite On
+            Cull [_Cull]
+
+            HLSLPROGRAM
+            #pragma vertex   vert
+            #pragma fragment frag
+
+            #pragma shader_feature_local _ALPHATEST_ON
+            #pragma multi_compile_fog
+
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "PSX_Common.hlsl"
+
+            CBUFFER_START(UnityPerMaterial)
+                float4 _BaseMap_ST;
+                float4 _BaseColor;
+                float4 _EmissionColor;
+                float  _EmissionStrength;
+                float  _SnapResolution;
+                float  _AffineAmount;
+                float  _Cutoff;
+            CBUFFER_END
+
+            TEXTURE2D(_BaseMap);
+            SAMPLER(sampler_BaseMap);
+
+            struct Attributes
+            {
+                float4 positionOS : POSITION;
+                float2 uv         : TEXCOORD0;
+                float4 color      : COLOR;
+            };
+
+            struct Varyings
+            {
+                float4 positionCS : SV_POSITION;
+                float2 uvPersp    : TEXCOORD0;               // перспективно-корректные UV
+                noperspective float2 uvAffine : TEXCOORD1;   // аффинные UV (искажение PS1)
+                float  fogFactor  : TEXCOORD2;
+                float4 color      : COLOR;
+            };
+
+            Varyings vert (Attributes IN)
+            {
+                Varyings OUT;
+
+                float3 positionWS = TransformObjectToWorld(IN.positionOS.xyz);
+                float4 clipPos    = TransformWorldToHClip(positionWS);
+
+                // PS1 вершинный джиттер
+                OUT.positionCS = PSX_SnapVertex(clipPos, _SnapResolution);
+
+                OUT.uvPersp  = TRANSFORM_TEX(IN.uv, _BaseMap);
+                OUT.uvAffine = OUT.uvPersp;
+
+                OUT.color     = IN.color;
+                OUT.fogFactor = ComputeFogFactor(OUT.positionCS.z);
+
+                return OUT;
+            }
+
+            float4 frag (Varyings IN) : SV_Target
+            {
+                // Аффинное искажение текстур
+                float2 uv  = lerp(IN.uvPersp, IN.uvAffine, _AffineAmount);
+                float4 col = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, uv) * _BaseColor * IN.color;
+
+                #ifdef _ALPHATEST_ON
+                    clip(col.a - _Cutoff);
+                #endif
+
+                // Самосвечение: без освещения, текстура светится сама.
+                col.rgb *= _EmissionColor.rgb * _EmissionStrength;
+                col.rgb  = MixFog(col.rgb, IN.fogFactor);
+                return col;
+            }
+            ENDHLSL
+        }
+
+        // ---------------------------------------------------------------
+        Pass
+        {
+            Name "ShadowCaster"
+            Tags { "LightMode"="ShadowCaster" }
+            ZWrite On ZTest LEqual ColorMask 0
+            Cull [_Cull]
+
+            HLSLPROGRAM
+            #pragma vertex   ShadowVert
+            #pragma fragment ShadowFrag
+            #pragma shader_feature_local _ALPHATEST_ON
+            #pragma multi_compile_vertex _ _CASTING_PUNCTUAL_LIGHT_SHADOW
+
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/CommonMaterial.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Shadows.hlsl"
+            #include "PSX_Common.hlsl"
+
+            CBUFFER_START(UnityPerMaterial)
+                float4 _BaseMap_ST;
+                float4 _BaseColor;
+                float4 _EmissionColor;
+                float  _EmissionStrength;
+                float  _SnapResolution;
+                float  _AffineAmount;
+                float  _Cutoff;
+            CBUFFER_END
+
+            TEXTURE2D(_BaseMap);
+            SAMPLER(sampler_BaseMap);
+
+            float3 _LightDirection;
+            float3 _LightPosition;
+
+            struct ShadowAttributes { float4 positionOS:POSITION; float3 normalOS:NORMAL; float2 uv:TEXCOORD0; };
+            struct ShadowVaryings   { float4 positionCS:SV_POSITION; float2 uv:TEXCOORD0; };
+
+            ShadowVaryings ShadowVert (ShadowAttributes IN)
+            {
+                ShadowVaryings OUT;
+                float3 positionWS = TransformObjectToWorld(IN.positionOS.xyz);
+                float3 normalWS   = TransformObjectToWorldNormal(IN.normalOS);
+
+                #if _CASTING_PUNCTUAL_LIGHT_SHADOW
+                    float3 lightDir = normalize(_LightPosition - positionWS);
+                #else
+                    float3 lightDir = _LightDirection;
+                #endif
+
+                float4 clip = TransformWorldToHClip(ApplyShadowBias(positionWS, normalWS, lightDir));
+                #if UNITY_REVERSED_Z
+                    clip.z = min(clip.z, UNITY_NEAR_CLIP_VALUE);
+                #else
+                    clip.z = max(clip.z, UNITY_NEAR_CLIP_VALUE);
+                #endif
+
+                OUT.positionCS = PSX_SnapVertex(clip, _SnapResolution);
+                OUT.uv = TRANSFORM_TEX(IN.uv, _BaseMap);
+                return OUT;
+            }
+
+            float4 ShadowFrag (ShadowVaryings IN) : SV_Target
+            {
+                #ifdef _ALPHATEST_ON
+                    float a = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, IN.uv).a * _BaseColor.a;
+                    clip(a - _Cutoff);
+                #endif
+                return 0;
+            }
+            ENDHLSL
+        }
+
+        // ---------------------------------------------------------------
+        Pass
+        {
+            Name "DepthOnly"
+            Tags { "LightMode"="DepthOnly" }
+            ZWrite On ColorMask 0
+            Cull [_Cull]
+
+            HLSLPROGRAM
+            #pragma vertex   DepthVert
+            #pragma fragment DepthFrag
+            #pragma shader_feature_local _ALPHATEST_ON
+
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "PSX_Common.hlsl"
+
+            CBUFFER_START(UnityPerMaterial)
+                float4 _BaseMap_ST;
+                float4 _BaseColor;
+                float4 _EmissionColor;
+                float  _EmissionStrength;
+                float  _SnapResolution;
+                float  _AffineAmount;
+                float  _Cutoff;
+            CBUFFER_END
+
+            TEXTURE2D(_BaseMap);
+            SAMPLER(sampler_BaseMap);
+
+            struct DepthAttributes { float4 positionOS:POSITION; float2 uv:TEXCOORD0; };
+            struct DepthVaryings   { float4 positionCS:SV_POSITION; float2 uv:TEXCOORD0; };
+
+            DepthVaryings DepthVert (DepthAttributes IN)
+            {
+                DepthVaryings OUT;
+                float4 clip = TransformObjectToHClip(IN.positionOS.xyz);
+                OUT.positionCS = PSX_SnapVertex(clip, _SnapResolution);
+                OUT.uv = TRANSFORM_TEX(IN.uv, _BaseMap);
+                return OUT;
+            }
+
+            float4 DepthFrag (DepthVaryings IN) : SV_Target
+            {
+                #ifdef _ALPHATEST_ON
+                    float a = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, IN.uv).a * _BaseColor.a;
+                    clip(a - _Cutoff);
+                #endif
+                return 0;
+            }
+            ENDHLSL
+        }
+
+        // ---------------------------------------------------------------
+        Pass
+        {
+            Name "DepthNormals"
+            Tags { "LightMode"="DepthNormals" }
+            ZWrite On
+            Cull [_Cull]
+
+            HLSLPROGRAM
+            #pragma vertex   DepthNormalsVert
+            #pragma fragment DepthNormalsFrag
+            #pragma shader_feature_local _ALPHATEST_ON
+
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "PSX_Common.hlsl"
+
+            CBUFFER_START(UnityPerMaterial)
+                float4 _BaseMap_ST;
+                float4 _BaseColor;
+                float4 _EmissionColor;
+                float  _EmissionStrength;
+                float  _SnapResolution;
+                float  _AffineAmount;
+                float  _Cutoff;
+            CBUFFER_END
+
+            TEXTURE2D(_BaseMap);
+            SAMPLER(sampler_BaseMap);
+
+            struct DNAttributes { float4 positionOS:POSITION; float3 normalOS:NORMAL; float2 uv:TEXCOORD0; };
+            struct DNVaryings   { float4 positionCS:SV_POSITION; float3 normalWS:TEXCOORD0; float2 uv:TEXCOORD1; };
+
+            DNVaryings DepthNormalsVert(DNAttributes IN)
+            {
+                DNVaryings OUT;
+                float3 positionWS = TransformObjectToWorld(IN.positionOS.xyz);
+                float4 clip = TransformWorldToHClip(positionWS);
+                OUT.positionCS = PSX_SnapVertex(clip, _SnapResolution);
+                OUT.normalWS   = TransformObjectToWorldNormal(IN.normalOS);
+                OUT.uv         = TRANSFORM_TEX(IN.uv, _BaseMap);
+                return OUT;
+            }
+
+            float4 DepthNormalsFrag(DNVaryings IN) : SV_Target
+            {
+                #ifdef _ALPHATEST_ON
+                    float a = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, IN.uv).a * _BaseColor.a;
+                    clip(a - _Cutoff);
+                #endif
+                float3 n = normalize(IN.normalWS);
+                return float4(n * 0.5 + 0.5, 0);
+            }
+            ENDHLSL
+        }
+    }
+
+    FallBack "Universal Render Pipeline/Unlit"
+}

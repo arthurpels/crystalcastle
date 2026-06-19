@@ -176,6 +176,10 @@ public class PlayerInventory : MonoBehaviour {
     return item != null && item.count >= amount;
   }
 
+  /// <summary>ItemData предмета в правой руке (или null). Нужно сокетам (стенды/бомба).</summary>
+  public ItemData GetRightHandItem() =>
+      rightHandSlot != null ? rightHandSlot.CurrentItem.itemData : null;
+
   // ── Save system support ──────────────────────────────────────────────────
 
   /// <summary>

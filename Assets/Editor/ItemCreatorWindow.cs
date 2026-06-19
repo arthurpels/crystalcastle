@@ -259,7 +259,7 @@ public class ItemCreatorWindow : EditorWindow
             Debug.LogWarning($"[ItemCreator] Слой «{ItemLayerName}» не найден — ставлю Default.");
             layer = 0;
         }
-        var root = new GameObject($"{p.name}_WI") { layer = layer };
+        var root = new GameObject($"{p.name}_WI");
         try
         {
             AttachMesh(root, mesh);
@@ -278,6 +278,9 @@ public class ItemCreatorWindow : EditorWindow
             wi.amount = p.amount;
 
             root.AddComponent<SaveableIdentity>();
+
+            // Слой на всю иерархию (корень + меш-ребёнок).
+            SetLayerRecursive(root, layer);
 
             var path = AssetDatabase.GenerateUniqueAssetPath($"{PrefabsFolder}/{p.name}_WI.prefab");
             return PrefabUtility.SaveAsPrefabAsset(root, path);
@@ -308,10 +311,16 @@ public class ItemCreatorWindow : EditorWindow
         var child = (GameObject)PrefabUtility.InstantiatePrefab(mesh);
         if (child == null) child = Instantiate(mesh);
         child.name = "mesh";
+        // Сохраняем трансформ префаба меша (масштаб/поворот/позицию, которые ты
+        // настроил) — только делаем дочерним, ничего не обнуляем.
         child.transform.SetParent(root.transform, false);
-        child.transform.localPosition = Vector3.zero;
-        child.transform.localRotation = Quaternion.identity;
-        child.transform.localScale    = Vector3.one;
+    }
+
+    private static void SetLayerRecursive(GameObject go, int layer)
+    {
+        go.layer = layer;
+        foreach (Transform child in go.transform)
+            SetLayerRecursive(child.gameObject, layer);
     }
 
     private static void FitBox(GameObject root, BoxCollider box)

@@ -6,7 +6,10 @@ public class PowerNetwork : MonoBehaviour {
 
     [SerializeField] private List<PowerGenerator> generators = new();
     [SerializeField] private List<PowerNode>      _allNodes  = new();
-    [SerializeField] private List<PowerAndGate>   _andGates  = new();
+
+    // Все логические элементы (AND-гейты, переключаемые LogicGate, чекеры) —
+    // собираются в рантайме, т.к. интерфейс не сериализуется.
+    private readonly List<IPowerGate> _gates = new();
 
     private readonly List<IPowerSource> _runtimeSources = new();
 
@@ -33,53 +36,51 @@ public class PowerNetwork : MonoBehaviour {
         _allNodes.Clear();
         _allNodes.AddRange(FindObjectsByType<PowerNode>(FindObjectsSortMode.None));
 
-        _andGates.Clear();
-        _andGates.AddRange(FindObjectsByType<PowerAndGate>(FindObjectsSortMode.None));
+        _gates.Clear();
+        _gates.AddRange(FindObjectsByType<PowerAndGate>(FindObjectsSortMode.None));
+        _gates.AddRange(FindObjectsByType<LogicGate>(FindObjectsSortMode.None));
+        _gates.AddRange(FindObjectsByType<SignalChecker>(FindObjectsSortMode.None));
     }
 
     [ContextMenu("Evaluate Grid")]
     public void Evaluate() {
         CollectNodes();
 
-        // Сбрасываем порядок обхода (направление потока) перед новым расчётом.
-        _reachCounter = 0;
-        foreach (var node in _allNodes)
-            if (node != null) node.ReachOrder = int.MaxValue;
-
         HashSet<PowerNode> powered = new();
-        Queue<PowerNode>   queue   = new();
 
-        // Стартуем BFS от активных генераторов
-        foreach (var gen in generators) {
-            if (gen == null || !gen.IsActive || gen.OutputNode == null) continue;
-            queue.Enqueue(gen.OutputNode);
-        }
-        foreach (var src in _runtimeSources) {
-            if (src == null || !src.IsActive || src.OutputNode == null) continue;
-            queue.Enqueue(src.OutputNode);
-        }
-        RunBFS(queue, powered);
+        // Пересчёт ДО СТАБИЛИЗАЦИИ: каждую итерацию строим питание заново от
+        // источников + выходов гейтов, удовлетворённых ПРЕДЫДУЩИМ состоянием.
+        // Так корректно работают немонотонные элементы (XOR, чекер): добавление
+        // сигнала может и ВЫКЛючить выход — инкрементальное накопление это ломало.
+        int maxIter = _gates.Count + 2;
+        for (int iter = 0; iter <= maxIter; iter++) {
+            // Сброс порядка обхода (направление потока) для этого прохода.
+            _reachCounter = 0;
+            foreach (var node in _allNodes)
+                if (node != null) node.ReachOrder = int.MaxValue;
 
-        // AND-гейты: если все входы запитаны → запускаем BFS от выхода.
-        // Повторяем пока есть изменения (для цепочек гейтов).
-        bool changed = true;
-        while (changed) {
-            changed = false;
-            foreach (var gate in _andGates) {
-                if (gate == null || gate.Output == null) continue;
-                if (powered.Contains(gate.Output))       continue; // уже запитана
+            var next  = new HashSet<PowerNode>();
+            var queue = new Queue<PowerNode>();
 
-                bool allPowered = true;
-                foreach (var input in gate.Inputs) {
-                    if (input == null || !powered.Contains(input)) { allPowered = false; break; }
-                }
-
-                if (allPowered) {
-                    queue.Enqueue(gate.Output);
-                    RunBFS(queue, powered);
-                    changed = true;
-                }
+            // Источники
+            foreach (var gen in generators) {
+                if (gen == null || !gen.IsActive || gen.OutputNode == null) continue;
+                queue.Enqueue(gen.OutputNode);
             }
+            foreach (var src in _runtimeSources) {
+                if (src == null || !src.IsActive || src.OutputNode == null) continue;
+                queue.Enqueue(src.OutputNode);
+            }
+            // Выходы гейтов, чьё условие выполнено по предыдущему состоянию
+            foreach (var gate in _gates) {
+                if (gate == null || gate.Output == null) continue;
+                if (gate.Compute(powered)) queue.Enqueue(gate.Output);
+            }
+
+            RunBFS(queue, next);
+
+            if (next.SetEquals(powered)) { powered = next; break; }
+            powered = next;
         }
 
         // Применяем результат ко всем нодам
